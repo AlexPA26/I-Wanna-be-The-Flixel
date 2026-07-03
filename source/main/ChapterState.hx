@@ -251,7 +251,7 @@ class ChapterState extends FlxState {
 				cameraTarget.y = map.y;
 			} else if (cameraType == "unlockY") {
 				cameraTarget.x = map.x + (map.width / 2);
-				cameraTarget.y = player.y;
+				cameraTarget.y = player.y + 225;
 			} else if (cameraType == "unlockXY") {
 				cameraTarget.x = player.x;
 				cameraTarget.y = player.y;
@@ -475,7 +475,7 @@ class ChapterState extends FlxState {
 		if (FlxG.keys.justPressed.TWO)
 			RoomLoader.loadRoom(this, "map11");
 		if (FlxG.keys.justPressed.THREE)
-			RoomLoader.loadRoom(this, "map37");
+			RoomLoader.loadRoom(this, "map39");
 		if (FlxG.keys.justPressed.I)
 			spawnTimer = 9999;
 		if (FlxG.keys.justPressed.M) {
@@ -926,13 +926,31 @@ class ChapterState extends FlxState {
 			cameraType = camLayer.properties.get("cameraType");
 		}
 
-		if (map != null && cameraType != "unlockX") {
+		if (map != null && cameraType != null)
+		{
 			FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 50, map.height + 65, false);
 			FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
-		} else if (map != null && cameraType == "unlockX") {
+		}
+		else if (map != null && cameraType == "unlockX")
+		{
 			FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height + 65, false);
 			FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
-		} else if (map != null && cameraType == "debug") {
+		}
+		else if (map != null && cameraType == "unlockY")
+		{
+			FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height - 115, false);
+			FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
+			trace("PUTA MIERDA 3: LA TRILOGIA");
+		}
+		else if (map != null && cameraType == "unlockXY")
+		{
+			FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height - 115, false);
+			FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
+			trace("PUTA MIERDA 4");
+		}
+		
+		
+		else if (map != null && cameraType == "debug") {
 			FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
 		}
 
@@ -951,19 +969,24 @@ class ChapterState extends FlxState {
 			var cameraMarginW:Float = 0;
 			var cameraMarginH:Float = 0;
 
-			if (cameraType == "unlockX") {
+			if (cameraType == "unlockX")
+			{
 				cameraMarginX = FlxG.width * 0.3;
 				cameraMarginW = FlxG.width * 0.3; // 30% + 40% = 70%
 
 				cameraMarginY = FlxG.height / 2;
 				cameraMarginH = 0;
-			} else if (cameraType == "unlockY") {
+			}
+			else if (cameraType == "unlockY")
+			{
 				cameraMarginX = FlxG.width / 2;
 				cameraMarginW = 0;
 
 				cameraMarginY = FlxG.height * 0.3;
 				cameraMarginH = FlxG.height * 0.4;
-			} else if (cameraType == "unlockXY") {
+			}
+			else if (cameraType == "unlockXY")
+			{
 				cameraMarginX = FlxG.width * 0.3;
 				cameraMarginW = FlxG.width * 0.4;
 				cameraMarginY = FlxG.height * 0.3;

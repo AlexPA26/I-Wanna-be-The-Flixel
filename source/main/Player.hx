@@ -24,7 +24,9 @@ class Player extends FlxSprite
     public var mapMaxSpeed:Float = 400;
     public var currentOffsetY:Float = 20;
 
-    public var isFlipped:Bool = false; 
+    public var isFlipped:Bool = false;
+    var isFlipping:Bool;
+    var flippingTimer:Float;
     static var baseOffsetY:Null<Float> = null;
     var tapTimer:Float = 0;
     var tapCount:Int = 0;
@@ -82,6 +84,11 @@ public function flipGravity():Void
         baseOffsetY = offset.y;
     }
 
+    isFlipping = true;
+    flippingTimer = 0.35;
+
+    FlxG.keys.enabled = false;
+
     velocity.y = 0;
 
     setFacingFlip(LEFT, true, isFlipped);
@@ -108,6 +115,18 @@ public function flipGravity():Void
         {
             tapTimer -= elapsed;
             if (tapTimer <= 0) tapCount = 0;
+        }
+
+        if (isFlipping)
+        {
+            flippingTimer -= elapsed;
+            velocity.y = 0;
+            
+            if (flippingTimer <= 0)
+            {
+                isFlipping = false;
+                FlxG.keys.enabled = true;
+            }
         }
         
         if (isTouching(floorDir))

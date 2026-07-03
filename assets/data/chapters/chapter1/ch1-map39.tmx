@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="32" nextobjectid="1880">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="33" nextobjectid="1882">
  <properties>
   <property name="songName" value="rain"/>
  </properties>
@@ -84,13 +84,8 @@
    <property name="direction" value="down"/>
   </properties>
  </objectgroup>
- <objectgroup id="13" name="platform" visible="0">
+ <objectgroup id="13" name="platform">
   <object id="1830" name="platform" gid="27" x="1100" y="900" width="50" height="50">
-   <properties>
-    <property name="direction" value="up"/>
-   </properties>
-  </object>
-  <object id="1833" name="platform" gid="27" x="650" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
    </properties>
@@ -113,12 +108,22 @@
     <property name="id" value="3"/>
    </properties>
   </object>
+  <object id="1880" name="spike" gid="92" x="1050" y="300" width="50" height="50">
+   <properties>
+    <property name="id" value="7"/>
+   </properties>
+  </object>
+  <object id="1881" name="spike" gid="92" x="1050" y="600" width="50" height="50">
+   <properties>
+    <property name="id" value="7"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="29" name="redCoin"/>
  <objectgroup id="27" name="switch-spike"/>
  <objectgroup id="8" name="save"/>
  <objectgroup id="10" name="laser"/>
- <objectgroup id="31" name="light">
+ <objectgroup id="31" name="light" visible="0">
   <object id="1874" name="light" gid="111" x="134" y="223.333" width="200" height="200"/>
   <object id="1875" name="light" gid="111" x="176.667" y="474" width="200" height="200"/>
   <object id="1876" name="light" gid="111" x="128" y="813.333" width="200" height="200"/>

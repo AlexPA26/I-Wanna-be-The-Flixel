@@ -13,6 +13,7 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
+import character.KrisDeathState;
 import main.PlayerData;
 
 class DeathState extends FlxSubState
@@ -86,8 +87,12 @@ class DeathState extends FlxSubState
             case "boyfriend":
                 ModLoader.playModMusic("music/death/bf_death.ogg", 0.7, true);
 
+            case "thekris":
+                openSubState(new KrisDeathState());
+
             default:
-                ModLoader.playModMusic("music/death/death_bgm.ogg", 0.7, true);
+                openSubState(new KrisDeathState());
+                // ModLoader.playModMusic("music/death/death_bgm.ogg", 0.7, true);
         }
 
         bg = new FlxSprite();
