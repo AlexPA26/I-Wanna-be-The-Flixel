@@ -91,8 +91,8 @@ class DeathState extends FlxSubState
                 openSubState(new KrisDeathState());
 
             default:
-                openSubState(new KrisDeathState());
-                // ModLoader.playModMusic("music/death/death_bgm.ogg", 0.7, true);
+                // openSubState(new KrisDeathState());
+                ModLoader.playModMusic("music/death/death_bgm.ogg", 0.7, true);
         }
 
         bg = new FlxSprite();
