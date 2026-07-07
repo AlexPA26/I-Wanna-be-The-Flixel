@@ -52,6 +52,7 @@
 	<assets path="assets/images/title"/>
 	<assets path="assets/fonts"/>
 	<assets path="assets/images/characters"/>
+	<assets path="assets/images/testing"/>
 	<assets path="assets/images/skins" embed="true"/>
 	<assets path="assets/images/levels" embed="true"/>
 	<assets path="assets/images/foreground" embed="true"/>

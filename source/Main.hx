@@ -1,8 +1,9 @@
+import flixel.FlxSprite;
 import flixel.FlxGame;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 // import main.ChapterState;
-import main.DebugState;
+import debug.BattleState;
 import main.MenuState;
 import main.mods.ModLoader;
 import openfl.Lib;
@@ -13,10 +14,11 @@ class Main extends Sprite
 	{
 		super();
 
+		FlxSprite.defaultAntialiasing = false;
 		var gameWidth:Int = 1280;
 		var gameHeight:Int = 720;
 		var initialState = MenuState;
-		var debugState = DebugState;
+		var debugState = BattleState;
 		var zoom:Float = 1;
 		var refreshRate:Int = Lib.current.stage.window.displayMode.refreshRate;
 		if (refreshRate <= 0) refreshRate = 60;
@@ -36,6 +38,11 @@ class Main extends Sprite
 		
 		#if !debug
 			addChild(new FlxGame(gameWidth, gameHeight, initialState, updateFramerate, drawFramerate, skipSplash, startFullscreen));
+			flixel.FlxG.fixedTimestep = false;
+		#end
+
+		#if debug
+			addChild(new FlxGame(gameWidth, gameHeight, debugState, updateFramerate, drawFramerate, skipSplash, startFullscreen));
 			flixel.FlxG.fixedTimestep = false;
 		#end
 		

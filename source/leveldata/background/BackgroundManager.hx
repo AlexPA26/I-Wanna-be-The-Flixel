@@ -1,5 +1,6 @@
 package leveldata.background;
 
+import debug.CircusBackground;
 import openfl.display.BitmapData;
 import main.mods.ModLoader;
 import main.ChapterState;
@@ -154,9 +155,24 @@ public static function bgEffect(state:ChapterState, tiledData:TiledMap):Void
         switch (effect)
         {
             case "fog":
-                state.backEffectObj = new FlxBackdrop(AssetPaths.white_fog__png, X);
-                state.backEffectObj.velocity.set(-50 - boost, 0);
-                state.backEffectObj.alpha = 0.2;
+                // state.backEffectObj = new FlxBackdrop(AssetPaths.white_fog__png, X);
+                // state.backEffectObj.velocity.set(-50 - boost, 0);
+                // state.backEffectObj.alpha = 0.2;
+
+                        var circusBG = new CircusBackground();
+                        circusBG.numSides = 8;
+                        circusBG.rotationSpeed = 60;
+                        circusBG.distanceZ = 300;
+                        circusBG.floorY = -300;
+                        circusBG.centerHeight = 220;
+                        state.insert(2, circusBG);
+
+                        var circusTopBG = new CircusBackground();
+                        circusTopBG.numSides = 8;
+                        circusTopBG.floorY = 200;
+                        circusTopBG.centerHeight = -220;
+                        circusTopBG.distanceZ = 200;
+                        state.insert(2, circusTopBG);
             case "poison-fog":
                 state.backEffectObj = new FlxBackdrop(AssetPaths.poison_fog__png, XY);
                 state.backEffectObj.velocity.set(60, 0);

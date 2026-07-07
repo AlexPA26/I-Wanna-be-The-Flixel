@@ -105,11 +105,11 @@ class KrisDeathState extends FlxSubState
         substateBlood.acceleration.set(0, 1200);
         substateBlood.lifespan.set(2, 4);
         substateBlood.alpha.set(1, 1, 0, 0);
-        substateBlood.scale.set(0.5, 0.5, 1.5, 1.5);
-        substateBlood.makeParticles(3, 3, FlxColor.RED, 250);
+        substateBlood.scale.set(1, 1, 2, 2);
+        substateBlood.makeParticles(3, 3, FlxColor.RED, 10);
         
         add(substateBlood);
-        substateBlood.start(true, 0, 250);
+        substateBlood.start(true, 0, 10);
 
     }
 

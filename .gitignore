@@ -7,6 +7,8 @@ export/
 mapeditor/
 screenshots/
 templates/
+assets/testing
+source/debug
 
 *.psd
 .DS_Store
