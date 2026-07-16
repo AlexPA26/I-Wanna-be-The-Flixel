@@ -28,7 +28,6 @@ class NormalTrampolineMini extends FlxSprite
 
 public function launch():Void
 {
-    // The name of the animation must match what we check in the collide block
     animation.play("jump_" + launchDir);
 }
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:344cf93ad49653b7bc4c0b6658721f82:ceca38ff84bf92005684ae853b5a3838:28fbc9160b3f8ff731234bee58a6bc7c$ -->
+<TextureAtlas imagePath="jevil.png" width="230" height="233">
+    <SubTexture name="jevil_dance_normal_0" x="0" y="0" width="46" height="48"/>
+    <SubTexture name="jevil_dance_normal_1" x="46" y="0" width="46" height="48"/>
+    <SubTexture name="jevil_dance_normal_2" x="92" y="0" width="46" height="48"/>
+    <SubTexture name="jevil_dance_normal_3" x="138" y="0" width="46" height="48"/>
+    <SubTexture name="jevil_dance_normal_4" x="184" y="0" width="46" height="48"/>
+    <SubTexture name="jevil_dance_normal_5" x="0" y="48" width="46" height="48"/>
+    <SubTexture name="jevil_dance_normal_6" x="46" y="48" width="46" height="48"/>
+    <SubTexture name="jevil_dance_normal_7" x="92" y="48" width="46" height="48"/>
+    <SubTexture name="jevil_dance_reverse_0" x="138" y="48" width="46" height="48"/>
+    <SubTexture name="jevil_dance_reverse_1" x="184" y="48" width="46" height="48"/>
+    <SubTexture name="jevil_dance_reverse_2" x="0" y="96" width="46" height="48"/>
+    <SubTexture name="jevil_dance_reverse_3" x="46" y="96" width="46" height="48"/>
+    <SubTexture name="jevil_dance_reverse_4" x="92" y="96" width="46" height="48"/>
+    <SubTexture name="jevil_dance_reverse_5" x="138" y="96" width="46" height="48"/>
+    <SubTexture name="jevil_dance_reverse_6" x="184" y="96" width="46" height="48"/>
+    <SubTexture name="jevil_dance_reverse_7" x="0" y="144" width="46" height="48"/>
+    <SubTexture name="jevil_main_0" x="46" y="144" width="42" height="41"/>
+    <SubTexture name="jevil_laugh_0" x="46" y="144" width="42" height="41"/>
+    <SubTexture name="jevil_laugh_1" x="88" y="144" width="42" height="41"/>
+    <SubTexture name="jevil_teleport_n_0" x="130" y="144" width="42" height="41"/>
+    <SubTexture name="jevil_teleport_n_1" x="172" y="144" width="42" height="41"/>
+    <SubTexture name="jevil_teleport_r_0" x="0" y="192" width="42" height="41"/>
+    <SubTexture name="jevil_teleport_r_1" x="42" y="192" width="42" height="41"/>
+    <SubTexture name="jevil_tired_0" x="84" y="192" width="42" height="41"/>
+</TextureAtlas>

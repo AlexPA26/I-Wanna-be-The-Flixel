@@ -9,8 +9,8 @@
  <tileset firstgid="85" source="../../textures/spike.tsx"/>
  <tileset firstgid="93" source="../../textures/laser.tsx"/>
  <tileset firstgid="111" source="../../textures/light.tsx"/>
- <tileset firstgid="112" source="../../textures/trampoline-mini.tsx"/>
- <tileset firstgid="121" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="113" source="../../textures/trampoline-mini.tsx"/>
+ <tileset firstgid="122" source="../../textures/transition-tiles.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,
@@ -27,9 +27,9 @@
 0,0,0,0,0,0,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
 0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
 0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,1,1,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,1,0,1,0,0,7,0,0,0,0,0,1,7,0,0,0,0,0,0,0,0,7,0,0,0,0,
-0,0,1,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,
+0,0,1,1,1,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,1,0,1,0,0,7,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,7,0,0,0,0,
+0,0,1,0,1,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,
 0,0,1,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0
 </data>
  </layer>
@@ -50,7 +50,7 @@
 0,0,0,0,0,0,0,0,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,
 0,0,0,0,0,0,0,0,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,
 0,0,0,0,0,0,0,0,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,
-0,0,0,9,0,0,0,0,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,
+0,0,0,9,0,0,0,0,9,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,9,9,9,9,
 0,0,0,9,0,0,0,0,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,
 0,0,0,9,0,0,0,0,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9
 </data>
@@ -92,31 +92,31 @@
   <object id="487" name="light" gid="111" x="1174.67" y="724" width="200" height="200"/>
  </objectgroup>
  <objectgroup id="7" name="trampoline">
-  <object id="490" name="trampoline" gid="81" x="700" y="750" width="50" height="50"/>
+  <object id="490" name="trampoline" gid="81" x="700" y="700" width="50" height="50"/>
  </objectgroup>
  <objectgroup id="19" name="trampoline-mini">
-  <object id="409" name="trampoline-mini" gid="118" x="1150" y="700" width="50" height="50">
+  <object id="409" name="trampoline-mini" gid="119" x="1150" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
    </properties>
   </object>
-  <object id="410" name="trampoline-mini" gid="118" x="1150" y="750" width="50" height="50">
+  <object id="410" name="trampoline-mini" gid="119" x="1150" y="750" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
    </properties>
   </object>
-  <object id="417" name="trampoline-mini" gid="112" x="200" y="700" width="50" height="50">
+  <object id="417" name="trampoline-mini" gid="113" x="200" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
    </properties>
   </object>
   <object id="488" name="trampoline" gid="81" x="150" y="700" width="50" height="50"/>
-  <object id="489" name="trampoline-mini" gid="118" x="800" y="400" width="50" height="50">
+  <object id="489" name="trampoline-mini" gid="119" x="800" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
    </properties>
   </object>
-  <object id="493" name="trampoline-mini" gid="118" x="800" y="450" width="50" height="50">
+  <object id="493" name="trampoline-mini" gid="119" x="800" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
    </properties>
@@ -316,61 +316,61 @@
   </properties>
  </objectgroup>
  <objectgroup id="20" name="warps">
-  <object id="456" name="warp" gid="121" x="1200" y="50" width="50" height="50">
+  <object id="456" name="warp" gid="122" x="1200" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
     <property name="target" value="map20"/>
    </properties>
   </object>
-  <object id="457" name="warp" gid="121" x="1250" y="50" width="50" height="50">
+  <object id="457" name="warp" gid="122" x="1250" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
     <property name="target" value="map20"/>
    </properties>
   </object>
-  <object id="473" name="warp" gid="124" x="0" y="450" width="50" height="50">
+  <object id="473" name="warp" gid="125" x="0" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map22"/>
    </properties>
   </object>
-  <object id="474" name="warp" gid="124" x="0" y="500" width="50" height="50">
+  <object id="474" name="warp" gid="125" x="0" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map22"/>
    </properties>
   </object>
-  <object id="475" name="warp" gid="124" x="0" y="600" width="50" height="50">
+  <object id="475" name="warp" gid="125" x="0" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map22"/>
    </properties>
   </object>
-  <object id="476" name="warp" gid="124" x="0" y="600" width="50" height="50">
+  <object id="476" name="warp" gid="125" x="0" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map22"/>
    </properties>
   </object>
-  <object id="477" name="warp" gid="124" x="0" y="550" width="50" height="50">
+  <object id="477" name="warp" gid="125" x="0" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map22"/>
    </properties>
   </object>
-  <object id="478" name="warp" gid="124" x="0" y="650" width="50" height="50">
+  <object id="478" name="warp" gid="125" x="0" y="650" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map22"/>
    </properties>
   </object>
-  <object id="479" name="warp" gid="124" x="0" y="700" width="50" height="50">
+  <object id="479" name="warp" gid="125" x="0" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map22"/>
    </properties>
   </object>
-  <object id="481" name="warp" gid="124" x="0" y="750" width="50" height="50">
+  <object id="481" name="warp" gid="125" x="0" y="750" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map22"/>

@@ -1,5 +1,6 @@
 package main;
 
+import main.bosses.ch1.JevilDirectionalAttack;
 import main.Multiplayer.UdpClient;
 import coop.LocalCoopSubstate.LocalCoopSubState;
 import flixel.sound.FlxSound;
@@ -31,10 +32,14 @@ import leveldata.misc.*;
 import leveldata.collectibles.*;
 import flixel.addons.effects.FlxTrail;
 import main.mods.ModLoader;
+import flixel.ui.FlxBar;
+import main.bosses.ch1.BossJevil;
 
 @:allow(main.RoomLoader)
 @:allow(leveldata.events.EventLoader)
-class ChapterState extends FlxState {
+@:allow(main.bosses.ch1)
+class ChapterState extends FlxState
+{
 	var player:Player;
 	var currentDeaths = PlayerData.totalDeaths;
 	var blood:flixel.effects.particles.FlxEmitter;
@@ -47,13 +52,19 @@ class ChapterState extends FlxState {
 	var bullets:FlxTypedGroup<FlxSprite>;
 	var playerGlow:FlxSprite;
 	var cameraTarget:FlxObject;
+	var cameraOffsetY:Float = -225;
 	var scrollSpeed:Float = 0;
 	var isAutoscrolling:Bool = false;
+	var fightingBoss:Bool;
 
+	public var currentBoss:FlxSprite = null;
+	public var krisDeathAlt:Bool;
 	public var cameraType:String = "normal";
 	public var isPaused:Bool = false;
 
 	public var bg:FlxSprite;
+	public var circusShader:shaders.JevilCircusBG;
+	public var rainbowShader:shaders.RainbowCrazy;
 	public var currentBGName:String = "";
 	public var mainTilesPath:String = "assets/images/levels/tiles/ch" + PlayerData.currentChapter + "tiles.png";
 	public var currentConfig:ChapterConfig;
@@ -89,6 +100,7 @@ class ChapterState extends FlxState {
 	public var currentTopEffectName:String = "";
 	public var lastTopScrollBoost:Float = 0;
 
+	public var roomImages:FlxTypedGroup<FlxSprite>;
 	public var eventEffectGroup:FlxGroup;
 	public var savesGroup:FlxTypedGroup<SavePoint>;
 	public var popups:FlxTypedGroup<FlxText>;
@@ -114,10 +126,14 @@ class ChapterState extends FlxState {
 	var saveAnimation:FlxSprite;
 	var tiledData:TiledMap;
 	var spawnTimer:Float = 0.1;
+	var inmortal:Bool = false;
 	var timeElapsed:FlxText;
 	var currentChapter:FlxText;
 	var playerDeaths:FlxText;
 	var lastSave:FlxText;
+	var bossHpBar:FlxBar;
+    var bossDebugText:FlxText;
+	public var jevil:main.bosses.ch1.BossJevil.Jevil;
 
 	var udpClient:UdpClient;
 
@@ -128,7 +144,8 @@ class ChapterState extends FlxState {
 
 	static var loopPoints:Map<String, Float> = null;
 
-	override public function create():Void {
+	override public function create():Void
+	{
 		#if !debug
 		#if !mobile
 		FlxG.mouse.visible = false;
@@ -142,27 +159,20 @@ class ChapterState extends FlxState {
 		#end
 
 		var clientAddr = UdpClient.getClientAddress();
-		if (clientAddr != null) {
+		if (clientAddr != null)
+		{
 			udpClient = new UdpClient(clientAddr.host, clientAddr.port, clientAddr.localPort);
-			trace("Multiplayer client active: "
-				+ clientAddr.host
-				+ ":"
-				+ clientAddr.port
-				+ " (bound to local port "
-				+ clientAddr.localPort
-				+ ")");
-		} else if (LocalCoopSubState.isMultiplayerActive) {
+			trace("Multiplayer client active: " + clientAddr.host + ":" + clientAddr.port + " (bound to local port " + clientAddr.localPort + ")");
+		}
+		else if (LocalCoopSubState.isMultiplayerActive)
+		{
 			var host = LocalCoopSubState.targetIP;
 			var port = LocalCoopSubState.targetPort;
 			udpClient = new UdpClient(host, port, port);
-			trace("Multiplayer client active (via Coop Substate): "
-				+ host
-				+ ":"
-				+ port
-				+ " (bound to local port "
-				+ port
-				+ ")");
-		} else {
+			trace("Multiplayer client active (via Coop Substate): " + host + ":" + port + " (bound to local port " + port + ")");
+		}
+		else
+		{
 			udpClient = null;
 			trace("Multiplayer client inactive");
 		}
@@ -174,6 +184,7 @@ class ChapterState extends FlxState {
 		imgCache();
 		sfxCache();
 
+		roomImages = new FlxTypedGroup();
 		dangerObjects = new FlxGroup();
 		savesGroup = new FlxTypedGroup<SavePoint>();
 		popups = new FlxTypedGroup<FlxText>();
@@ -192,6 +203,7 @@ class ChapterState extends FlxState {
 		slabs = new FlxTypedGroup<NormalSlab>();
 		solidBlock = new FlxTypedGroup<SolidBlock>();
 		bullets = new FlxTypedGroup<FlxSprite>();
+
 		hud = new FlxGroup();
 
 		playerGlow = new FlxSprite();
@@ -218,9 +230,9 @@ class ChapterState extends FlxState {
 		saveAnimation.scrollFactor.set(0, 0);
 
 		RoomLoader.loadRoom(this, PlayerData.currentRoom);
-		// ;
 
-		switch (PlayerData.currentChapter) {
+		switch (PlayerData.currentChapter)
+		{
 			case 1:
 				chapter1Cache();
 			case 2:
@@ -230,36 +242,54 @@ class ChapterState extends FlxState {
 		}
 
 		// currentConfig.cacheAssets();
-
 		// FlxG.stage.addEventListener(openfl.events.Event.DEACTIVATE, onFocusLost);
 
 		super.create();
 	}
 
-	override public function update(elapsed:Float):Void {
-		if (isAutoscrolling && cameraTarget != null) {
+	override public function update(elapsed:Float):Void
+	{
+		#if debug
+				FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
+		#end
+		if (isAutoscrolling && cameraTarget != null)
+		{
 			cameraTarget.x += scrollSpeed * elapsed;
 			cameraTarget.y = 300;
 
-			if (player.x + player.width < FlxG.camera.scroll.x) {
+			if (player.x + player.width < FlxG.camera.scroll.x)
+			{
 				killPlayer();
 			}
-		} else if (!isAutoscrolling && cameraTarget != null) {
-			if (cameraType == "unlockX") {
+		}
+		else if (!isAutoscrolling && cameraTarget != null)
+		{
+			#if !debug
+			if (cameraType == "unlockX")
+			{
 				cameraTarget.x = player.x;
-				// cameraTarget.y = map.y + (map.height / 2);
 				cameraTarget.y = map.y;
-			} else if (cameraType == "unlockY") {
+			}
+			else if (cameraType == "unlockY")
+			{
 				cameraTarget.x = map.x + (map.width / 2);
-				cameraTarget.y = player.y + 225;
-			} else if (cameraType == "unlockXY") {
+				var targetOffset:Float = (player.velocity.y > 50) ? 0 : -225;
+				
+				cameraOffsetY += (targetOffset - cameraOffsetY) * 5.0 * FlxG.elapsed;
+
+				cameraTarget.y = player.y + cameraOffsetY;
+			}
+			else if (cameraType == "unlockXY")
+			{
 				cameraTarget.x = player.x;
 				cameraTarget.y = player.y;
 			}
+			#end
 		}
 
 		#if !mobile
-		if (FlxG.keys.justPressed.F11) {
+		if (FlxG.keys.justPressed.F11 || FlxG.keys.pressed.ALT && FlxG.keys.justPressed.ENTER)
+		{
 			if (FlxG.fullscreen == false)
 				FlxG.fullscreen = true;
 			else
@@ -267,58 +297,65 @@ class ChapterState extends FlxState {
 		}
 		#end
 
-		if (subState == null) {
+		if (subState == null)
+		{
 			PlayerData.totalSeconds += elapsed;
 		}
 
+
 		super.update(elapsed);
+
+		if (circusShader != null)
+		{
+			if (bg != null) bg.shader = circusShader;
+			bg.x = -200;
+			circusShader.update(elapsed);
+		}
+
+		if (rainbowShader != null)
+		{
+			if (bg != null) bg.shader = rainbowShader;
+			rainbowShader.data.time.value[0] += elapsed;
+		}
 
 		FlxG.collide(player, map);
 		FlxG.collide(player, slabs);
 		FlxG.collide(player, solidBlock);
 
-		FlxG.overlap(player, warpsGroup, (p, w) -> {
-			HandleWarp(cast w);
-		});
-		FlxG.overlap(player, savesGroup, (p, s) -> {
-			SaveLogicSprite(cast s);
-		});
-		FlxG.overlap(player, redCoinsGroup, (p, c) -> {
-			RedCoinLogic(cast c);
-		});
-		FlxG.overlap(player, doubleJumpGroup, (p, d) -> {
-			DoubleJumpLogic(cast d);
-		});
-		FlxG.overlap(player, portalGroup, (p, pw) -> {
-			PortalWarpLogic(cast pw);
-		});
-		FlxG.overlap(player, flipGroup, (p, sw) -> {
-			FlipSwitchObjLogic(cast sw);
-		});
+		FlxG.overlap(player, warpsGroup, (p, w) -> { HandleWarp(cast w); });
+		FlxG.overlap(player, savesGroup, (p, s) -> { SaveLogicSprite(cast s); });
+		FlxG.overlap(player, redCoinsGroup, (p, c) -> { RedCoinLogic(cast c); });
+		FlxG.overlap(player, doubleJumpGroup, (p, d) -> { DoubleJumpLogic(cast d); });
+		FlxG.overlap(player, portalGroup, (p, pw) -> { PortalWarpLogic(cast pw); });
+		FlxG.overlap(player, flipGroup, (p, sw) -> { FlipSwitchObjLogic(cast sw); });
 
-		FlxG.collide(player, trampolines, (p, t) -> {
+		FlxG.collide(player, trampolines, (p, t) ->
+		{
 			var tramp:NormalTrampoline = cast t;
-			if (player.touching == DOWN && tramp.touching == UP) {
+			if (player.touching == DOWN && tramp.touching == UP)
+			{
 				player.velocity.y = -1000;
 				tramp.launch();
 				FlxG.sound.play(AssetPaths.trampoline_bounce__ogg, 0.5, false);
 			}
 		});
-		FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) -> {
+		FlxG.collide(player, trampolinesMini, (p:Player, t:NormalTrampolineMini) ->
+		{
 			var trampMini:NormalTrampolineMini = cast t;
-
-			if (trampMini.animation.curAnim != null
-				&& StringTools.startsWith(trampMini.animation.curAnim.name, "jump")
-				&& !trampMini.animation.finished)
+			if (trampMini.animation.curAnim != null && StringTools.startsWith(trampMini.animation.curAnim.name, "jump") && !trampMini.animation.finished)
+			{
 				return;
-
+			}
+				
 			var hitFloor = p.touching.has(DOWN);
 			var hitPlayerLeft = p.touching.has(LEFT);
 			var hitPlayerRight = p.touching.has(RIGHT);
 
-			switch (trampMini.launchDir) {
+			switch (trampMini.launchDir)
+			{
 				case "up":
-					if (hitFloor) {
+					if (hitFloor)
+					{
 						p.velocity.y = -730;
 						p.canDoubleJump = true;
 						trampMini.launch();
@@ -326,7 +363,8 @@ class ChapterState extends FlxState {
 					}
 
 				case "left":
-					if (hitPlayerLeft && !hitFloor) {
+					if (hitPlayerLeft && !hitFloor)
+					{
 						p.maxVelocity.x = 800;
 						p.velocity.x = 800;
 						p.velocity.y = -600;
@@ -337,7 +375,8 @@ class ChapterState extends FlxState {
 					}
 
 				case "right":
-					if (hitPlayerRight && !hitFloor) {
+					if (hitPlayerRight && !hitFloor)
+					{
 						p.maxVelocity.x = 800;
 						p.velocity.x = -800;
 						p.velocity.y = -600;
@@ -349,22 +388,29 @@ class ChapterState extends FlxState {
 			}
 		});
 
-		FlxG.collide(player, platforms, function(p:Player, plat:MovingBlock) {
-			if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP)) {
-				if (plat.velocity.y != 0) {
+		FlxG.collide(player, platforms, function(p:Player, plat:MovingBlock)
+		{
+			if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP))
+			{
+				if (plat.velocity.y != 0)
+				{
 					p.y = plat.y - p.height;
 				}
 				p.velocity.y = 0;
 			}
 		});
 
-		FlxG.collide(platforms, map, function(plat:MovingBlock, wall:FlxObject) {
+		FlxG.collide(platforms, map, function(plat:MovingBlock, wall:FlxObject)
+		{
 			plat.stopMovement();
 		});
 
-		FlxG.collide(player, fallingBlock, function(p:Player, plat:FallingBlock) {
-			if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP)) {
-				if (plat.velocity.y != 0) {
+		FlxG.collide(player, fallingBlock, function(p:Player, plat:FallingBlock)
+		{
+			if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP))
+			{
+				if (plat.velocity.y != 0)
+				{
 					p.y = plat.y - p.height;
 				}
 
@@ -372,32 +418,69 @@ class ChapterState extends FlxState {
 			}
 		});
 
-		if (spawnTimer > 0) {
+		if (spawnTimer > 0 || inmortal)
+		{
 			spawnTimer -= elapsed;
-		} else {
-			FlxG.overlap(player, dangerObjects, function(p:flixel.FlxObject, hazard:flixel.FlxObject) {
-				if (FlxG.pixelPerfectOverlap(player, cast hazard)) {
+		}
+		
+		if (spawnTimer <= 0 && !inmortal)
+		{
+			FlxG.overlap(player, dangerObjects, function(p:flixel.FlxObject, hazard:flixel.FlxObject)
+			{
+				if (FlxG.pixelPerfectOverlap(player, cast hazard))
+				{
 					killPlayer();
 				}
 			});
 		}
 
-		if (PlayerData.saveCooldown > 0) {
+		if (currentBoss != null && currentBoss.exists && currentBoss.alive && currentBoss.visible && currentBoss.alpha > 0)
+		{
+			if (Std.isOfType(currentBoss, main.bosses.ch1.BossJevil.Jevil))
+			{
+				var jevilBoss:main.bosses.ch1.BossJevil.Jevil = cast currentBoss;
+				if (jevilBoss.state != "waiting" && 
+                jevilBoss.state != "precutscene" && 
+                jevilBoss.state != "cutscene" && 
+                jevilBoss.state != "startCube" && 
+                jevilBoss.state != "attackingCube" && 
+                jevilBoss.state != "returningCube" &&
+                jevilBoss.state != "ultimate_cutscene" &&
+                jevilBoss.state != "ultimate_transition" &&
+                jevilBoss.state != "ultimate_barrage" &&
+                jevilBoss.state != "dead")
+            	{
+					FlxG.overlap(player, currentBoss, function(p, b)
+					{
+						if (FlxG.pixelPerfectOverlap(player, jevilBoss))
+						{
+							killPlayer();
+						}
+					});
+				}
+			}
+		}
+
+		if (PlayerData.saveCooldown > 0)
+		{
 			PlayerData.saveCooldown -= elapsed;
 			if (PlayerData.saveCooldown < 0)
 				PlayerData.saveCooldown = 0;
 		}
 
-		if (timeElapsed != null) {
+		if (timeElapsed != null)
+		{
 			timeElapsed.text = "Time: " + PlayerData.formatTime();
 		}
 
 		#if !mobile
-		if (FlxG.keys.justPressed.TAB) {
+		if (FlxG.keys.justPressed.TAB)
+		{
 			FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
 		}
 
-		if (FlxG.keys.justPressed.R) {
+		if (FlxG.keys.justPressed.R)
+		{
 			var currentSeconds = PlayerData.totalSeconds;
 			PlayerData.totalDeaths++;
 			leveldata.misc.SaveManager.saveGameRestart();
@@ -406,40 +489,57 @@ class ChapterState extends FlxState {
 			FlxG.resetState();
 		}
 
-		if (FlxG.keys.justPressed.K) {
+		// trace(player.x + " ||| " + player.y);
+
+		if (FlxG.keys.justPressed.K)
+		{
 			killPlayer();
 		}
 
-		if (FlxG.keys.justPressed.Z)
-			PlayerShoot();
+		if (FlxG.keys.justPressed.Z && player.exists) playerShoot();
 		{
-			FlxG.collide(bullets, map, (bullet, wall) -> {
+			FlxG.collide(bullets, map, (bullet, wall) ->
+			{
 				bullet.kill();
 			});
 		}
 
-		if (FlxG.keys.justPressed.ESCAPE && player.exists) {
+		if (FlxG.keys.justPressed.ESCAPE && player.exists)
+		{
+			if (jevil != null && Reflect.hasField(jevil, "fightingBoss") && Reflect.field(jevil, "fightingBoss") == true)
+			{
+				FlxG.camera.shake(0.01, 0.05);
+            	FlxG.sound.play(AssetPaths.error__ogg, 0.5, false);
+				return;
+			}
+ 
 			isPaused = true;
 			this.persistentUpdate = false;
 			openSubState(new gui.PauseState());
 		}
 		#end
 
-		if (saveAnimation.alpha > 0) {
+		if (saveAnimation.alpha > 0)
+		{
 			saveAnimation.alpha -= 0.01;
 		}
 
-		bullets.forEachAlive((bullet) -> {
-			if (!bullet.isOnScreen()) {
+		bullets.forEachAlive((bullet) ->
+		{
+			if (!bullet.isOnScreen())
+			{
 				bullet.kill();
 			}
 		});
 
-		if (player != null && player.exists && playerGlow != null) {
+		if (player != null && player.exists && playerGlow != null)
+		{
 			playerGlow.exists = true;
 			playerGlow.x = player.x + (player.width / 2) - (playerGlow.width / 2);
 			playerGlow.y = player.y + (player.height / 2) - (playerGlow.height / 2);
-		} else if (playerGlow != null) {
+		}
+		else if (playerGlow != null)
+		{
 			playerGlow.exists = false;
 		}
 
@@ -448,59 +548,94 @@ class ChapterState extends FlxState {
 
 		#if mobile
 		if (virtualPad.buttonA.justPressed)
-			PlayerShoot();
+			playerShoot();
 		{
-			FlxG.collide(bullets, map, (bullet, wall) -> {
+			FlxG.collide(bullets, map, (bullet, wall) ->
+			{
 				bullet.kill();
 			});
 		}
 		#end
 
-		if (player.x > map.width + 100 || player.y > map.height + 100) {
+		if (player.x > map.width + 100 || player.y > map.height + 100)
+		{
 			killPlayer();
 		}
 
-		if (FlxG.keys.justPressed.T) {
+		if (FlxG.keys.justPressed.T)
+		{
 			trace("PLAYER X: " + player.x + " ||| PLAYER Y: " + player.y);
 		}
 
-		if (FlxG.keys.justPressed.Y) {
+		if (FlxG.keys.justPressed.Y)
+		{
 			trace("MAP WIDTH: " + map.width);
 			trace("MAP HEIGHT: " + map.height);
+		}
+
+
+		if (currentBoss != null && Std.isOfType(currentBoss, main.bosses.ch1.BossJevil.Jevil))
+		{
+			var bossJevil:main.bosses.ch1.BossJevil.Jevil = cast currentBoss;
+			if (bossJevil != null && bossJevil.state == "waiting" && player.x > map.x + (map.width / 3))
+			{
+				bossJevil.preCutscene();
+			}
+		}
+
+		if (currentBoss != null && currentBoss.exists && currentBoss.alive)
+		{
+			FlxG.overlap(bullets, currentBoss, function(bullet, boss)
+			{
+				if (Std.isOfType(boss, main.bosses.ch1.BossJevil.Jevil))
+				{
+					var jevilBoss:main.bosses.ch1.BossJevil.Jevil = cast boss;
+					
+					if (jevilBoss.isVulnerable)
+					{
+						jevilBoss.takeDamage(1);
+						bullet.kill();
+					}
+				}
+				else 
+				{
+					var invul:Bool = Reflect.field(boss, "isInvulnerable");
+					if (!invul)
+					{
+						Reflect.setField(boss, "hp", Reflect.field(boss, "hp") - 1);
+						bullet.kill();
+					}
+				}
+			});
 		}
 
 		#if !mobile
 		if (FlxG.keys.justPressed.ONE)
 			RoomLoader.loadRoom(this, "testing");
 		if (FlxG.keys.justPressed.TWO)
-			RoomLoader.loadRoom(this, "map11");
+			RoomLoader.loadRoom(this, "map41");
 		if (FlxG.keys.justPressed.THREE)
-			RoomLoader.loadRoom(this, "map39");
+			RoomLoader.loadRoom(this, "map09");
+		if (FlxG.keys.justPressed.NINE)
+			RoomLoader.loadRoom(this, "boss-jevil01");
 		if (FlxG.keys.justPressed.I)
-			spawnTimer = 9999;
-		if (FlxG.keys.justPressed.M) {
-			var current = currentRoomName;
-			var numPart = Std.parseInt(current.substr(3));
-			numPart++;
-			var nextRoomNum = (numPart < 10) ? "0" + numPart : Std.string(numPart);
-			var nextRoomName = "map" + nextRoomNum;
-
-			RoomLoader.loadRoom(this, nextRoomName);
-
-			trace("Teleported to: " + nextRoomName);
-			spawnTimer = 2.0;
-		}
+			inmortal = true;
 		#end
 
-		if (FlxG.keys.justPressed.P) {
+		if (FlxG.keys.justPressed.P)
+		{
 			trace("--- COIN STATUS ---");
 			trace("Total Coins: " + PlayerData.getCoinCount());
 			trace("IDs in memory: " + PlayerData.collectedCoins);
 		}
 
-		if (cameraType != "normal") {
-			if (cameraSnapTimer >= 0) {
-				if (cameraSnapTimer <= 0) {
+		#if !debug
+		if (cameraType != "normal")
+		{
+			if (cameraSnapTimer >= 0)
+			{
+				if (cameraSnapTimer <= 0)
+				{
 					FlxG.camera.follow(cameraTarget, PLATFORMER, 0.1);
 					return;
 				}
@@ -509,10 +644,14 @@ class ChapterState extends FlxState {
 				cameraSnapTimer -= 1;
 			}
 		}
-		if (udpClient != null) {
-			if (player != null && player.alive) {
+		#end
+		if (udpClient != null)
+		{
+			if (player != null && player.alive)
+			{
 				networkTimer += elapsed;
-				if (networkTimer >= tickRate) {
+				if (networkTimer >= tickRate)
+				{
 					networkTimer = 0;
 					var currentAnim = (player.animation.curAnim != null ? player.animation.curAnim.name : "idle");
 					var payload:String = '{"x":' + player.x + ',"y":' + player.y + ',"flip":' + player.isFlipped + ',"facingRight":' + Player.isFacingRIGHT
@@ -523,46 +662,62 @@ class ChapterState extends FlxState {
 
 			// Recibir todos los paquetes pendientes
 			var packet:String = null;
-			while ((packet = udpClient.receive()) != null) {
-				try {
+			while ((packet = udpClient.receive()) != null)
+			{
+				try
+				{
 					var data = haxe.Json.parse(packet);
-					if (data.death == true) {
-						if (data.currentRoom == currentRoomName) {
+					if (data.death == true)
+					{
+						if (data.currentRoom == currentRoomName)
+						{
 							var spawnX = (data.x != null) ? data.x : (remotePlayer != null ? remotePlayer.x : 0);
 							var spawnY = (data.y != null) ? data.y : (remotePlayer != null ? remotePlayer.y : 0);
 							bloodParticles(spawnX, spawnY);
-							if (remotePlayer != null) {
+							if (remotePlayer != null)
+							{
 								remotePlayer.visible = false;
 								remotePlayer.exists = false;
 							}
 						}
-					} else if (data.x != null && data.y != null) {
-						if (remotePlayer == null) {
+					}
+					else if (data.x != null && data.y != null)
+					{
+						if (remotePlayer == null)
+						{
 							remotePlayer = new main.RemotePlayer(data.x, data.y);
 							add(remotePlayer);
 						}
 						remotePlayer.loadSkin(data.skin != null ? data.skin : "thekid");
-						if (data.currentRoom == currentRoomName) {
+						if (data.currentRoom == currentRoomName)
+						{
 							remotePlayer.exists = true;
 							remotePlayer.visible = true;
 							remotePlayer.applyNetworkPacket(data.x, data.y, data.flip == true, data.facingRight == true, data.anim);
-						} else {
+						}
+						else
+						{
 							remotePlayer.exists = false;
 						}
 					}
-				} catch (e:Dynamic) {
+				}
+				catch (e:Dynamic)
+				{
 					trace("Error al procesar el paquete recibido: " + e);
 				}
 			}
 		}
 	}
 
-	override public function destroy():Void {
-		if (udpClient != null) {
+	override public function destroy():Void
+	{
+		if (udpClient != null)
+		{
 			udpClient.close();
 			udpClient = null;
 		}
-		if (remotePlayer != null) {
+		if (remotePlayer != null)
+		{
 			remotePlayer.destroy();
 			remotePlayer = null;
 		}
@@ -570,12 +725,14 @@ class ChapterState extends FlxState {
 		super.destroy();
 	}
 
-	function imgCache():Void {
+	function imgCache():Void
+	{
 		FlxG.bitmap.add(AssetPaths.save__png);
 		FlxG.bitmap.add(AssetPaths.playerGlow__png);
 	}
 
-	function sfxCache():Void {
+	function sfxCache():Void
+	{
 		FlxG.sound.cache(AssetPaths.jump__ogg);
 		FlxG.sound.cache(AssetPaths.doublejump__ogg);
 		FlxG.sound.cache(AssetPaths.break_block__ogg);
@@ -583,24 +740,34 @@ class ChapterState extends FlxState {
 		FlxG.sound.cache(AssetPaths.death_bgm__ogg);
 	}
 
-	function chapter1Cache():Void {
+	function chapter1Cache():Void
+	{
+		FlxG.sound.cache(AssetPaths.castle1__ogg);
+		FlxG.sound.cache(AssetPaths.castle_underground__ogg);
 		FlxG.bitmap.add(AssetPaths.ch1tiles__png);
 	}
 
-	function chapter2Cache():Void {
+	function chapter2Cache():Void
+	{
 		// TODO:
 	}
 
-	function PlayerShoot():Void {
+	function playerShoot():Void
+	{
+		if (!player.active || player.alpha == 0 || player.visible == false) return;
+
 		var bullet = new FlxSprite();
 		bullet.loadGraphic(AssetPaths.bullet__png, false);
 		add(bullet);
 
-		if (Player.isFacingRIGHT == false) {
+		if (Player.isFacingRIGHT == false)
+		{
 			bullet.velocity.x = -800;
 			bullet.x = player.x + -20;
 			bullet.y = player.y + 4;
-		} else if (Player.isFacingRIGHT == true) {
+		}
+		else if (Player.isFacingRIGHT == true)
+		{
 			bullet.velocity.x = 800;
 			bullet.x = player.x + 30;
 			bullet.y = player.y + 4;
@@ -610,8 +777,11 @@ class ChapterState extends FlxState {
 		FlxG.sound.play(AssetPaths.playershoot__ogg, 0.5, false);
 	}
 
-	function HandleWarp(w:WarpTrigger):Void {
-		if (w.newChapter != null && w.newChapter != "") {
+	function HandleWarp(w:WarpTrigger):Void
+	{
+		
+		if (w.newChapter != null && w.newChapter != "")
+		{
 			PlayerData.currentChapter = Std.parseInt(w.newChapter);
 		}
 
@@ -620,16 +790,14 @@ class ChapterState extends FlxState {
 
 		RoomLoader.loadRoom(this, w.targetRoom);
 
-		switch (w.direction) {
+		switch (w.direction)
+		{
 			case "up":
 				player.y = map.y + map.height - player.height - 60;
-				var widthDiff = oldWidth - map.width;
-				player.x = (map.x + relativeX) - widthDiff;
+				var relativeX:Float = player.x - map.x;
 
 			case "down":
 				player.y = map.y + 60;
-
-			// TODO: Hacer lo mismo que con el up
 
 			case "left":
 				player.x = map.x + map.width - player.width - 60;
@@ -646,7 +814,9 @@ class ChapterState extends FlxState {
 		if (player.x > maxX)
 			player.x = maxX;
 
-		if (cameraTarget != null && cameraType != "normal") {
+		#if !debug
+		if (cameraTarget != null && cameraType != "normal")
+		{
 			if (cameraType == "unlockY")
 				cameraTarget.x = FlxG.width / 2;
 			else
@@ -657,11 +827,13 @@ class ChapterState extends FlxState {
 			else
 				cameraTarget.y = player.y;
 		}
+		#end
 
 		spawnTimer = 0.15;
 	}
 
-	function setupHUD():Void {
+	function setupHUD():Void
+	{
 		#if debug
 		currentChapter = new FlxText(50, FlxG.height - 90, 0, "Chapter: ", 18);
 		currentChapter.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
@@ -699,9 +871,12 @@ class ChapterState extends FlxState {
 		add(timeElapsed);
 	}
 
-	function SaveLogicSprite(saveObj:SavePoint):Void {
-		if (saveObj.alive) {
-			if (PlayerData.currentRoom == currentRoomName) {
+	function SaveLogicSprite(saveObj:SavePoint):Void
+	{
+		if (saveObj.alive)
+		{
+			if (PlayerData.currentRoom == currentRoomName)
+			{
 				saveObj.alive = false;
 				saveObj.visible = false;
 				saveObj.kill();
@@ -711,7 +886,8 @@ class ChapterState extends FlxState {
 			PlayerData.spawnY = player.y + 60;
 			PlayerData.currentRoom = currentRoomName;
 
-			if (PlayerData.saveCooldown <= 0) {
+			if (PlayerData.saveCooldown <= 0)
+			{
 				saveObj.pop(player);
 				saveAnimation.alpha = 0.5;
 				FlxG.sound.play(AssetPaths.savedgame__ogg, 0.5, false);
@@ -724,11 +900,14 @@ class ChapterState extends FlxState {
 		}
 	}
 
-	function RedCoinLogic(redCoin:RedCoin):Void {
+	function RedCoinLogic(redCoin:RedCoin):Void
+	{
 		if (redCoin == null || !redCoin.exists || !redCoin.alive)
 			return;
-		if (redCoin.alive && redCoin.exists) {
-			if (!PlayerData.isCoinCollected(redCoin.coinID)) {
+		if (redCoin.alive && redCoin.exists) 
+		{
+			if (!PlayerData.isCoinCollected(redCoin.coinID))
+			{
 				trace("Pushing coin ID to memory: " + redCoin.coinID);
 				PlayerData.collectedCoins.push(redCoin.coinID);
 			}
@@ -741,16 +920,20 @@ class ChapterState extends FlxState {
 		}
 	}
 
-	function DoubleJumpLogic(doublejObj:DoubleJumpObj):Void {
-		if (doublejObj.alive) {
-			if (player.canDoubleJump == false) {
+	function DoubleJumpLogic(doublejObj:DoubleJumpObj):Void
+	{
+		if (doublejObj.alive)
+		{
+			if (player.canDoubleJump == false)
+			{
 				player.canDoubleJump = true;
 			}
 			doublejObj.kill();
 		}
 	}
 
-	function FlipSwitchObjLogic(flipSwitchObj:FlipSwitch):Void {
+	function FlipSwitchObjLogic(flipSwitchObj:FlipSwitch):Void
+	{
 		if (!flipSwitchObj.alive)
 			return;
 
@@ -759,14 +942,17 @@ class ChapterState extends FlxState {
 
 		player.flipGravity();
 
-		FlxTween.tween(FlxG.camera, {
+		FlxTween.tween(FlxG.camera,
+		{
 			angle: player.isFlipped ? 180 : 0
-		}, 0.5, {
+		}, 0.5,
+		{
 			ease: FlxEase.sineInOut
 		});
 	}
 
-	function PortalWarpLogic(portalLogic:PortalWarp):Void {
+	function PortalWarpLogic(portalLogic:PortalWarp):Void
+	{
 		RoomLoader.loadRoom(this, "map33");
 		FlxG.camera.shake(0.005, 0.25);
 		saveAnimation.alpha = 0.5;
@@ -775,9 +961,21 @@ class ChapterState extends FlxState {
 		player.y = 300;
 	}
 
-	function killPlayer():Void {
-		if (player != null && player.exists && player.alive) {
-			if (FlxG.sound.music != null) {
+	function killPlayer():Void
+	{
+		if (currentRoomName == "boss-jevil03" && currentBoss != null && Std.isOfType(currentBoss, main.bosses.ch1.BossJevil.Jevil))
+		{
+			var bossJevil:main.bosses.ch1.BossJevil.Jevil = cast currentBoss;
+			if (bossJevil.ultimateManager != null)
+			{
+				bossJevil.ultimateManager.cancelBarrage();
+			}
+		}
+
+		if (player != null && player.exists && player.alive)
+		{
+			if (FlxG.sound.music != null)
+			{
 				PlayerData.lastMusicTime = FlxG.sound.music.time;
 			}
 
@@ -788,7 +986,9 @@ class ChapterState extends FlxState {
 			PlayerData.deathY = player.y;
 			playerGlow.visible = false;
 			player.kill();
-			if (playerTrail != null) {
+
+			if (playerTrail != null)
+			{
 				playerTrail.kill();
 			}
 
@@ -796,19 +996,20 @@ class ChapterState extends FlxState {
 				FlxG.sound.music.stop();
 			this.persistentUpdate = true;
 			PlayerData.totalDeaths -= 1;
-			bloodParticles();
-			openSubState(new DeathState());
 
-			/* if multiplayer */
-			if (udpClient != null) {
+			bloodParticles();
+            openSubState(new DeathState());
+
+			if (udpClient != null)
+			{
 				var payload:String = '{"death": true, "x": ' + player.x + ', "y": ' + player.y + ', "currentRoom": "' + currentRoomName + '"}';
 				udpClient.send(payload);
-				// sends a death to the server
 			}
 		}
 	}
 
-	function initLoopPoints():Void {
+	function initLoopPoints():Void
+	{
 		if (loopPoints != null)
 			return;
 
@@ -816,21 +1017,24 @@ class ChapterState extends FlxState {
 
 		var fileContent:String = openfl.Assets.getText("assets/data/music/loopPoints.txt");
 
-		if (fileContent != null) {
+		if (fileContent != null)
+		{
 			var lines:Array<String> = fileContent.split("\n");
-			for (line in lines) {
+			for (line in lines)
+			{
 				var parts:Array<String> = line.split(":");
-				if (parts.length == 2) {
+				if (parts.length == 2)
+				{
 					var songName:String = StringTools.trim(parts[0]);
 					var loopTime:Float = Std.parseFloat(StringTools.trim(parts[1]));
-
 					loopPoints.set(songName, loopTime);
 				}
 			}
 		}
 	}
 
-	function updateMusic():Void {
+	function updateMusic():Void
+	{
 		if (player != null && !player.alive)
 			return;
 		if (subState != null)
@@ -853,12 +1057,15 @@ class ChapterState extends FlxState {
 		initLoopPoints();
 		var loopStartMs:Float = 0;
 
-		if (!isModded && loopPoints.exists(songName)) {
+		if (!isModded && loopPoints.exists(songName))
+		{
 			loopStartMs = loopPoints.get(songName) * 1000;
 		}
 
-		if (PlayerData.currentSong == songPath && FlxG.sound.music != null && FlxG.sound.music.playing) {
-			if (PlayerData.isRespawning) {
+		if (PlayerData.currentSong == songPath && FlxG.sound.music != null && FlxG.sound.music.playing)
+		{
+			if (PlayerData.isRespawning)
+			{
 				FlxG.sound.music.time = PlayerData.lastMusicTime;
 				PlayerData.isRespawning = false;
 			}
@@ -868,25 +1075,33 @@ class ChapterState extends FlxState {
 		PlayerData.currentSong = songPath;
 
 		#if sys
-		if (ModLoader.overrides.exists(relativePath)) {
+		if (ModLoader.overrides.exists(relativePath))
+		{
 			var customSound = openfl.media.Sound.fromFile(songPath);
-			if (customSound != null) {
-				FlxG.sound.playMusic(customSound, 0.5, true);
-			} else {
-				FlxG.sound.playMusic("assets/" + relativePath, 0.5, true); // Fallback
+			if (customSound != null)
+			{
+				FlxG.sound.playMusic(customSound, 0.75, true);
 			}
-		} else {
-			FlxG.sound.playMusic(songPath, 0.5, true);
+			else
+			{
+				FlxG.sound.playMusic("assets/" + relativePath, 0.75, true); // Fallback
+			}
+		}
+		else
+		{
+			FlxG.sound.playMusic(songPath, 0.75, true);
 		}
 		#else
-		FlxG.sound.playMusic(songPath, 0.5, true);
+		FlxG.sound.playMusic(songPath, 0.75, true);
 		#end
 
-		if (FlxG.sound.music != null) {
+		if (FlxG.sound.music != null)
+		{
 			FlxG.sound.music.loopTime = loopStartMs;
 		}
 
-		if (PlayerData.isRespawning) {
+		if (PlayerData.isRespawning)
+		{
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.update(0);
 
@@ -895,20 +1110,26 @@ class ChapterState extends FlxState {
 		}
 	}
 
-	function autoScroll():Void {
-		for (layer in tiledData.layers) {
-			if (layer.name == "Autoscroll") {
+	function autoScroll():Void
+	{
+		for (layer in tiledData.layers)
+		{
+			if (layer.name == "Autoscroll")
+			{
 				this.isAutoscrolling = true;
 			}
 
-			if (layer.type == TiledLayerType.OBJECT) {
+			if (layer.type == TiledLayerType.OBJECT)
+			{
 				var objLayer:TiledObjectLayer = cast layer;
 
-				if (layer.name == "ScrollSettings" && objLayer.properties.contains("speed")) {
+				if (layer.name == "ScrollSettings" && objLayer.properties.contains("speed"))
+				{
 					this.scrollSpeed = Std.parseFloat(objLayer.properties.get("speed"));
 				}
 
-				if (layer.name == "PlayerSpeed" && objLayer.properties.contains("value")) {
+				if (layer.name == "PlayerSpeed" && objLayer.properties.contains("value"))
+				{
 					var pSpeed = Std.parseFloat(objLayer.properties.get("value"));
 					player.mapMaxSpeed = pSpeed;
 					player.maxVelocity.x = pSpeed;
@@ -917,53 +1138,61 @@ class ChapterState extends FlxState {
 		}
 	}
 
-	function cameraScroll():Void {
+	function cameraScroll():Void
+	{
 		cameraType = "normal";
 		FlxG.camera.target = null;
 
 		var camLayer = tiledData.getLayer("camera");
-		if (camLayer != null && camLayer.properties.contains("cameraType")) {
+		if (camLayer != null && camLayer.properties.contains("cameraType"))
+		{
 			cameraType = camLayer.properties.get("cameraType");
 		}
 
-		if (map != null && cameraType != null)
+		if (map != null)
 		{
-			FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 50, map.height + 65, false);
+			switch (cameraType)
+			{
+				case "unlockX":
+					trace("UnlockX");
+					FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height + 65, false);
+
+				case "unlockY":
+					trace("UnlockY");
+					FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height - 115, false);
+
+				case "unlockXY":
+					trace("UnlockXY");
+					FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height - 115, false);
+
+				case "debug":
+					trace("debug");
+					FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
+
+				default:
+					trace("Default");
+					FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 50, map.height + 65, false);
+			}
+
 			FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
-		}
-		else if (map != null && cameraType == "unlockX")
-		{
-			FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height + 65, false);
-			FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
-		}
-		else if (map != null && cameraType == "unlockY")
-		{
-			FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height - 115, false);
-			FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
-			trace("PUTA MIERDA 3: LA TRILOGIA");
-		}
-		else if (map != null && cameraType == "unlockXY")
-		{
-			FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height - 115, false);
-			FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
-			trace("PUTA MIERDA 4");
-		}
-		
-		
-		else if (map != null && cameraType == "debug") {
-			FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
 		}
 
-		if (cameraTarget == null) {
+		#if !debug
+		if (cameraTarget == null)
+		{
 			cameraTarget = new flixel.FlxObject(player.x, player.y, 1, 1);
 			add(cameraTarget);
 		}
+		#end
 
 		// 5. Apply the correct Follow behavior
-		if (this.isAutoscrolling) {
+		if (this.isAutoscrolling)
+		{
 			cameraTarget.setPosition(player.x + 465, player.y);
 			FlxG.camera.follow(cameraTarget, PLATFORMER, 1);
-		} else if (cameraType != "normal") {
+		}
+		else if (cameraType != "normal")
+		{
 			var cameraMarginX:Float = 0;
 			var cameraMarginY:Float = 0;
 			var cameraMarginW:Float = 0;
@@ -972,7 +1201,7 @@ class ChapterState extends FlxState {
 			if (cameraType == "unlockX")
 			{
 				cameraMarginX = FlxG.width * 0.3;
-				cameraMarginW = FlxG.width * 0.3; // 30% + 40% = 70%
+				cameraMarginW = FlxG.width * 0.3;
 
 				cameraMarginY = FlxG.height / 2;
 				cameraMarginH = 0;
@@ -994,14 +1223,18 @@ class ChapterState extends FlxState {
 			}
 
 			FlxG.camera.deadzone = flixel.math.FlxRect.get(cameraMarginX, cameraMarginY, cameraMarginW, cameraMarginH);
-		} else {
-			if (map != null) {
+		}
+		else
+		{
+			if (map != null)
+			{
 				FlxG.camera.scroll.set(-260, -265);
 			}
 		}
 	}
 
-	function bloodParticles(?x:Float, ?y:Float):Void {
+	function bloodParticles(?x:Float, ?y:Float):Void
+	{
 		var spawnX = (x != null) ? x : PlayerData.deathX;
 		var spawnY = (y != null) ? y : PlayerData.deathY;
 		blood = new flixel.effects.particles.FlxEmitter(spawnX, spawnY, 250);
@@ -1017,7 +1250,8 @@ class ChapterState extends FlxState {
 		blood.start(true, 0, 250);
 	}
 
-	function layoutVirtualPad():Void {
+	function layoutVirtualPad():Void
+	{
 		if (virtualPad == null)
 			return;
 		var padScale:Float = 2.5;
@@ -1025,7 +1259,8 @@ class ChapterState extends FlxState {
 
 		var allButtons = [virtualPad.getButton(LEFT), virtualPad.getButton(RIGHT), virtualPad.getButton(A)];
 
-		for (button in allButtons) {
+		for (button in allButtons)
+		{
 			if (button == null)
 				continue;
 			button.scale.set(padScale, padScale);
@@ -1040,12 +1275,14 @@ class ChapterState extends FlxState {
 			button.alpha = targetAlpha;
 		}
 
-		if (virtualPad.getButton(LEFT) != null) {
+		if (virtualPad.getButton(LEFT) != null)
+		{
 			virtualPad.getButton(LEFT).x = 100;
 			virtualPad.getButton(LEFT).y = FlxG.height - virtualPad.getButton(LEFT).height - 90;
 		}
 
-		if (virtualPad.getButton(RIGHT) != null && virtualPad.getButton(LEFT) != null) {
+		if (virtualPad.getButton(RIGHT) != null && virtualPad.getButton(LEFT) != null)
+		{
 			virtualPad.getButton(RIGHT)
 				.x = virtualPad.getButton(LEFT)
 					.x + virtualPad.getButton(LEFT)
@@ -1053,9 +1290,24 @@ class ChapterState extends FlxState {
 			virtualPad.getButton(RIGHT).y = virtualPad.getButton(LEFT).y;
 		}
 
-		if (virtualPad.getButton(A) != null) {
+		if (virtualPad.getButton(A) != null)
+		{
 			virtualPad.getButton(A).x = FlxG.width - virtualPad.getButton(A).width - 140;
 			virtualPad.getButton(A).y = FlxG.height - virtualPad.getButton(A).height - 200;
 		}
 	}
+
+    public function initBossHUD(bossInstance:main.bosses.ch1.BossJevil.Jevil):Void
+    {
+        this.jevil = bossInstance;
+
+        bossHpBar = new FlxBar((FlxG.width - 400) / 4, 20, LEFT_TO_RIGHT, 800, 20, jevil, "hp", 0, 120);
+        bossHpBar.createFilledBar(0xFF551111, 0xFFFFFFFF, true, 0xFF000000);
+		bossHpBar.screenCenter();
+		bossHpBar.y = 10;
+        bossHpBar.scrollFactor.set(0, 0);
+		bossHpBar.visible = true;
+        if (player.alive && player.active) { add(bossHpBar); }
+
+    }
 }

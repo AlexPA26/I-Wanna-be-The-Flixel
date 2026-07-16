@@ -308,36 +308,6 @@
   </properties>
  </objectgroup>
  <objectgroup id="14" name="warps">
-  <object id="76" name="warp" gid="111" x="950" y="50" width="50" height="50">
-   <properties>
-    <property name="direction" value="up"/>
-    <property name="target" value="map06"/>
-   </properties>
-  </object>
-  <object id="77" name="warp" gid="111" x="1000" y="50" width="50" height="50">
-   <properties>
-    <property name="direction" value="up"/>
-    <property name="target" value="map06"/>
-   </properties>
-  </object>
-  <object id="78" name="warp" gid="111" x="1100" y="50" width="50" height="50">
-   <properties>
-    <property name="direction" value="up"/>
-    <property name="target" value="map06"/>
-   </properties>
-  </object>
-  <object id="79" name="warp" gid="111" x="1100" y="50" width="50" height="50">
-   <properties>
-    <property name="direction" value="up"/>
-    <property name="target" value="map06"/>
-   </properties>
-  </object>
-  <object id="80" name="warp" gid="111" x="1050" y="50" width="50" height="50">
-   <properties>
-    <property name="direction" value="up"/>
-    <property name="target" value="map06"/>
-   </properties>
-  </object>
   <object id="81" name="warp" gid="113" x="200" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="down"/>
@@ -360,18 +330,6 @@
    <properties>
     <property name="direction" value="down"/>
     <property name="target" value="map08"/>
-   </properties>
-  </object>
-  <object id="94" name="warp" gid="111" x="300" y="50" width="50" height="50">
-   <properties>
-    <property name="direction" value="up"/>
-    <property name="target" value="map06"/>
-   </properties>
-  </object>
-  <object id="95" name="warp" gid="111" x="350" y="50" width="50" height="50">
-   <properties>
-    <property name="direction" value="up"/>
-    <property name="target" value="map06"/>
    </properties>
   </object>
   <object id="97" name="warp" gid="113" x="950" y="900" width="50" height="50">

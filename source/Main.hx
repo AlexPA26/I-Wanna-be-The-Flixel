@@ -1,9 +1,11 @@
+import main.ChapterState;
 import flixel.FlxSprite;
 import flixel.FlxGame;
 import openfl.display.FPS;
 import openfl.display.Sprite;
 // import main.ChapterState;
 import debug.BattleState;
+import debug.DebugState;
 import main.MenuState;
 import main.mods.ModLoader;
 import openfl.Lib;
@@ -18,7 +20,7 @@ class Main extends Sprite
 		var gameWidth:Int = 1280;
 		var gameHeight:Int = 720;
 		var initialState = MenuState;
-		var debugState = BattleState;
+		var debugState = MenuState;
 		var zoom:Float = 1;
 		var refreshRate:Int = Lib.current.stage.window.displayMode.refreshRate;
 		if (refreshRate <= 0) refreshRate = 60;

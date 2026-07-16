@@ -1,4 +1,5 @@
 package gui;
+import main.bosses.ch1.BossJevil.Jevil;
 import flixel.sound.FlxSound;
 import openfl.media.Sound;
 import main.mods.ModLoader;
@@ -15,6 +16,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import character.KrisDeathState;
 import main.PlayerData;
+import main.bosses.ch1.BossJevil;
 
 class DeathState extends FlxSubState
 {        
@@ -89,10 +91,10 @@ class DeathState extends FlxSubState
 
             case "thekris":
                 openSubState(new KrisDeathState());
+                PlayerData.currentSkin = Jevil.playerSkin;
 
             default:
-                // openSubState(new KrisDeathState());
-                ModLoader.playModMusic("music/death/death_bgm.ogg", 0.7, true);
+                ModLoader.playModMusic("music/death/death_bgm.ogg", 0.7, false);
         }
 
         bg = new FlxSprite();
@@ -184,4 +186,5 @@ class DeathState extends FlxSubState
         leveldata.misc.SaveManager.loadGame();
         FlxG.resetState();
     }
+
 }

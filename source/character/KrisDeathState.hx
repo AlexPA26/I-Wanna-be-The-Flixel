@@ -20,6 +20,7 @@ class KrisDeathState extends FlxSubState
     var bg:FlxSprite;
     var gameOverText:FlxText;
     var fullText:String = "GAME OVER";
+    var retryText:FlxText;
     var currentLetterCount:Int = 0;
     var textTimer:FlxTimer;
 
@@ -60,7 +61,7 @@ class KrisDeathState extends FlxSubState
         FlxG.sound.play(AssetPaths.kris_hit__ogg, 1);
 
         gameOverText = new FlxText(0, 0, FlxG.width, "");
-        gameOverText.setFormat(AssetPaths.deltarune__otf, 64, FlxColor.WHITE, CENTER);
+        gameOverText.setFormat(AssetPaths.deltarune__otf, 128, FlxColor.WHITE, CENTER);
         gameOverText.setBorderStyle(OUTLINE, 0xFF0000, 2);
         gameOverText.screenCenter();
         gameOverText.y -= 150;
@@ -69,24 +70,47 @@ class KrisDeathState extends FlxSubState
         FlxTween.tween(gameOverText, {y: gameOverText.y - 5}, 1, {type: PINGPONG, ease: FlxEase.sineInOut});
         add(gameOverText);
 
+        retryText = new FlxText(0, 0, FlxG.width, "Press 'R' to try again.");
+        retryText.setFormat(AssetPaths.deltarune__otf, 32, FlxColor.WHITE, CENTER);
+        retryText.screenCenter();
+        retryText.y = gameOverText.y + 300;
+        retryText.scrollFactor.set(0, 0);
+        retryText.visible = false;
+        FlxTween.tween(retryText, {y: retryText.y - 2}, 1, {type: PINGPONG, ease: FlxEase.sineInOut});
+        add(retryText);
+
         new FlxTimer().start(2.1, function(musicTimer:FlxTimer)
         {
             if (FlxG.sound.music != null)
             {
                 FlxG.sound.music.stop();
             }
-            FlxG.sound.playMusic(AssetPaths.determination__ogg, 1, true);
-            gameOverText.visible = true;
-            currentLetterCount = 0;
-            textTimer = new FlxTimer().start(0.5, function(t:FlxTimer)
-            {
-                currentLetterCount++;
-                gameOverText.text = fullText.substr(0, currentLetterCount);
-                
-                gameOverText.screenCenter(Y); 
-            }, fullText.length);
 
-        });
+        FlxG.sound.playMusic(AssetPaths.determination__ogg, 1, true);
+
+        gameOverText.visible = true;
+        currentLetterCount = 0;
+
+        textTimer = new FlxTimer().start(0.5, function(t:FlxTimer)
+        {
+            currentLetterCount++;
+            gameOverText.text = fullText.substr(0, currentLetterCount);
+
+            gameOverText.screenCenter(Y);
+
+            if (currentLetterCount == fullText.length)
+            {
+                new FlxTimer().start(1, function(_)
+                {
+                    retryText.alpha = 0;
+                    retryText.visible = true;
+                    FlxTween.tween(retryText, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
+                });
+            }
+
+        }, fullText.length);
+
+    });
 
         new FlxTimer().start(0.95, function(tmplTimer:FlxTimer)
         {

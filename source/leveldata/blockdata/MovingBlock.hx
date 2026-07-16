@@ -7,10 +7,10 @@ using flixel.FlxG;
 class MovingBlock extends FlxSprite
 {
     var moveDir:String;
-    var speed:Float = 200;
+    var speed:Float;
     var activeMoving:Bool = false;
 
-    public function new(X:Float, Y:Float, MoveDir:String, TileID:Int)
+    public function new(X:Float, Y:Float, MoveDir:String, TileID:Int, speed:Int)
     {
         super(X, Y);
         loadGraphic(AssetPaths.ch1tiles__png, true, 50, 50);
@@ -18,6 +18,7 @@ class MovingBlock extends FlxSprite
         animation.frameIndex = TileID;
         
         this.moveDir = MoveDir;
+        this.speed = speed;
         immovable = true;
     }
 
@@ -39,10 +40,10 @@ class MovingBlock extends FlxSprite
         {
             switch (moveDir)
             {
-                case "up":    velocity.y = -180; 
-                case "down":  velocity.y = 180;
-                case "left":  velocity.x = -180;
-                case "right": velocity.x = 180;
+                case "up":    velocity.y = -speed; 
+                case "down":  velocity.y = speed;
+                case "left":  velocity.x = -speed;
+                case "right": velocity.x = speed;
             }
         }
 

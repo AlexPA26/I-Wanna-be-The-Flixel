@@ -1,5 +1,6 @@
 package main;
 
+import main.bosses.BossLoader;
 import flixel.FlxG;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledTileLayer;
@@ -12,11 +13,14 @@ import leveldata.events.SavePoint;
 import main.ChapterState;
 import main.PlayerData;
 
-class RoomLoader {
-	public static function loadRoom(state:ChapterState, roomName:String):Void {
+class RoomLoader
+{
+	public static function loadRoom(state:ChapterState, roomName:String):Void
+	{
 		flixel.tweens.FlxTween.globalManager.forEach(function(twn) twn.cancel());
 
-		if (state.roomAcid != null) {
+		if (state.roomAcid != null)
+		{
 			state.remove(state.roomAcid);
 			state.roomAcid.destroy();
 			state.roomAcid = null;
@@ -24,15 +28,15 @@ class RoomLoader {
 		#if !mobile
 		var chartPath = "assets/data/chapters/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + ".tmx";
 		#else
-		var chartPath = "assets/data/chapters_mobile/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + "-mobile"
-			+ ".tmx";
+		var chartPath = "assets/data/chapters_mobile/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + "-mobile" + ".tmx";
 		#end
 
 		state.currentRoomName = roomName;
 
-		/* Character Unlocks */
-		if (roomName == "map25" && PlayerData.currentChapter == 1) {
-			if (!PlayerData.reachedSewers) {
+		if (roomName == "map25" && PlayerData.currentChapter == 1)
+		{
+			if (!PlayerData.reachedSewers)
+			{
 				PlayerData.reachedSewers = true;
 				trace("Sewers reached! Skin Unlocked.");
 			}
@@ -40,17 +44,20 @@ class RoomLoader {
 
 		// ##########################
 
-		state.tiledData = new TiledMap(chartPath);
+		if (chartPath != null) state.tiledData = new TiledMap(chartPath);
 
-		if (state.map != null) {
+		if (state.map != null)
+		{
 			state.remove(state.map);
 			state.map.destroy();
 		}
-		if (state.mapDeco != null) {
+		if (state.mapDeco != null)
+		{
 			state.remove(state.mapDeco);
 			state.mapDeco.destroy();
 		}
-		if (state.mapDeco2 != null) {
+		if (state.mapDeco2 != null)
+		{
 			state.remove(state.mapDeco2);
 			state.mapDeco2.destroy();
 		}
@@ -64,24 +71,26 @@ class RoomLoader {
 		state.add(state.map);
 
 		var decoLayer = state.tiledData.getLayer("tiles-deco");
-		if (decoLayer != null) {
+		if (decoLayer != null)
+		{
 			state.mapDeco = new FlxTilemap();
-			state.mapDeco.loadMapFromArray(cast(decoLayer, TiledTileLayer).tileArray, state.tiledData.width, state.tiledData.height, state.mainTilesPath, 50,
-				50, OFF, 1);
+			state.mapDeco.loadMapFromArray(cast(decoLayer, TiledTileLayer).tileArray, state.tiledData.width, state.tiledData.height, state.mainTilesPath, 50, 50, OFF, 1);
 			state.mapDeco.x = -60;
 			state.mapDeco.y = -65;
 			state.add(state.mapDeco);
 		}
 
 		var decoLayer2 = state.tiledData.getLayer("tiles-deco2");
-		if (decoLayer2 != null) {
+		if (decoLayer2 != null)
+			{
 			state.mapDeco2 = new FlxTilemap();
-			state.mapDeco2.loadMapFromArray(cast(decoLayer2, TiledTileLayer).tileArray, state.tiledData.width, state.tiledData.height, state.mainTilesPath,
-				50, 50, OFF, 1);
+			state.mapDeco2.loadMapFromArray(cast(decoLayer2, TiledTileLayer).tileArray, state.tiledData.width, state.tiledData.height, state.mainTilesPath, 50, 50, OFF, 1);
 			state.mapDeco2.x = -60;
 			state.mapDeco2.y = -65;
 			state.add(state.mapDeco2);
 		}
+
+		trace("Teleported to: " + chartPath);
 
 		FlxG.bitmap.clearUnused();
 		state.redCoinsGroup.clear();
@@ -102,10 +111,26 @@ class RoomLoader {
 		state.saveParticlesGroup.clear();
 		state.redCoinParticlesGroup.clear();
 		state.hud.clear();
+		state.currentBoss = null;
 		leveldata.hazards.SwitchSpike.clear();
 
-		if (state.saveParticlesGroup != null) {
-			state.saveParticlesGroup.forEachExists(function(p:FlxEmitter) {
+		if (state.roomImages != null)
+		{
+			state.roomImages.forEach(function(img:flixel.FlxSprite) 
+			{
+				if (img != null) 
+				{
+					flixel.tweens.FlxTween.cancelTweensOf(img);
+					img.destroy();
+				}
+			});
+			state.roomImages.clear();
+		}
+		
+		if (state.saveParticlesGroup != null)
+		{
+			state.saveParticlesGroup.forEachExists(function(p:FlxEmitter)
+			{
 				p.active = false;
 				p.visible = false;
 				p.exists = false;
@@ -113,8 +138,10 @@ class RoomLoader {
 			state.saveParticlesGroup.clear();
 		}
 
-		if (state.redCoinParticlesGroup != null) {
-			state.redCoinParticlesGroup.forEachExists(function(p:FlxEmitter) {
+		if (state.redCoinParticlesGroup != null)
+		{
+			state.redCoinParticlesGroup.forEachExists(function(p:FlxEmitter)
+			{
 				p.active = false;
 				p.visible = false;
 				p.exists = false;
@@ -122,23 +149,25 @@ class RoomLoader {
 			state.redCoinParticlesGroup.clear();
 		}
 
-		if (state.redCoinsGroup != null) {
-			state.redCoinsGroup.forEach(function(c:leveldata.collectibles.RedCoin) {
+		if (state.redCoinsGroup != null)
+		{
+			state.redCoinsGroup.forEach(function(c:leveldata.collectibles.RedCoin)
+			{
 				c.destroy();
 			});
 			state.redCoinsGroup.clear();
 		}
 
-		if (state.savesGroup != null) {
-			state.savesGroup.forEachExists(function(s:SavePoint) {
+		if (state.savesGroup != null)
+		{
+			state.savesGroup.forEachExists(function(s:SavePoint)
+			{
 				s.exists = false;
 			});
 			state.savesGroup.clear();
 		}
 
-		state.bullets.forEachAlive((bullet) -> {
-			bullet.kill();
-		});
+		state.bullets.forEachAlive((bullet) -> { bullet.kill(); });
 
 		ObjectLoader.loadEverything(state.tiledData, state, state.map.x, state.map.y);
 		EventLoader.loadEvents(state.tiledData, state);
@@ -146,14 +175,25 @@ class RoomLoader {
 		state.add(state.redCoinParticlesGroup);
 		state.add(state.slabs);
 		state.add(state.playerTrail);
-		state.add(state.player);
 
-		/**Remote player logic**/
-		if (state.remotePlayer != null) {
+		var bossLayer = state.tiledData.getLayer("boss");
+		if (bossLayer != null)
+		{
+			if (bossLayer.properties.contains("bossName"))
+			{
+				var name = bossLayer.properties.get("bossName");
+				BossLoader.spawnBoss(state, name);
+			}
+		}
+
+		if (state.remotePlayer != null)
+		{
 			state.remove(state.remotePlayer);
 			state.add(state.remotePlayer);
 		}
-		/*-------------------**/
+
+		state.add(state.roomImages);
+		state.add(state.player);
 		state.add(state.dangerObjects);
 		state.add(state.player.doubleJumpEffect);
 		state.add(state.doubleJumpGroup);
@@ -173,16 +213,21 @@ class RoomLoader {
 		state.add(state.hud);
 		state.cameraSnapTimer = 1;
 
-		state.savesGroup.forEach(function(save:SavePoint) {
+		state.savesGroup.forEach(function(save:SavePoint)
+		{
 			state.saveParticlesGroup.add(save.particle);
 		});
 
 		BackgroundManager.updateAllEffects(state, state.tiledData);
 		state.add(state.lightsGroup);
-		if (state.vignite != null) {
+		if (state.vignite != null)
+		{
 			if (state.members.contains(state.vignite))
+			{
 				state.remove(state.vignite);
+			}
 		}
+
 		state.add(state.vignite);
 		state.setupHUD();
 		state.autoScroll();
@@ -191,11 +236,11 @@ class RoomLoader {
 		state.add(state.saveAnimation);
 
 		#if !debug
-		PlayerData.saveCooldown = 0.1;
-		state.spawnTimer = 0.1;
+			PlayerData.saveCooldown = 0.1;
+			state.spawnTimer = 0.1;
 		#else
-		PlayerData.saveCooldown = 9999;
-		state.spawnTimer = 0.1;
+			PlayerData.saveCooldown = 9999;
+			state.spawnTimer = 0.1;
 		#end
 
 		state.hudGroup.clear();

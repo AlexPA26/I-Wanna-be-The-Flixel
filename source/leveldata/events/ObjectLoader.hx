@@ -1,5 +1,7 @@
 package leveldata.events;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import leveldata.collectibles.RedCoin;
 import flixel.addons.editors.tiled.TiledLayer;
 import flixel.addons.editors.tiled.TiledMap;
@@ -74,7 +76,26 @@ class ObjectLoader
 
                         case "switch-spike":
                             var localID:Int = 0;
+                            var movement:Int = 50;
                             var status:String = "none";
+                            var auto:Bool = false;
+                            var speed:Float = 1.5;
+
+                            if (obj.properties.contains("auto"))
+                            {
+                                auto = obj.properties.get("auto") == "true";
+
+                                if (obj.properties.contains("speed"))
+                                {
+                                    var parsedSpeed:Float = Std.parseFloat(obj.properties.get("speed"));
+
+                                    if (parsedSpeed > 0)
+                                    {
+                                        speed = parsedSpeed;
+                                    }
+                                }
+                            }
+
                             if (obj.properties.contains("status"))
                             {
                                 status = obj.properties.get("status");
@@ -83,7 +104,7 @@ class ObjectLoader
                             {
                                 localID = Std.parseInt(obj.properties.get("id"));
                             } 
-                            var sSpike = new SwitchSpike(spawnX, spawnY, localID, status);
+                            var sSpike = new SwitchSpike(spawnX, spawnY, localID, status, movement, auto, speed);
                             state.dangerObjects.add(sSpike);
 
                         case "save":
@@ -137,9 +158,16 @@ class ObjectLoader
 
                         case "platform":
                             var dir = obj.properties.get("direction");
+                            var speed = 180;
                             var tileset = tiledData.getGidOwner(obj.gid);
                             var localID:Int = obj.gid - tileset.firstGID;
-                            var plat = new MovingBlock(spawnX, spawnY, dir, localID);
+
+                            if (obj.properties.contains("speed"))
+                            {
+                                speed = Std.parseInt(obj.properties.get("speed"));
+                            }
+
+                            var plat = new MovingBlock(spawnX, spawnY, dir, localID, speed);
                             state.platforms.add(plat);
 
                         case "falling":
@@ -150,7 +178,17 @@ class ObjectLoader
                             state.fallingBlock.add(fall);
 
                         case "light":
-                            var light = new LightTorch(spawnX, spawnY);
+                            var color:String = "orange";
+                            if (obj.properties != null && obj.properties.contains("color"))
+                            {
+                                var customColor:String = obj.properties.get("color");
+                                
+                                if (customColor != null && customColor != "")
+                                {
+                                    color = customColor;
+                                }
+                            }
+                            var light = new LightTorch(spawnX, spawnY, color);
                             light.x -= light.width / 2;
                             light.y -= light.height / 2;
                             state.lightsGroup.add(light);
@@ -165,6 +203,54 @@ class ObjectLoader
                             var localID:Int = obj.gid - tileset.firstGID;
                             var solid = new SolidBlock(spawnX, spawnY, localID);
                             state.solidBlock.add(solid);
+
+                        case "image":
+                            var imageName:String = "";
+                            var opacity:Float = 1;
+                            var scale:Float = 1;
+                            var tweenDuration:Float = 1;
+
+                            if (obj.properties.contains("imageName"))
+                            {
+                                imageName = obj.properties.get("imageName");
+                            }
+
+                            if (imageName != "")
+                            {
+                                var imgSprite = new flixel.FlxSprite(spawnX, spawnY);
+                                var imgPath = "assets/data/images/chapter" + PlayerData.currentChapter + "/" + imageName + ".png";
+                                
+                                imgSprite.loadGraphic(imgPath);
+                                var blockCenterX:Float = spawnX + (obj.width / 2);
+                                var blockCenterY:Float = spawnY + (obj.height / 2);
+                                imgSprite.x = blockCenterX - (imgSprite.width / 2);
+                                imgSprite.y = blockCenterY - (imgSprite.height / 2);
+
+                                if (obj.properties.contains("alpha"))
+                                {
+                                    opacity = Std.parseFloat(obj.properties.get("alpha"));
+                                    imgSprite.alpha = opacity;
+                                }
+
+                                if (obj.properties.contains("scale"))
+                                {
+                                    scale = Std.parseFloat(obj.properties.get("scale"));
+                                    imgSprite.scale.set(scale, scale);
+                                    imgSprite.updateHitbox();
+                                }
+
+                                if (obj.properties.contains("tweenDuration"))
+                                {
+                                    tweenDuration = Std.parseFloat(obj.properties.get("tweenDuration"));
+                                }
+
+                                if (obj.properties.contains("tween"))
+                                {
+                                    var offY = Std.parseFloat(obj.properties.get("tween"));
+                                    FlxTween.tween(imgSprite, {y: imgSprite.y - offY}, tweenDuration, {type: PINGPONG, ease: FlxEase.sineInOut});
+                                }
+                                state.roomImages.add(imgSprite);
+                            }
 
                     }
                 }
