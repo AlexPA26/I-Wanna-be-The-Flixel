@@ -103,6 +103,7 @@
  <objectgroup id="9" name="bg">
   <properties>
    <property name="bgName" value="bgMountains"/>
+   <property name="bgShader" value="rain"/>
   </properties>
  </objectgroup>
  <objectgroup id="10" name="mapEffect">

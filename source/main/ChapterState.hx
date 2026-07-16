@@ -33,7 +33,6 @@ import leveldata.collectibles.*;
 import flixel.addons.effects.FlxTrail;
 import main.mods.ModLoader;
 import flixel.ui.FlxBar;
-import main.bosses.ch1.BossJevil;
 
 @:allow(main.RoomLoader)
 @:allow(leveldata.events.EventLoader)
@@ -63,8 +62,15 @@ class ChapterState extends FlxState
 	public var isPaused:Bool = false;
 
 	public var bg:FlxSprite;
+
+
+	public var rainShader:shaders.RainShader;
 	public var circusShader:shaders.JevilCircusBG;
 	public var rainbowShader:shaders.RainbowCrazy;
+
+
+
+
 	public var currentBGName:String = "";
 	public var mainTilesPath:String = "assets/images/levels/tiles/ch" + PlayerData.currentChapter + "tiles.png";
 	public var currentConfig:ChapterConfig;
@@ -305,6 +311,10 @@ class ChapterState extends FlxState
 
 		super.update(elapsed);
 
+		if (rainShader != null)
+		{
+			rainShader.update(elapsed);
+		}
 		if (circusShader != null)
 		{
 			if (bg != null) bg.shader = circusShader;

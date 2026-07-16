@@ -1,5 +1,6 @@
 package leveldata.background;
 
+import shaders.RainShader;
 import shaders.RainbowCrazy;
 import backgrounds3D.CircusBackground;
 import openfl.display.BitmapData;
@@ -98,7 +99,24 @@ class BackgroundManager
                     state.rainbowShader = new RainbowCrazy();
                     state.rainbowShader.data.time.value = [0.0];
                     state.bg.shader = state.rainbowShader;
+
+                case "rain":
+                    state.rainShader = new RainShader();
+                    state.rainShader.data.time.value = [0.0];
+                    state.bg.shader = state.rainShader;
             }
+        }
+        else
+        {
+            // This room's bg layer has no bgShader property at all — make sure a
+            // shader isn't still hanging around on state.bg from a previous room
+            // that reused the same background image (updateBackground() only
+            // recreates state.bg when the bgName itself changes, so the shader
+            // would otherwise survive untouched).
+            state.bg.shader = null;
+            state.circusShader = null;
+            state.rainbowShader = null;
+            state.rainShader = null;
         }
         
     }
