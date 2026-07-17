@@ -72,7 +72,7 @@ class ChapterState extends FlxState
 	public var castleShader:CastleIndoors;
 	public var toxicShader:ToxicShader;
 
-	public var screenShader:Dynamic;
+	public var screenShader:flixel.system.FlxAssets.FlxShader;
 	public var screenShaderName:String;
 
 

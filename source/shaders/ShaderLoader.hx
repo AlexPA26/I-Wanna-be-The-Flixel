@@ -6,9 +6,6 @@ import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledLayer;
 import flixel.addons.editors.tiled.TiledObjectLayer;
 import main.ChapterState;
-import shaders.RainShader;
-import shaders.RainbowCrazy;
-import shaders.JevilCircusBG;
 
 class ShaderLoader
 {
@@ -49,13 +46,13 @@ class ShaderLoader
             case "castle":
                 state.screenShader = new CastleInside();
 
-
             default:
                 trace("[ ShaderLoader ] Unknown shaderName on 'shaders' layer: " + shaderName);
                 return;
         }
 
         state.screenShaderName = shaderName;
+        
         FlxG.camera.filters = [new ShaderFilter(state.screenShader)];
     }
 

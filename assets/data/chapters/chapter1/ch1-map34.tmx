@@ -423,11 +423,6 @@
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1391" name="spike" gid="89" x="1700" y="600" width="50" height="50">
-   <properties>
-    <property name="id" value="4"/>
-   </properties>
-  </object>
   <object id="1532" name="switch-spike" gid="87" x="1250" y="300" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
