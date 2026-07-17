@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="25" nextobjectid="835">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="26" nextobjectid="835">
  <properties>
   <property name="songName" value="none"/>
  </properties>
@@ -103,6 +103,11 @@
   </object>
  </objectgroup>
  <objectgroup id="8" name="save"/>
+ <objectgroup id="25" name="camera">
+  <properties>
+   <property name="cameraType" value="unlockX"/>
+  </properties>
+ </objectgroup>
  <objectgroup id="21" name="acidlayer"/>
  <objectgroup id="10" name="laser"/>
  <objectgroup id="11" name="bg">

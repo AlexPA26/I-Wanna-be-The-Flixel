@@ -40,11 +40,12 @@ class Jevil extends FlxSprite
     public static var playerSkin:String;
     public var playerHUD:FlxSprite;
     var originalSkin:String;
-    var craziness:Bool = false;
+    public var craziness:Bool = false;
     var soul:FlxSprite;
     public var flash:FlxSprite;
     public var ultimateManager:main.bosses.ch1.JevilUltimateState;
     public var shield:FlxSprite;
+    var trailEffect:main.bosses.ch1.JevilEffect;
     var jailObjects:flixel.group.FlxGroup;
     var battleMusicStarted:Bool = false;
     var jailManager:main.bosses.ch1.JevilJailManager;
@@ -123,6 +124,9 @@ class Jevil extends FlxSprite
         playerSkin = PlayerData.currentSkin;
 
         FlxTween.tween(this, {y: y - 10}, 0.75, {type: PINGPONG, ease: FlxEase.sineInOut});
+
+        trailEffect = new main.bosses.ch1.JevilEffect(this, parentState);
+        if (parentState != null) parentState.add(trailEffect);
 
         // phase01Attacks = [attackScythe];
 
@@ -1709,6 +1713,16 @@ class Jevil extends FlxSprite
         {
             trail.destroy();
             trail = null;
+        }
+
+        if (trailEffect != null)
+        {
+            try
+            {
+                trailEffect.destroy();
+            }
+            catch (e:Dynamic) {}
+            trailEffect = null;
         }
 
         super.destroy();

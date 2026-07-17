@@ -284,7 +284,7 @@
  </objectgroup>
  <objectgroup id="18" name="shaders">
   <properties>
-   <property name="shaderName" value="shaders"/>
+   <property name="shaderName" value="rain"/>
   </properties>
  </objectgroup>
  <objectgroup id="12" name="warps">

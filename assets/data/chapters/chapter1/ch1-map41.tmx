@@ -88,7 +88,7 @@
   <object id="2222" name="platform" gid="27" x="725" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
-    <property name="speed" value="100"/>
+    <property name="speed" value="125"/>
    </properties>
   </object>
  </objectgroup>

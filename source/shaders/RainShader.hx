@@ -40,7 +40,7 @@ vec4 getStationaryDrops(vec2 uv, float t)
     vec2 rand = hash22(id);
 
     // Only spawn droplets in ~40% of the grid cells
-    if (rand.x < 0.2) return vec4(0.0);
+    if (rand.x < 0.85) return vec4(0.0);
 
     // Fixed center position inside its cell (does NOT fall)
     vec2 center = (rand - 0.5) * 0.6;
@@ -69,7 +69,7 @@ vec4 getStationaryDrops(vec2 uv, float t)
 
     // Subtle 3D lens refraction
     vec2 norm = normalize(p + vec2(0.0001));
-    vec2 offset = norm * dropMask * 0.018;
+    vec2 offset = norm * dropMask * 0.024;
 
     // Specular highlight glisten
     vec3 lightDir = normalize(vec3(-0.4, 0.6, 0.7));

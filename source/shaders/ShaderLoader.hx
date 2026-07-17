@@ -46,6 +46,9 @@ class ShaderLoader
             case "castle":
                 state.screenShader = new CastleInside();
 
+            case "rainbow":
+                state.screenShader = new RainbowCrazy();
+
             default:
                 trace("[ ShaderLoader ] Unknown shaderName on 'shaders' layer: " + shaderName);
                 return;

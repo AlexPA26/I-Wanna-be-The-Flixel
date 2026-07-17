@@ -54,7 +54,9 @@ class ChapterState extends FlxState
 	var cameraTarget:FlxObject;
 	var cameraOffsetY:Float = -225;
 	var scrollSpeed:Float = 0;
+	var scrollOffsetX:Float = 0;
 	var isAutoscrolling:Bool = false;
+	var autoscrollType:String = "none";
 	var fightingBoss:Bool;
 
 	public var currentBoss:FlxSprite = null;
@@ -254,15 +256,23 @@ class ChapterState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
-		#if debug
-				FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
-		#end
+
 		if (isAutoscrolling && cameraTarget != null)
 		{
-			cameraTarget.x += scrollSpeed * elapsed;
-			cameraTarget.y = 300;
+			if (autoscrollType == "scrollX")
+			{
+				cameraTarget.y = player.y;
+			}
+			else if (autoscrollType == "scrollY")
+			{
+				cameraTarget.x = (map.x + (map.width / 2)) + scrollOffsetX;
+			}
 
-			if (player.x + player.width < FlxG.camera.scroll.x)
+			var limitOffset = 100;
+			if (player.x + player.width < FlxG.camera.scroll.x - limitOffset || 
+				player.x > FlxG.camera.scroll.x + FlxG.width + limitOffset ||
+				player.y + player.height < FlxG.camera.scroll.y - limitOffset || 
+				player.y > FlxG.camera.scroll.y + FlxG.height + limitOffset)
 			{
 				killPlayer();
 			}
@@ -663,8 +673,7 @@ class ChapterState extends FlxState
 			trace("IDs in memory: " + PlayerData.collectedCoins);
 		}
 
-		#if !debug
-		if (cameraType != "normal")
+		if (cameraType != "normal" && !isAutoscrolling)
 		{
 			if (cameraSnapTimer >= 0)
 			{
@@ -678,7 +687,7 @@ class ChapterState extends FlxState
 				cameraSnapTimer -= 1;
 			}
 		}
-		#end
+
 		if (udpClient != null)
 		{
 			if (player != null && player.alive)
@@ -1146,20 +1155,38 @@ class ChapterState extends FlxState
 
 	function autoScroll():Void
 	{
+		isAutoscrolling = false;
+		autoscrollType = "none";
+		scrollOffsetX = 0;
+		scrollSpeed = 0;
+
 		for (layer in tiledData.layers)
 		{
-			if (layer.name == "Autoscroll")
-			{
-				this.isAutoscrolling = true;
-			}
-
 			if (layer.type == TiledLayerType.OBJECT)
 			{
 				var objLayer:TiledObjectLayer = cast layer;
 
-				if (layer.name == "ScrollSettings" && objLayer.properties.contains("speed"))
+				if (layer.name.toLowerCase() == "autoscroll")
 				{
-					this.scrollSpeed = Std.parseFloat(objLayer.properties.get("speed"));
+					if (objLayer.properties.contains("autoscrollType"))
+					{
+						autoscrollType = objLayer.properties.get("autoscrollType");
+					}
+					
+					if (objLayer.properties.contains("speed"))
+					{
+						scrollSpeed = Std.parseFloat(objLayer.properties.get("speed"));
+					}
+
+					if (objLayer.properties.contains("offsetX"))
+					{
+						scrollOffsetX = Std.parseFloat(objLayer.properties.get("offsetX"));
+					}
+
+					if (autoscrollType == "scrollX" || autoscrollType == "scrollY")
+					{
+						isAutoscrolling = true;
+					}
 				}
 
 				if (layer.name == "PlayerSpeed" && objLayer.properties.contains("value"))
@@ -1211,19 +1238,50 @@ class ChapterState extends FlxState
 			FlxG.worldBounds.set(map.x - 200, map.y - 200, map.width + 400, map.height + 400);
 		}
 
-		#if !debug
 		if (cameraTarget == null)
 		{
 			cameraTarget = new flixel.FlxObject(player.x, player.y, 1, 1);
 			add(cameraTarget);
 		}
-		#end
 
-		// 5. Apply the correct Follow behavior
 		if (this.isAutoscrolling)
 		{
-			cameraTarget.setPosition(player.x + 465, player.y);
-			FlxG.camera.follow(cameraTarget, PLATFORMER, 1);
+			if (autoscrollType == "scrollX")
+			{
+				FlxG.camera.minScrollX = null;
+                FlxG.camera.maxScrollX = null;
+
+                if (map != null)
+                {
+                    FlxG.camera.minScrollY = map.y;
+                    FlxG.camera.maxScrollY = map.y + map.height;
+                }
+
+                cameraTarget.setPosition(player.x, player.y);
+                cameraTarget.velocity.x = scrollSpeed;
+                cameraTarget.velocity.y = 0;
+
+			}
+			else if (autoscrollType == "scrollY")
+			{
+				if (map != null)
+                {
+					FlxG.camera.minScrollX = null;
+					FlxG.camera.maxScrollX = null;
+
+					FlxG.camera.minScrollY = null;
+					FlxG.camera.maxScrollY = map.y + map.height;
+                }
+
+				var startX = (map != null ? map.x + (map.width / 2) : player.x) + scrollOffsetX;
+                var startY = map != null ? (map.y + map.height - (FlxG.height / 2)) : player.y;
+
+                cameraTarget.setPosition(startX, startY);
+                cameraTarget.velocity.y = -scrollSpeed;
+                cameraTarget.velocity.x = 0;
+			}
+			FlxG.camera.focusOn(cameraTarget.getPosition());
+			FlxG.camera.follow(cameraTarget, LOCKON, 1);
 		}
 		else if (cameraType != "normal")
 		{

@@ -266,7 +266,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="20" name="castle">
+ <objectgroup id="20" name="shaders">
   <properties>
    <property name="shaderName" value="castle"/>
   </properties>
