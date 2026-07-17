@@ -1,6 +1,7 @@
 package gui;
 
 import openfl.filters.BlurFilter;
+import openfl.filters.BitmapFilter;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -27,10 +28,11 @@ class PauseState extends FlxSubState
     var statsText:FlxText;
     var originalVolume:Float = 1.0;
 
-    // Store references to stop them later
+    var originalFilters:Array<BitmapFilter> = [];
+
     var activeTweens:Map<FlxButton, FlxTween> = new Map();
     var activeLabelTweens:Map<FlxText, FlxTween> = new Map();
-    var pauseTween:FlxTween; // Added reference
+    var pauseTween:FlxTween;
     
     var uiCamera:FlxCamera;
 
@@ -46,7 +48,14 @@ class PauseState extends FlxSubState
         uiCamera.bgColor = FlxColor.TRANSPARENT;
         FlxG.cameras.add(uiCamera, false);
 
-        FlxG.camera.filters = [new BlurFilter(2, 2, 2)];
+        if (FlxG.camera.filters != null)
+        {
+            originalFilters = FlxG.camera.filters.copy();
+        }
+
+        var pauseFilters = originalFilters.copy();
+        pauseFilters.push(new BlurFilter(2, 2, 2));
+        FlxG.camera.filters = pauseFilters;
         assetsGroup = new FlxGroup();
 
         bg = new FlxSprite();
@@ -125,12 +134,11 @@ class PauseState extends FlxSubState
 
         FlxG.sound.volume = originalVolume;
 
-        FlxG.camera.filters = [];
+        FlxG.camera.filters = originalFilters;
         if (uiCamera != null) FlxG.cameras.remove(uiCamera);
         openfl.ui.Mouse.hide();
     }
 
-    // Override destroy to catch any closing situation
     override public function destroy():Void
     {
         cleanup();

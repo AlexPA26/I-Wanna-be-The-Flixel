@@ -1,5 +1,6 @@
 package main;
 
+import shaders.ShaderLoader;
 import main.bosses.BossLoader;
 import flixel.FlxG;
 import flixel.addons.editors.tiled.TiledMap;
@@ -170,6 +171,7 @@ class RoomLoader
 		state.bullets.forEachAlive((bullet) -> { bullet.kill(); });
 
 		ObjectLoader.loadEverything(state.tiledData, state, state.map.x, state.map.y);
+		ShaderLoader.loadShaders(state.tiledData, state);
 		EventLoader.loadEvents(state.tiledData, state);
 		state.add(state.redCoinsGroup);
 		state.add(state.redCoinParticlesGroup);
@@ -220,15 +222,6 @@ class RoomLoader
 
 		BackgroundManager.updateAllEffects(state, state.tiledData);
 		state.add(state.lightsGroup);
-		if (state.vignite != null)
-		{
-			if (state.members.contains(state.vignite))
-			{
-				state.remove(state.vignite);
-			}
-		}
-
-		state.add(state.vignite);
 		state.setupHUD();
 		state.autoScroll();
 		state.cameraScroll();

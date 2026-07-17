@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="19" nextobjectid="213">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="20" nextobjectid="213">
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
  <tileset firstgid="81" source="../../textures/trampoline.tsx"/>
  <tileset firstgid="84" source="../../textures/save.tsx"/>
@@ -505,6 +505,11 @@
  <objectgroup id="11" name="bg">
   <properties>
    <property name="bgName" value="bgMountains"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="19" name="shaders">
+  <properties>
+   <property name="shaderName" value="rain"/>
   </properties>
  </objectgroup>
  <objectgroup id="12" name="mapEffect">

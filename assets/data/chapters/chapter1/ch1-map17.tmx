@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="22" nextobjectid="853">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="23" nextobjectid="853">
  <properties>
   <property name="songName" value="castle1"/>
  </properties>
@@ -9,8 +9,8 @@
  <tileset firstgid="85" source="../../textures/spike.tsx"/>
  <tileset firstgid="93" source="../../textures/laser.tsx"/>
  <tileset firstgid="111" source="../../textures/light.tsx"/>
- <tileset firstgid="112" source="../../textures/transition-tiles.tsx"/>
- <tileset firstgid="117" source="../../textures/coins.tsx"/>
+ <tileset firstgid="113" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="118" source="../../textures/coins.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -968,11 +968,16 @@
   </object>
  </objectgroup>
  <objectgroup id="21" name="coin">
-  <object id="852" name="redCoin" gid="121" x="525" y="250" width="50" height="50">
+  <object id="852" name="redCoin" gid="122" x="525" y="250" width="50" height="50">
    <properties>
     <property name="id" value="TEST6"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="22" name="shaders">
+  <properties>
+   <property name="shaderName" value="castle"/>
+  </properties>
  </objectgroup>
  <objectgroup id="11" name="bg">
   <properties>
@@ -991,49 +996,49 @@
  </objectgroup>
  <objectgroup id="19" name="save"/>
  <objectgroup id="20" name="warps">
-  <object id="831" name="warp" gid="115" x="0" y="600" width="50" height="50">
+  <object id="831" name="warp" gid="116" x="0" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map16"/>
    </properties>
   </object>
-  <object id="832" name="warp" gid="115" x="0" y="650" width="50" height="50">
+  <object id="832" name="warp" gid="116" x="0" y="650" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map16"/>
    </properties>
   </object>
-  <object id="833" name="warp" gid="115" x="0" y="700" width="50" height="50">
+  <object id="833" name="warp" gid="116" x="0" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map16"/>
    </properties>
   </object>
-  <object id="834" name="warp" gid="115" x="0" y="750" width="50" height="50">
+  <object id="834" name="warp" gid="116" x="0" y="750" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map16"/>
    </properties>
   </object>
-  <object id="835" name="warp" gid="112" x="200" y="50" width="50" height="50">
+  <object id="835" name="warp" gid="113" x="200" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
     <property name="target" value="map18"/>
    </properties>
   </object>
-  <object id="836" name="warp" gid="112" x="250" y="50" width="50" height="50">
+  <object id="836" name="warp" gid="113" x="250" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
     <property name="target" value="map18"/>
    </properties>
   </object>
-  <object id="837" name="warp" gid="112" x="300" y="50" width="50" height="50">
+  <object id="837" name="warp" gid="113" x="300" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
     <property name="target" value="map18"/>
    </properties>
   </object>
-  <object id="838" name="warp" gid="112" x="350" y="50" width="50" height="50">
+  <object id="838" name="warp" gid="113" x="350" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
     <property name="target" value="map18"/>

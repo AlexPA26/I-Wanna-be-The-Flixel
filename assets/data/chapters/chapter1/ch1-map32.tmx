@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="40" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="30" nextobjectid="1229">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="40" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="31" nextobjectid="1229">
  <properties>
   <property name="songName" value="rain"/>
  </properties>
@@ -130,21 +130,9 @@
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1130" name="spike" gid="87" x="1150" y="250" width="50" height="50">
-   <properties>
-    <property name="id" value="2"/>
-    <property name="status" value="active"/>
-   </properties>
-  </object>
   <object id="1131" name="spike" gid="91" x="1200" y="250" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
-    <property name="status" value="active"/>
-   </properties>
-  </object>
-  <object id="1132" name="spike" gid="85" x="1200" y="350" width="50" height="50">
-   <properties>
-    <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
@@ -180,24 +168,6 @@
   <object id="1155" name="spike" gid="89" x="1500" y="500" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
-    <property name="status" value="active"/>
-   </properties>
-  </object>
-  <object id="1160" name="spike" gid="85" x="1750" y="500" width="50" height="50">
-   <properties>
-    <property name="id" value="0"/>
-    <property name="status" value="active"/>
-   </properties>
-  </object>
-  <object id="1163" name="spike" gid="87" x="1700" y="400" width="50" height="50">
-   <properties>
-    <property name="id" value="2"/>
-    <property name="status" value="active"/>
-   </properties>
-  </object>
-  <object id="1165" name="spike" gid="87" x="1550" y="400" width="50" height="50">
-   <properties>
-    <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
@@ -238,18 +208,14 @@
   <object id="1169" name="solid_block" gid="36" x="1000" y="400" width="50" height="50"/>
   <object id="1172" name="solid_block" gid="36" x="1150" y="400" width="50" height="50"/>
   <object id="1173" name="solid_block" gid="36" x="1250" y="400" width="50" height="50"/>
-  <object id="1174" name="solid_block" gid="36" x="1300" y="400" width="50" height="50"/>
   <object id="1175" name="solid_block" gid="35" x="1350" y="400" width="50" height="50"/>
   <object id="1176" name="solid_block" gid="33" x="1350" y="450" width="50" height="50"/>
-  <object id="1177" name="solid_block" gid="36" x="1450" y="550" width="50" height="50"/>
-  <object id="1178" name="solid_block" gid="36" x="1600" y="550" width="50" height="50"/>
   <object id="1179" name="solid_block" gid="36" x="1550" y="550" width="50" height="50"/>
   <object id="1180" name="solid_block" gid="35" x="1800" y="550" width="50" height="50"/>
   <object id="1181" name="solid_block" gid="35" x="1800" y="350" width="50" height="50"/>
   <object id="1182" name="solid_block" gid="36" x="1650" y="350" width="50" height="50"/>
   <object id="1184" name="solid_block" gid="35" x="1500" y="350" width="50" height="50"/>
   <object id="1185" name="solid_block" gid="36" x="1300" y="200" width="50" height="50"/>
-  <object id="1186" name="solid_block" gid="36" x="1350" y="200" width="50" height="50"/>
   <object id="1187" name="solid_block" gid="36" x="1050" y="200" width="50" height="50"/>
   <object id="1188" name="solid_block" gid="36" x="1100" y="200" width="50" height="50"/>
   <object id="1192" name="solid_block" gid="36" x="1600" y="350" width="50" height="50"/>
@@ -308,19 +274,7 @@
     <property name="status" value="disabled"/>
    </properties>
   </object>
-  <object id="1134" name="switch-spike" gid="89" x="1300" y="350" width="50" height="50">
-   <properties>
-    <property name="id" value="4"/>
-    <property name="status" value="active"/>
-   </properties>
-  </object>
   <object id="1138" name="switch-spike" gid="87" x="1300" y="250" width="50" height="50">
-   <properties>
-    <property name="id" value="2"/>
-    <property name="status" value="disabled"/>
-   </properties>
-  </object>
-  <object id="1139" name="switch-spike" gid="87" x="1350" y="250" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="disabled"/>
@@ -344,22 +298,10 @@
     <property name="status" value="disabled"/>
    </properties>
   </object>
-  <object id="1154" name="switch-spike" gid="85" x="1450" y="500" width="50" height="50">
-   <properties>
-    <property name="id" value="0"/>
-    <property name="status" value="disabled"/>
-   </properties>
-  </object>
   <object id="1156" name="switch-spike" gid="89" x="1550" y="500" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
     <property name="status" value="active"/>
-   </properties>
-  </object>
-  <object id="1158" name="switch-spike" gid="85" x="1600" y="500" width="50" height="50">
-   <properties>
-    <property name="id" value="0"/>
-    <property name="status" value="disabled"/>
    </properties>
   </object>
   <object id="1161" name="switch-spike" gid="89" x="1800" y="500" width="50" height="50">
@@ -419,6 +361,11 @@
  </objectgroup>
  <objectgroup id="8" name="save">
   <object id="1101" name="save" gid="84" x="600" y="250" width="50" height="50"/>
+ </objectgroup>
+ <objectgroup id="30" name="shaders">
+  <properties>
+   <property name="shaderName" value="radioactive"/>
+  </properties>
  </objectgroup>
  <objectgroup id="21" name="acidlayer"/>
  <objectgroup id="10" name="laser">
@@ -481,6 +428,7 @@
  <objectgroup id="11" name="bg">
   <properties>
    <property name="bgName" value="castleBG3"/>
+   <property name="bgShader" value="toxic"/>
   </properties>
  </objectgroup>
  <objectgroup id="12" name="foregroundEffect">

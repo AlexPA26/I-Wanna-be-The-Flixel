@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="20" nextobjectid="102">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="21" nextobjectid="102">
  <properties>
   <property name="songName" value="rain"/>
  </properties>
@@ -356,6 +356,11 @@
     <property name="target" value="map08"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="20" name="shaders">
+  <properties>
+   <property name="shaderName" value="rain"/>
+  </properties>
  </objectgroup>
  <objectgroup id="15" name="topEffect">
   <properties>

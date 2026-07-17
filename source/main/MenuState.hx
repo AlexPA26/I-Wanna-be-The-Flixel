@@ -73,6 +73,8 @@ class MenuState extends FlxState
         SaveManager.loadGame();
         LocalCoopSubState.isMultiplayerActive = false;
 
+        FlxG.camera.filters = [];
+
         #if !mobile
         FlxG.mouse.visible = true;
         FlxG.mouse.useSystemCursor = true;

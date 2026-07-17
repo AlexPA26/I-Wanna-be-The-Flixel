@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="30" nextobjectid="1176">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="31" nextobjectid="1176">
  <properties>
   <property name="songName" value="rain"/>
  </properties>
@@ -154,6 +154,11 @@
   <object id="1149" name="solid_block" gid="36" x="1050" y="400" width="50" height="50"/>
   <object id="1174" name="solid_block" gid="36" x="1250" y="400" width="50" height="50"/>
  </objectgroup>
+ <objectgroup id="30" name="shaders">
+  <properties>
+   <property name="shaderName" value="radioactive"/>
+  </properties>
+ </objectgroup>
  <objectgroup id="26" name="acidlayer"/>
  <objectgroup id="25" name="small-spike"/>
  <objectgroup id="8" name="save">
@@ -214,6 +219,7 @@
  <objectgroup id="11" name="bg">
   <properties>
    <property name="bgName" value="castleBG3"/>
+   <property name="bgShader" value="toxic"/>
   </properties>
  </objectgroup>
  <objectgroup id="12" name="foregroundEffect">

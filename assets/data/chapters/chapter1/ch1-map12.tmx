@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="20" nextobjectid="552">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="21" nextobjectid="552">
  <properties>
   <property name="songName" value="castle1"/>
  </properties>
@@ -9,7 +9,7 @@
  <tileset firstgid="85" source="../../textures/spike.tsx"/>
  <tileset firstgid="93" source="../../textures/laser.tsx"/>
  <tileset firstgid="111" source="../../textures/light.tsx"/>
- <tileset firstgid="112" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="113" source="../../textures/transition-tiles.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,0,1,0,0,1,0,0,0,0,
@@ -284,44 +284,49 @@
    <property name="effectType" value="none"/>
   </properties>
  </objectgroup>
+ <objectgroup id="20" name="shaders">
+  <properties>
+   <property name="shaderName" value="castle"/>
+  </properties>
+ </objectgroup>
  <objectgroup id="19" name="warps">
-  <object id="538" name="warp" gid="115" x="0" y="600" width="50" height="50">
+  <object id="538" name="warp" gid="116" x="0" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map11"/>
    </properties>
   </object>
-  <object id="539" name="warp" gid="115" x="0" y="550" width="50" height="50">
+  <object id="539" name="warp" gid="116" x="0" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map11"/>
    </properties>
   </object>
-  <object id="540" name="warp" gid="115" x="0" y="500" width="50" height="50">
+  <object id="540" name="warp" gid="116" x="0" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map11"/>
    </properties>
   </object>
-  <object id="541" name="warp" gid="115" x="0" y="450" width="50" height="50">
+  <object id="541" name="warp" gid="116" x="0" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map11"/>
    </properties>
   </object>
-  <object id="542" name="warp" gid="113" x="1350" y="350" width="50" height="50">
+  <object id="542" name="warp" gid="114" x="1350" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map13"/>
    </properties>
   </object>
-  <object id="543" name="warp" gid="113" x="1350" y="400" width="50" height="50">
+  <object id="543" name="warp" gid="114" x="1350" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map13"/>
    </properties>
   </object>
-  <object id="544" name="warp" gid="113" x="1350" y="450" width="50" height="50">
+  <object id="544" name="warp" gid="114" x="1350" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map13"/>

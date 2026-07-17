@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="35" nextobjectid="72">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="36" nextobjectid="72">
  <properties>
   <property name="doubleEffectType" value="dark-cloud"/>
  </properties>
@@ -103,7 +103,6 @@
  <objectgroup id="9" name="bg">
   <properties>
    <property name="bgName" value="bgMountains"/>
-   <property name="bgShader" value="rain"/>
   </properties>
  </objectgroup>
  <objectgroup id="10" name="mapEffect">
@@ -141,12 +140,11 @@
    <property name="songName" value="rain"/>
   </properties>
  </objectgroup>
- <objectgroup id="34" name="images">
-  <object id="71" name="image" gid="8" x="500" y="300" width="50" height="50">
-   <properties>
-    <property name="imageName" value="ralsei_blunt"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="34" name="images"/>
  <objectgroup id="21" name="portal"/>
+ <objectgroup id="35" name="shaders">
+  <properties>
+   <property name="shaderName" value="rain"/>
+  </properties>
+ </objectgroup>
 </map>

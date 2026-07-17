@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="21" nextobjectid="568">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="22" nextobjectid="568">
  <properties>
   <property name="songName" value="castle1"/>
  </properties>
@@ -174,6 +174,11 @@
     <property name="target" value="boss-reznor01"/>
    </properties>
   </object>
+ </objectgroup>
+ <objectgroup id="21" name="shaders">
+  <properties>
+   <property name="shaderName" value="castle"/>
+  </properties>
  </objectgroup>
  <objectgroup id="15" name="music">
   <properties>

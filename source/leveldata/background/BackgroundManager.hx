@@ -1,7 +1,6 @@
 package leveldata.background;
 
-import shaders.RainShader;
-import shaders.RainbowCrazy;
+import shaders.*;
 import backgrounds3D.CircusBackground;
 import openfl.display.BitmapData;
 import main.mods.ModLoader;
@@ -12,7 +11,6 @@ import flixel.addons.display.FlxBackdrop;
 import flixel.addons.editors.tiled.TiledLayer;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledObjectLayer;
-import shaders.JevilCircusBG;
 
 class BackgroundManager 
 {
@@ -104,19 +102,26 @@ class BackgroundManager
                     state.rainShader = new RainShader();
                     state.rainShader.data.time.value = [0.0];
                     state.bg.shader = state.rainShader;
+
+                case "castle":
+                    state.castleShader = new CastleIndoors();
+                    state.castleShader.data.time.value = [0.0];
+                    state.bg.shader = state.castleShader;
+
+                case "toxic":
+                    state.toxicShader = new ToxicShader();
+                    state.toxicShader.data.time.value = [0.0];
+                    state.bg.shader = state.toxicShader;
             }
         }
         else
         {
-            // This room's bg layer has no bgShader property at all — make sure a
-            // shader isn't still hanging around on state.bg from a previous room
-            // that reused the same background image (updateBackground() only
-            // recreates state.bg when the bgName itself changes, so the shader
-            // would otherwise survive untouched).
             state.bg.shader = null;
             state.circusShader = null;
             state.rainbowShader = null;
             state.rainShader = null;
+            state.castleShader = null;
+            state.toxicShader = null;
         }
         
     }

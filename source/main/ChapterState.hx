@@ -1,5 +1,6 @@
 package main;
 
+import shaders.*;
 import main.bosses.ch1.JevilDirectionalAttack;
 import main.Multiplayer.UdpClient;
 import coop.LocalCoopSubstate.LocalCoopSubState;
@@ -64,9 +65,15 @@ class ChapterState extends FlxState
 	public var bg:FlxSprite;
 
 
-	public var rainShader:shaders.RainShader;
-	public var circusShader:shaders.JevilCircusBG;
-	public var rainbowShader:shaders.RainbowCrazy;
+	public var rainShader:RainShader;
+	public var circusShader:JevilCircusBG;
+	public var rainbowShader:RainbowCrazy;
+	public var castleInsideShader:CastleInside;
+	public var castleShader:CastleIndoors;
+	public var toxicShader:ToxicShader;
+
+	public var screenShader:Dynamic;
+	public var screenShaderName:String;
 
 
 
@@ -84,7 +91,6 @@ class ChapterState extends FlxState
 
 	public var currentRoomName:String;
 	public var warpsGroup:FlxTypedGroup<WarpTrigger>;
-	public var vignite:FlxSprite;
 
 	public var backEffectObj:FlxBackdrop;
 	public var currentBackEffectName:String = "";
@@ -223,13 +229,6 @@ class ChapterState extends FlxState
 		playerTrail = new FlxTrail(player, null, 24, 0, 0.2, 0.02);
 		playerTrail.alpha = 0;
 
-		vignite = new FlxSprite();
-		vignite.loadGraphic(AssetPaths.vignite__png, false);
-		vignite.scrollFactor.set(0, 0);
-		vignite.alpha = 1;
-		vignite.visible = true;
-		vignite.screenCenter();
-
 		saveAnimation = new FlxSprite();
 		saveAnimation.makeGraphic(FlxG.width + 1, FlxG.height, FlxColor.WHITE, false);
 		saveAnimation.alpha = 0;
@@ -315,6 +314,22 @@ class ChapterState extends FlxState
 		{
 			rainShader.update(elapsed);
 		}
+
+		if (castleShader != null)
+		{
+			castleShader.update(elapsed);
+		}
+
+		if (castleInsideShader != null)
+		{
+			castleInsideShader.update(elapsed);
+		}
+		
+		if (toxicShader != null)
+		{
+			toxicShader.update(elapsed);
+		}
+
 		if (circusShader != null)
 		{
 			if (bg != null) bg.shader = circusShader;
@@ -326,6 +341,15 @@ class ChapterState extends FlxState
 		{
 			if (bg != null) bg.shader = rainbowShader;
 			rainbowShader.data.time.value[0] += elapsed;
+		}
+
+		if (screenShader != null)
+		{
+			try
+			{
+				screenShader.data.time.value[0] += elapsed;
+			}
+			catch (e:Dynamic) {}
 		}
 
 		FlxG.collide(player, map);
