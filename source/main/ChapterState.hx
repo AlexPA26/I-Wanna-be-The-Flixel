@@ -1,5 +1,6 @@
 package main;
 
+import character.KrisDeathState;
 import shaders.*;
 import main.bosses.ch1.JevilDirectionalAttack;
 import main.Multiplayer.UdpClient;
@@ -24,7 +25,7 @@ import flixel.ui.FlxVirtualPad;
 import flixel.util.FlxColor;
 import flixel.util.FlxDirectionFlags;
 import gui.DeathState;
-import leveldata.background.AcidFluid;
+import leveldata.background.*;
 import leveldata.blockdata.*;
 import leveldata.deco.*;
 import leveldata.events.*;
@@ -59,6 +60,7 @@ class ChapterState extends FlxState
 	var autoscrollType:String = "none";
 	var fightingBoss:Bool;
 
+	public var currentBossName:String = "";
 	public var currentBoss:FlxSprite = null;
 	public var krisDeathAlt:Bool;
 	public var cameraType:String = "normal";
@@ -68,6 +70,7 @@ class ChapterState extends FlxState
 
 
 	public var rainShader:RainShader;
+	public var sunsetShader:SunsetRayShader;
 	public var circusShader:JevilCircusBG;
 	public var rainbowShader:RainbowCrazy;
 	public var castleInsideShader:CastleInside;
@@ -125,6 +128,7 @@ class ChapterState extends FlxState
 	public var flipGroup:FlxTypedGroup<FlipSwitch>;
 	public var portalGroup:FlxTypedGroup<PortalWarp>;
 	public var roomAcid:AcidFluid = null;
+	public var waterDeco:WaterDeco = null;
 	public var trampolines:FlxTypedGroup<NormalTrampoline>;
 	public var trampolinesMini:FlxTypedGroup<NormalTrampolineMini>;
 	public var platforms:FlxTypedGroup<MovingBlock>;
@@ -340,6 +344,11 @@ class ChapterState extends FlxState
 			toxicShader.update(elapsed);
 		}
 
+		if (sunsetShader != null)
+		{
+			sunsetShader.update(elapsed);
+		}
+
 		if (circusShader != null)
 		{
 			if (bg != null) bg.shader = circusShader;
@@ -548,6 +557,8 @@ class ChapterState extends FlxState
 			});
 		}
 
+		
+
 		if (FlxG.keys.justPressed.ESCAPE && player.exists)
 		{
 			if (jevil != null && Reflect.hasField(jevil, "fightingBoss") && Reflect.field(jevil, "fightingBoss") == true)
@@ -617,6 +628,11 @@ class ChapterState extends FlxState
 			trace("MAP HEIGHT: " + map.height);
 		}
 
+		if (FlxG.keys.justPressed.B)
+		{
+			trace("CURRENT ROOM: " + currentRoomName);
+		}
+
 
 		if (currentBoss != null && Std.isOfType(currentBoss, main.bosses.ch1.BossJevil.Jevil))
 		{
@@ -655,13 +671,25 @@ class ChapterState extends FlxState
 
 		#if !mobile
 		if (FlxG.keys.justPressed.ONE)
+		{
+			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "testing");
+		}
 		if (FlxG.keys.justPressed.TWO)
+		{
+			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "map41");
+		}
 		if (FlxG.keys.justPressed.THREE)
+		{
+			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "map09");
+		}
 		if (FlxG.keys.justPressed.NINE)
+		{
+			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "boss-jevil01");
+		}
 		if (FlxG.keys.justPressed.I)
 			inmortal = true;
 		#end
@@ -896,7 +924,7 @@ class ChapterState extends FlxState
 		playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
 		playerDeaths.scrollFactor.set(0, 0);
 		playerDeaths.alpha = 0.5;
-		add(hud);
+		if (PlayerData.currentChapter != 0) add(hud);
 		#end
 
 		#if mobile
@@ -996,24 +1024,20 @@ class ChapterState extends FlxState
 
 	function PortalWarpLogic(portalLogic:PortalWarp):Void
 	{
-		RoomLoader.loadRoom(this, "map33");
-		FlxG.camera.shake(0.005, 0.25);
-		saveAnimation.alpha = 0.5;
-		FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);
-		player.x = 350;
-		player.y = 300;
+		PlayerData.tutorialCompleted = true;
+		PlayerData.currentChapter = 1;
+		PlayerData.totalDeaths = 0;
 	}
 
 	function killPlayer():Void
 	{
-		if (currentRoomName == "boss-jevil03" && currentBoss != null && Std.isOfType(currentBoss, main.bosses.ch1.BossJevil.Jevil))
+		if (PlayerData.currentChapter == 0)
 		{
-			var bossJevil:main.bosses.ch1.BossJevil.Jevil = cast currentBoss;
-			if (bossJevil.ultimateManager != null)
-			{
-				bossJevil.ultimateManager.cancelBarrage();
-			}
+
+			// todo
+			return;
 		}
+		
 
 		if (player != null && player.exists && player.alive)
 		{
@@ -1041,7 +1065,21 @@ class ChapterState extends FlxState
 			PlayerData.totalDeaths -= 1;
 
 			bloodParticles();
-            openSubState(new DeathState());
+
+			if (currentBossName == "jevil")
+			{
+				if (jevil != null && jevil.ultimateManager != null)
+				{
+					jevil.ultimateManager.cancelBarrage();
+
+				}
+
+				openSubState(new KrisDeathState());
+				return;
+			}
+
+			openSubState(new KrisDeathState());
+            // openSubState(new DeathState());
 
 			if (udpClient != null)
 			{

@@ -43,9 +43,14 @@ class BackgroundManager
     public static function updateBackground(state:ChapterState, tiledData:TiledMap):Void
     {
         var bgLayer = tiledData.getLayer("bg");
+        var isScrolling:Bool = true;
+
         if (bgLayer == null || !bgLayer.properties.contains("bgName")) return;
 
         var newBG:String = bgLayer.properties.get("bgName");
+        var scrollText = bgLayer.properties.get("scrolls");
+
+        if (scrollText != null && scrollText == "false") isScrolling = false; 
 
         if (newBG != state.currentBGName)
         {
@@ -69,7 +74,8 @@ class BackgroundManager
             state.bg = new FlxBackdrop("assets/images/backgrounds/" + newBG + ".png");
             #end
             state.bg.velocity.set(0, 0);
-            state.bg.scrollFactor.set(0.15, 0);
+            if (isScrolling) state.bg.scrollFactor.set(0.15, 0);
+            else state.bg.scrollFactor.set(0, 0);
             state.bg.active = false;
 
             state.currentBGName = newBG;
@@ -88,6 +94,11 @@ class BackgroundManager
 
             switch (bgLayer.properties.get("bgShader"))
             {
+                case "sunset":
+                    state.sunsetShader = new SunsetRayShader(0.5, 5);
+                    state.sunsetShader.data.time.value = [0.0];
+                    state.bg.shader = state.sunsetShader;
+
                 case "circus":
                     state.circusShader = new JevilCircusBG();
                     state.circusShader.data.time.value = [0.0];

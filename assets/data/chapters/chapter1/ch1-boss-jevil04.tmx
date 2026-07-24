@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="16" nextobjectid="11">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="21" nextobjectid="132">
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
- <tileset firstgid="81" source="../../textures/save.tsx"/>
- <tileset firstgid="82" source="../../textures/transition-tiles.tsx"/>
- <tileset firstgid="87" source="../../textures/light.tsx"/>
+ <tileset firstgid="89" source="../../textures/save.tsx"/>
+ <tileset firstgid="90" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="95" source="../../textures/light.tsx"/>
+ <tileset firstgid="97" source="../../textures/spike.tsx"/>
+ <tileset firstgid="105" source="../../textures/trampoline-mini.tsx"/>
+ <tileset firstgid="114" source="../../textures/small-spike.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -19,11 +22,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,57,58,58,58,58,58,58,58,58,58,59,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,61,0,0,0,0,0,0,0,0,0,60,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,61,62,0,0,0,0,0,0,0,62,60,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,61,0,0,0,0,0,0,0,0,0,60,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,61,0,0,0,0,0,0,0,0,0,60,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="11" name="tiles-deco" width="28" height="18">
@@ -42,10 +45,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,
-62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,
-62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,
-62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62
+0,0,0,0,0,0,0,0,0,0,62,62,62,62,62,62,62,62,62,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,56,62,62,62,62,62,62,62,56,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,62,62,62,62,62,62,62,62,62,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,62,62,62,62,62,62,62,62,62,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="14" name="tiles-deco2" width="28" height="18">
@@ -65,7 +68,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,56,0,0,0,0,0,0,0,56,0,0,0,0,0,0,0,56,0,0,0,0,0,0,56,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
@@ -76,23 +79,14 @@
   </properties>
  </objectgroup>
  <objectgroup id="13" name="camera"/>
+ <objectgroup id="16" name="solid_block"/>
  <objectgroup id="15" name="light">
-  <object id="7" name="light" gid="88" x="24" y="872" width="200" height="200">
+  <object id="8" name="light" gid="96" x="424" y="872" width="200" height="200">
    <properties>
     <property name="color" value="blue"/>
    </properties>
   </object>
-  <object id="8" name="light" gid="88" x="424" y="872" width="200" height="200">
-   <properties>
-    <property name="color" value="blue"/>
-   </properties>
-  </object>
-  <object id="9" name="light" gid="88" x="824" y="870.667" width="200" height="200">
-   <properties>
-    <property name="color" value="blue"/>
-   </properties>
-  </object>
-  <object id="10" name="light" gid="88" x="1176" y="872" width="200" height="200">
+  <object id="9" name="light" gid="96" x="824" y="870.667" width="200" height="200">
    <properties>
     <property name="color" value="blue"/>
    </properties>
@@ -104,6 +98,9 @@
    <property name="bgShader" value="circus"/>
   </properties>
  </objectgroup>
+ <objectgroup id="20" name="small-spike"/>
+ <objectgroup id="18" name="trampoline-mini"/>
+ <objectgroup id="19" name="slab"/>
  <objectgroup id="6" name="doubleEffect">
   <properties>
    <property name="doubleEffectType" value="none"/>

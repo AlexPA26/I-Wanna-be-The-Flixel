@@ -2,6 +2,7 @@ package main;
 
 class PlayerData
 {
+    public static var tutorialCompleted:Bool = false;
     public static var currentChapter:Int;
     public static var lastSaveRoom:String;
     public static var currentRoom:String = "";

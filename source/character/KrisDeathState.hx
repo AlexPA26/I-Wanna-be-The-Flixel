@@ -14,15 +14,25 @@ import main.ChapterState;
 
 class KrisDeathState extends FlxSubState
 {
-    var soul:FlxSprite;
+    var breakingSoul:FlxSprite;
+    var choiceSoul:FlxSprite;
     var deathX:Float = 0;
     var deathY:Float = 0;
+    
     var bg:FlxSprite;
-    var gameOverText:FlxText;
-    var fullText:String = "GAME OVER";
-    var retryText:FlxText;
-    var currentLetterCount:Int = 0;
-    var textTimer:FlxTimer;
+    var whiteFade:FlxSprite;
+    var blackFade:FlxSprite;
+
+    var mainText:FlxText;
+    var subText:FlxText;
+    var yesText:FlxText;
+    var noText:FlxText;
+
+    var isChoosing:Bool = false;
+    var isYes:Bool = true;
+    var canReset:Bool = true;
+    
+    var activeTimers:Array<FlxTimer> = [];
 
     override public function create():Void
     {
@@ -30,12 +40,12 @@ class KrisDeathState extends FlxSubState
 
         bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
         bg.scrollFactor.set(0, 0);
-        add(bg);
+        insert(0, bg);
 
+        // Calculate exact death position relative to camera
         var chapterState:ChapterState = Std.downcast(FlxG.state, ChapterState);
         if (chapterState != null && Reflect.field(chapterState, "player") != null)
         {
-
             var playerRef = Reflect.field(chapterState, "player");
             var worldX:Float = Reflect.field(playerRef, "x");
             var worldY:Float = Reflect.field(playerRef, "y");
@@ -49,84 +59,124 @@ class KrisDeathState extends FlxSubState
             deathY = FlxG.height / 2;
         }
 
-        soul = new FlxSprite(deathX, deathY);
-        
-        soul.loadGraphic(AssetPaths.soul__png, true, 20, 16);
-        soul.animation.add("break", [0, 1], 16, false);
-        soul.animation.play("break");
-        soul.scrollFactor.set(0, 0);
-        soul.scale.set(1.5, 1.5);
-        add(soul);
+        // 1. Initial Breaking Soul setup
+        breakingSoul = new FlxSprite(deathX, deathY);
+        breakingSoul.loadGraphic(AssetPaths.soul__png, true, 20, 16);
+        breakingSoul.animation.add("break", [0, 1], 16, false);
+        breakingSoul.animation.play("break");
+        breakingSoul.scrollFactor.set(0, 0);
+        breakingSoul.scale.set(1.5, 1.5);
+        add(breakingSoul);
 
         FlxG.sound.play(AssetPaths.kris_hit__ogg, 1);
 
-        gameOverText = new FlxText(0, 0, FlxG.width, "");
-        gameOverText.setFormat(AssetPaths.deltarune__otf, 128, FlxColor.WHITE, CENTER);
-        gameOverText.setBorderStyle(OUTLINE, 0xFF0000, 2);
-        gameOverText.screenCenter();
-        gameOverText.y -= 150;
-        gameOverText.scrollFactor.set(0, 0);
-        gameOverText.visible = false;
-        FlxTween.tween(gameOverText, {y: gameOverText.y - 5}, 1, {type: PINGPONG, ease: FlxEase.sineInOut});
-        add(gameOverText);
+        // 2. Setup all UI Texts (Hidden initially)
+        mainText = new FlxText(0, 0, FlxG.width, "");
+        mainText.setFormat(AssetPaths.deltarune__otf, 48, FlxColor.WHITE, CENTER);
+        mainText.setBorderStyle(OUTLINE, FlxColor.fromRGB(64, 64, 64), 2);
+        mainText.screenCenter();
+        mainText.y -= 125;
+        mainText.scrollFactor.set(0, 0);
+        mainText.alpha = 0.85;
+        FlxTween.tween(mainText, {y: mainText.y - 3}, 0.8, {type: PINGPONG, ease: FlxEase.sineInOut});
+        addGlowPulse(mainText);
+        add(mainText);
 
-        retryText = new FlxText(0, 0, FlxG.width, "Press 'R' to try again.");
-        retryText.setFormat(AssetPaths.deltarune__otf, 32, FlxColor.WHITE, CENTER);
-        retryText.screenCenter();
-        retryText.y = gameOverText.y + 300;
-        retryText.scrollFactor.set(0, 0);
-        retryText.visible = false;
-        FlxTween.tween(retryText, {y: retryText.y - 2}, 1, {type: PINGPONG, ease: FlxEase.sineInOut});
-        add(retryText);
+        subText = new FlxText(0, 0, FlxG.width, "");
+        subText.setFormat(AssetPaths.deltarune__otf, 48, FlxColor.WHITE, CENTER);
+        subText.setBorderStyle(OUTLINE, FlxColor.fromRGB(64, 64, 64), 2);
+        subText.screenCenter();
+        subText.y += 15; // Placed directly below the main text
+        subText.scrollFactor.set(0, 0);
+        subText.alpha = 0.85;
+        FlxTween.tween(subText, {y: subText.y - 3}, 0.8, {type: PINGPONG, ease: FlxEase.sineInOut});
+        addGlowPulse(subText);
+        add(subText);
 
-        new FlxTimer().start(2.1, function(musicTimer:FlxTimer)
+        yesText = new FlxText(0, 0, 0, "YES"); // Auto-sized width for easy centering
+        yesText.setFormat(AssetPaths.deltarune__otf, 32, FlxColor.WHITE, CENTER);
+        yesText.screenCenter();
+        yesText.y += 200;
+        yesText.x -= 150; // Huge gap to the left
+        yesText.scrollFactor.set(0, 0);
+        yesText.alpha = 0;
+        add(yesText);
+
+        noText = new FlxText(0, 0, 0, "NO");
+        noText.setFormat(AssetPaths.deltarune__otf, 32, FlxColor.WHITE, CENTER);
+        noText.screenCenter();
+        noText.y += 200;
+        noText.x += 150; // Huge gap to the right
+        noText.scrollFactor.set(0, 0);
+        noText.alpha = 0;
+        add(noText);
+
+        // 3. Choice Soul (Big x4 Soul)
+        choiceSoul = new FlxSprite(0, 0);
+        choiceSoul.loadGraphic(AssetPaths.soul__png, true, 20, 16);
+        choiceSoul.animation.add("idle", [0], 0, false);
+        choiceSoul.animation.play("idle");
+        choiceSoul.scrollFactor.set(0, 0);
+        choiceSoul.scale.set(3, 3);
+        choiceSoul.updateHitbox();
+        choiceSoul.visible = false;
+        choiceSoul.alpha = 0.85;
+        insert(1, choiceSoul);
+
+        // 4. Overlays for transitions
+        whiteFade = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.WHITE);
+        whiteFade.scrollFactor.set(0, 0);
+        whiteFade.alpha = 0;
+        add(whiteFade);
+
+        blackFade = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+        blackFade.scrollFactor.set(0, 0);
+        blackFade.alpha = 0;
+        add(blackFade);
+
+        // --- Sequence Timers ---
+        mkTimer(1.2, function(tmplTimer:FlxTimer)
+        {
+            triggerBloodExplosion(chapterState);
+        });
+
+        mkTimer(3, function(musicTimer:FlxTimer)
         {
             if (FlxG.sound.music != null)
             {
                 FlxG.sound.music.stop();
             }
 
-        FlxG.sound.playMusic(AssetPaths.determination__ogg, 1, true);
-
-        gameOverText.visible = true;
-        currentLetterCount = 0;
-
-        textTimer = new FlxTimer().start(0.5, function(t:FlxTimer)
-        {
-            currentLetterCount++;
-            gameOverText.text = fullText.substr(0, currentLetterCount);
-
-            gameOverText.screenCenter(Y);
-
-            if (currentLetterCount == fullText.length)
-            {
-                new FlxTimer().start(1, function(_)
-                {
-                    retryText.alpha = 0;
-                    retryText.visible = true;
-                    FlxTween.tween(retryText, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
-                });
-            }
-
-        }, fullText.length);
-
-    });
-
-        new FlxTimer().start(0.95, function(tmplTimer:FlxTimer)
-        {
-            triggerBloodExplosion(chapterState);
+            FlxG.sound.playMusic(AssetPaths.game_over_jevil__ogg, 1, true);
+            startCutsceneSequence();
         });
+    }
+
+    // Safely tracks active timers to avoid memory leaks or ghost executions if player quick-resets
+    function mkTimer(time:Float, callback:FlxTimer->Void, loops:Int = 1):FlxTimer
+    {
+        var t = new FlxTimer().start(time, callback, loops);
+        activeTimers.push(t);
+        return t;
+    }
+
+    // A slight, ambient glow — a gentle alpha breathe between 0.8 and full opacity,
+    // one full pulse every ~1s. Runs continuously; harmless while the text is empty
+    // pre-typing since there's nothing visible to pulse yet.
+    function addGlowPulse(text:FlxText):Void
+    {
+        FlxTween.tween(text, {alpha: 0.8}, 0.5, {type: PINGPONG, ease: FlxEase.sineInOut});
     }
 
     function triggerBloodExplosion(chapterState:ChapterState):Void
     {
-        soul.visible = false;
+        breakingSoul.visible = false;
 
-        var substateBlood:FlxEmitter = new FlxEmitter(deathX + (soul.width / 2), deathY + (soul.height / 2));
+        var substateBlood:FlxEmitter = new FlxEmitter(deathX + (breakingSoul.width / 2), deathY + (breakingSoul.height / 2));
         substateBlood.launchMode = CIRCLE;
         
-        substateBlood.speed.set(300, 700);
-        substateBlood.acceleration.set(0, 1200);
+        substateBlood.speed.set(300, 400);
+        substateBlood.acceleration.set(0, 400);
         substateBlood.lifespan.set(2, 4);
         substateBlood.alpha.set(1, 1, 0, 0);
         substateBlood.scale.set(1, 1, 2, 2);
@@ -134,31 +184,178 @@ class KrisDeathState extends FlxSubState
         
         add(substateBlood);
         substateBlood.start(true, 0, 10);
+    }
 
+
+    function startCutsceneSequence():Void
+    {
+        typeText(mainText, "IT APPEARS YOU HAVE REACHED", 0.1, function()
+        {
+            mkTimer(3.0, function(_)
+            {
+                typeText(subText, "AN END.", 0.1, function()
+                {
+                    mkTimer(2.0, function(_)
+                    {
+                        // Clear the texts and spawn the choice sequence
+                        mainText.text = "";
+                        subText.text = "";
+                        
+                        mainText.text = "WILL YOU TRY AGAIN?";
+                        
+                        // Fade in YES and NO
+                        FlxTween.tween(yesText, {alpha: 1}, 1.0);
+                        FlxTween.tween(noText, {alpha: 1}, 1.0, {
+                            onComplete: function(_)
+                            {
+                                isChoosing = true;
+                                choiceSoul.visible = true;
+                                updateSoulPosition();
+                            }
+                        });
+                    });
+                });
+            });
+        });
+    }
+
+    function typeText(textObj:FlxText, content:String, speed:Float, onComplete:Void->Void):Void
+    {
+        textObj.text = "";
+        textObj.visible = true;
+        var count = 0;
+        
+        mkTimer(speed, function(t:FlxTimer)
+        {
+            count++;
+            textObj.text = content.substr(0, count);
+            if (count >= content.length && onComplete != null)
+            {
+                onComplete();
+            }
+        }, content.length);
+    }
+
+    function updateSoulPosition():Void
+    {
+        if (isYes)
+        {
+            choiceSoul.x = yesText.x + (yesText.width / 2) - (choiceSoul.width / 2);
+            choiceSoul.y = yesText.y + 10;
+        }
+        else
+        {
+            choiceSoul.x = noText.x + (noText.width / 2) - (choiceSoul.width / 2);
+            choiceSoul.y = noText.y + 10;
+        }
     }
 
     override public function update(elapsed:Float):Void
     {
         super.update(elapsed);
 
-        if (FlxG.keys.justPressed.R)
+        // Always allow Quick Reset (unless they already made a final choice and are fading out)
+        if (canReset && FlxG.keys.justPressed.R)
         {
-            if (FlxG.sound.music != null)
+            quickReset();
+        }
+
+        if (isChoosing)
+        {
+            if (FlxG.keys.justPressed.A || FlxG.keys.justPressed.LEFT)
             {
-                if (FlxG.sound.music != null) FlxG.sound.music.stop();
-                PlayerData.totalDeaths++;
-                leveldata.misc.SaveManager.saveGameRestart();
-                leveldata.misc.SaveManager.loadGame();
-                FlxG.resetState();
+                isYes = true;
+                updateSoulPosition();
+            }
+            else if (FlxG.keys.justPressed.D || FlxG.keys.justPressed.RIGHT)
+            {
+                isYes = false;
+                updateSoulPosition();
+            }
+
+            if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.Z || FlxG.keys.justPressed.SPACE)
+            {
+                isChoosing = false;
+                canReset = false; // Disable quick reset during final transition
+                
+                // Fade out the choice UI (mainText is about to be reused for the
+                // ending text a moment later — no need to fade it here, and doing
+                // so was racing against that reveal).
+                FlxTween.tween(yesText, {alpha: 0}, 0.5);
+                FlxTween.tween(noText, {alpha: 0}, 0.5);
+                FlxTween.tween(choiceSoul, {alpha: 0}, 0.5, {
+                    onComplete: function(_) { choiceSoul.visible = false; }
+                });
+
+                if (isYes) executeYes();
+                else executeNo();
             }
         }
     }
 
+    // ------------------------------------------------------------------------
+    // ENDING PATHS
+    // ------------------------------------------------------------------------
+    function executeYes():Void
+    {
+        mkTimer(0.5, function(_)
+        {
+            mainText.alpha = 1;
+            mainText.text = "THEN THE FUTURE IS IN YOUR HANDS";
+            
+            // Screen turns white simultaneously
+            FlxTween.tween(whiteFade, {alpha: 1}, 2.5, {
+                onComplete: function(_)
+                {
+                    // Wait 0.5s after fully white, then reset
+                    mkTimer(0.5, function(_)
+                    {
+                        quickReset();
+                    });
+                }
+            });
+        });
+    }
+
+    function executeNo():Void
+    {
+        mkTimer(0.5, function(_)
+        {
+            mainText.alpha = 1;
+            
+            typeText(mainText, "THEN THE WORLD WAS COVERED IN DARKNESS", 0.08, function()
+            {
+                // Wait 1 second after letters finish appearing
+                mkTimer(1.0, function(_)
+                {
+                    // Screen goes totally black and music stops
+                    if (FlxG.sound.music != null) FlxG.sound.music.stop();
+                    blackFade.alpha = 1; // Instant black fade
+                    
+                    // After another 2 seconds, return to Main Menu
+                    mkTimer(2.0, function(_)
+                    {
+                        FlxG.switchState(main.MenuState.new);
+                    });
+                });
+            });
+        });
+    }
+
+    function quickReset():Void
+    {
+        if (FlxG.sound.music != null) FlxG.sound.music.stop();
+        PlayerData.totalDeaths++;
+        leveldata.misc.SaveManager.saveGameRestart();
+        leveldata.misc.SaveManager.loadGame();
+        FlxG.resetState();
+    }
+
     override public function destroy():Void
     {
-        if (textTimer != null)
+        for (t in activeTimers)
         {
-            textTimer.cancel();
+            if (t != null) t.cancel();
         }
         super.destroy();
     }

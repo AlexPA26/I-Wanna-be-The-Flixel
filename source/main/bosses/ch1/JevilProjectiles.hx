@@ -62,6 +62,7 @@ class JevilBullet extends FlxSprite
         loadGraphic(AssetPaths.spades__png, true, 34, 34);
         animation.add("spade", [0, 1], 6, true);
         animation.add("club", [2, 3], 6, true);
+        animation.add("clubIdle", [2], 1, false);
         scale.set(1.15, 1.15);
 
         trail = new FlxTrail(this, null, 20, 2, 0.10, 0.05);
@@ -74,7 +75,7 @@ class JevilBullet extends FlxSprite
         if (type == "spade") animation.frameIndex = 1;
         else animation.frameIndex = 0;
 
-        var speed:Float = (type == "spade") ? 600 : 450;
+        var speed:Float = (type == "spade") ? 450 : 300;
 
         if (angleOverride != null)
         {

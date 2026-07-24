@@ -41,7 +41,7 @@ void main()
     float vignette = 1.0 - smoothstep(0.25, 0.82, dist);
 
     // Dont make the corners completely black
-    vignette = mix(0.5, 1.0, vignette);
+    vignette = mix(0.65, 1.0, vignette);
 
     color *= vignette;
 

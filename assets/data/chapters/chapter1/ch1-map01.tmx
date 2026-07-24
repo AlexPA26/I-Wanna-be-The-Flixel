@@ -4,15 +4,15 @@
   <property name="doubleEffectType" value="dark-cloud"/>
  </properties>
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
- <tileset firstgid="81" source="../../textures/light.tsx"/>
- <tileset firstgid="83" source="../../textures/spike.tsx"/>
- <tileset firstgid="91" source="../../textures/transition-tiles.tsx"/>
- <tileset firstgid="96" source="../../textures/double_jump.tsx"/>
- <tileset firstgid="97" source="../../textures/misc/portal.tsx"/>
- <tileset firstgid="98" source="../../textures/flip.tsx"/>
- <tileset firstgid="99" source="../../textures/small-spike.tsx"/>
- <tileset firstgid="103" source="../../textures/coins.tsx"/>
- <tileset firstgid="111" source="../../textures/save.tsx"/>
+ <tileset firstgid="89" source="../../textures/light.tsx"/>
+ <tileset firstgid="91" source="../../textures/spike.tsx"/>
+ <tileset firstgid="99" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="104" source="../../textures/double_jump.tsx"/>
+ <tileset firstgid="105" source="../../textures/misc/portal.tsx"/>
+ <tileset firstgid="106" source="../../textures/flip.tsx"/>
+ <tileset firstgid="107" source="../../textures/small-spike.tsx"/>
+ <tileset firstgid="111" source="../../textures/coins.tsx"/>
+ <tileset firstgid="119" source="../../textures/save.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,
@@ -21,11 +21,11 @@
 0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,
 0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,12,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,12,12,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,2,2,2,2,2,2,2,2,
-0,0,0,12,12,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,2,0,0,0,0,0,0,0,
-0,0,0,12,12,0,0,0,0,0,0,2,2,2,0,2,0,0,0,2,2,0,0,0,0,0,0,0,
-0,0,0,12,12,0,0,0,0,0,0,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,82,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,2,2,2,2,2,2,2,2,
+0,0,0,82,0,0,0,0,0,0,0,0,84,2,0,2,0,0,0,0,2,0,0,0,0,0,0,0,
+0,0,82,82,0,0,0,0,0,0,0,2,2,2,0,2,0,0,0,2,2,0,0,0,0,0,0,0,
+0,0,82,82,0,0,0,0,0,0,82,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,
 2,2,2,2,2,2,2,2,2,2,2,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -45,10 +45,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0,10,10,10,10,10,10,10,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0,10,10,3,3,10,10,10,
-0,0,0,0,0,0,0,0,0,0,0,0,10,10,10,0,0,0,0,0,10,10,3,10,10,3,3,3,
-0,0,0,0,0,0,0,0,0,0,0,0,10,3,10,0,0,0,0,0,10,3,10,3,10,10,3,3,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,0,84,0,10,10,10,10,10,10,10,
+0,0,0,0,84,0,0,0,0,0,0,0,0,0,10,0,0,0,0,0,0,10,10,3,3,10,10,10,
+0,0,0,0,84,84,0,0,0,0,0,0,10,10,10,0,84,0,0,0,10,10,3,10,10,3,3,3,
+0,0,0,0,0,0,0,0,0,0,0,0,10,3,10,0,84,84,0,0,10,3,10,3,10,10,3,3,
 10,10,10,10,10,10,10,10,10,10,10,10,3,3,10,0,0,0,0,0,10,10,10,10,3,10,10,3,
 10,10,3,10,3,3,10,10,3,10,10,10,10,3,10,10,10,10,10,10,10,10,3,10,3,10,10,10,
 10,3,10,3,10,10,10,3,10,10,10,10,3,10,10,10,10,3,3,10,10,10,3,10,3,3,10,3,
@@ -62,37 +62,37 @@
    <property name="direction" value="right"/>
    <property name="target" value="map02"/>
   </properties>
-  <object id="15" name="warp" gid="92" x="1350" y="200" width="50" height="50">
+  <object id="15" name="warp" gid="100" x="1350" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map02"/>
    </properties>
   </object>
-  <object id="16" name="warp" gid="92" x="1350" y="250" width="50" height="50">
+  <object id="16" name="warp" gid="100" x="1350" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map02"/>
    </properties>
   </object>
-  <object id="17" name="warp" gid="92" x="1350" y="250" width="50" height="50">
+  <object id="17" name="warp" gid="100" x="1350" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map02"/>
    </properties>
   </object>
-  <object id="18" name="warp" gid="92" x="1350" y="300" width="50" height="50">
+  <object id="18" name="warp" gid="100" x="1350" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map02"/>
    </properties>
   </object>
-  <object id="19" name="warp" gid="92" x="1350" y="350" width="50" height="50">
+  <object id="19" name="warp" gid="100" x="1350" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map02"/>
    </properties>
   </object>
-  <object id="35" name="warp" gid="92" x="1300" y="700" width="50" height="50">
+  <object id="35" name="warp" gid="100" x="1300" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="newChapter" value="2"/>

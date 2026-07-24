@@ -1,3 +1,5 @@
+import flixel.FlxG;
+import main.CacheState;
 import main.ChapterState;
 import flixel.FlxSprite;
 import flixel.FlxGame;
@@ -8,10 +10,14 @@ import debug.BattleState;
 import debug.DebugState;
 import main.MenuState;
 import main.mods.ModLoader;
+import lime.app.Application;
 import openfl.Lib;
 
 class Main extends Sprite
 {
+	var allowQuit:Bool = false;
+
+
 	public function new()
 	{
 		super();
@@ -19,8 +25,8 @@ class Main extends Sprite
 		FlxSprite.defaultAntialiasing = false;
 		var gameWidth:Int = 1280;
 		var gameHeight:Int = 720;
-		var initialState = MenuState;
-		var debugState = MenuState;
+		var initialState = CacheState;
+		var debugState = CacheState;
 		var zoom:Float = 1;
 		var refreshRate:Int = Lib.current.stage.window.displayMode.refreshRate;
 		if (refreshRate <= 0) refreshRate = 60;
@@ -40,7 +46,7 @@ class Main extends Sprite
 		
 		#if !debug
 			addChild(new FlxGame(gameWidth, gameHeight, initialState, updateFramerate, drawFramerate, skipSplash, startFullscreen));
-			flixel.FlxG.fixedTimestep = true;
+			flixel.FlxG.fixedTimestep = false;
 		#end
 
 		#if debug
@@ -54,7 +60,16 @@ class Main extends Sprite
 			addChild(new FPS(10, 10, 0xffffff));
 		#end
 
+		Application.current.window.onClose.add(onWindowClose);
+		
 		flixel.FlxG.autoPause = false;
 		
+	}
+
+	function onWindowClose():Bool
+	{
+		FlxG.fullscreen = !FlxG.fullscreen;
+
+		return false;
 	}
 }

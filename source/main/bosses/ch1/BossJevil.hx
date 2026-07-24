@@ -132,7 +132,7 @@ class Jevil extends FlxSprite
 
         phase01Attacks =
         [
-            attackBullets, attackSpades, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
+            attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
         ];
 
         phase02Attacks =
@@ -627,6 +627,7 @@ class Jevil extends FlxSprite
     public function startCutscene()
     {
         state = "cutscene";
+        parentState.currentBossName = "jevil";
 
         animation.play("laugh");
         FlxG.sound.play(AssetPaths.jevil_laugh01__ogg);
@@ -635,10 +636,14 @@ class Jevil extends FlxSprite
 
         new FlxTimer().start(1.0, function(_)
         {
-            var scythe = new IntroScythe(parentState.player.x -50, parentState.map.y - 100, parentState);
-            FlxG.sound.play(AssetPaths.scythe_intro__ogg, 1, false);
-            parentState.dangerObjects.add(scythe);
-            parentState.player.active = true;
+            if (parentState.player != null && parentState.player.exists && parentState.player.alive)
+            {
+                var scythe = new IntroScythe(parentState.player.x -50, parentState.map.y - 100, parentState);
+                FlxG.sound.play(AssetPaths.scythe_intro__ogg, 1, false);
+                parentState.dangerObjects.add(scythe);
+                parentState.player.active = true;
+            }
+
 
             new FlxTimer().start(1.0, function(_)
             {
@@ -885,14 +890,13 @@ class Jevil extends FlxSprite
     
     function attackSpades()
     {
-        var randomY:Float = FlxG.random.float(100, 500);
+        var randomY:Float = FlxG.random.float(250, 500);
         var goLeft:Bool = false;
         
         if (spadeComboCount == 0 && hp >= 90)
         {
             targetSpadeCombos = FlxG.random.int(4, 8);
         }
-
         else
         {
             targetSpadeCombos = FlxG.random.int(6, 12);
@@ -926,14 +930,27 @@ class Jevil extends FlxSprite
         FlxTween.globalManager.cancelTweensOf(this);
         FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.beep__ogg, 0.5, false);
+        
         var cooldownAttack:Float = 0.75;
         if (hp <= 90) { cooldownAttack = 0.5; }
 
         var bulletSpawnX:Float = x + (width / 2) - 25;
         var bulletSpawnY:Float = y + (height / 2) - 50;
 
-        var b = new JevilBullet(bulletSpawnX, bulletSpawnY, "spade", parentState);
-        parentState.dangerObjects.add(b);
+        var baseAngle = flixel.math.FlxAngle.angleBetween(this, parentState.player, true);
+        var spreadOffsets:Array<Float> = [-15, -5, 5, 15];
+        
+        for (offset in spreadOffsets)
+        {
+            var finalAngle = baseAngle + offset + FlxG.random.float(-3, 3);
+            
+            var b = new JevilBullet(bulletSpawnX, bulletSpawnY, "spade", finalAngle, parentState);
+            b.scale.set(1, 1);
+            b.animation.play("clubIdle");
+            b.updateHitbox();
+            parentState.dangerObjects.add(b);
+        }
+
         spadeComboCount++;
 
         FlxTween.tween(this, {y: y - 10}, 0.75, {type: PINGPONG, ease: FlxEase.sineInOut});
@@ -1493,7 +1510,7 @@ class Jevil extends FlxSprite
                     FlxTween.tween(this, { x: 590, y: 100 }, 0.5, { ease: FlxEase.quadIn });
                 });
 
-                new FlxTimer().start(3, function(_)
+                new FlxTimer().start(4, function(_)
                 {
                     isVulnerable = false;
                     shield.visible = true;

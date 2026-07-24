@@ -37,6 +37,8 @@ class ShaderLoader
 
         switch (shaderName)
         {
+            case "dawn":
+                state.screenShader = new SunsetWarmShader();
             case "rain":
                 state.screenShader = new RainShader();
 

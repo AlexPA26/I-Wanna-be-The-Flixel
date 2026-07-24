@@ -113,7 +113,7 @@ class SaveManager
         save.bind("IWBTF_Save1");
         save.erase();
 
-        PlayerData.currentChapter = 1;
+        PlayerData.currentChapter = 0;
         PlayerData.currentRoom = "map01";
         PlayerData.totalDeaths = 0;
         PlayerData.spawnX = 250;

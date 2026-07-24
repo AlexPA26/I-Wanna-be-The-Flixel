@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="19" nextobjectid="23">
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
- <tileset firstgid="81" source="../../textures/save.tsx"/>
- <tileset firstgid="82" source="../../textures/transition-tiles.tsx"/>
- <tileset firstgid="87" source="../../textures/laser.tsx"/>
- <tileset firstgid="105" source="../../textures/light.tsx"/>
- <tileset firstgid="107" source="../../textures/trampoline.tsx"/>
+ <tileset firstgid="89" source="../../textures/save.tsx"/>
+ <tileset firstgid="90" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="95" source="../../textures/laser.tsx"/>
+ <tileset firstgid="113" source="../../textures/light.tsx"/>
+ <tileset firstgid="115" source="../../textures/trampoline.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 60,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,61,
@@ -23,7 +23,7 @@
 60,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,61,
 58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,58,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,62,0,0,0,0,0,0,62,0,0,0,0,0,0,0,62,0,0,0,0,0,0,62,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
@@ -45,7 +45,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,
-62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,
+62,62,62,56,62,62,62,62,62,62,56,62,62,62,62,62,62,62,56,62,62,62,62,62,62,56,62,62,
 62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,
 62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62
 </data>
@@ -67,7 +67,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,56,0,0,0,0,0,0,56,0,0,0,0,0,0,0,56,0,0,0,0,0,0,56,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
@@ -97,22 +97,22 @@
  <objectgroup id="8" name="save"/>
  <objectgroup id="18" name="trampoline"/>
  <objectgroup id="17" name="light">
-  <object id="14" name="light" gid="106" x="74" y="870.667" width="200" height="200">
+  <object id="14" name="light" gid="114" x="74" y="870.667" width="200" height="200">
    <properties>
     <property name="color" value="blue"/>
    </properties>
   </object>
-  <object id="15" name="light" gid="106" x="425.333" y="869.333" width="200" height="200">
+  <object id="15" name="light" gid="114" x="425.333" y="869.333" width="200" height="200">
    <properties>
     <property name="color" value="blue"/>
    </properties>
   </object>
-  <object id="16" name="light" gid="106" x="822.667" y="870.667" width="200" height="200">
+  <object id="16" name="light" gid="114" x="822.667" y="870.667" width="200" height="200">
    <properties>
     <property name="color" value="blue"/>
    </properties>
   </object>
-  <object id="17" name="light" gid="106" x="1173.33" y="869.333" width="200" height="200">
+  <object id="17" name="light" gid="114" x="1173.33" y="869.333" width="200" height="200">
    <properties>
     <property name="color" value="blue"/>
    </properties>
