@@ -934,7 +934,9 @@ class ChapterState extends FlxState
 					}
 
 					if (data.death == true) {
-						var isBossDeathMatch = (data.currentRoom != null && currentRoomName != null && data.currentRoom.startsWith("boss-") && currentRoomName.startsWith("boss-") && data.currentRoom.split("-")[1] == currentRoomName.split("-")[1]);
+						var dRoomStr:String = data.currentRoom != null ? cast data.currentRoom : "";
+						var cRoomStr:String = currentRoomName != null ? cast currentRoomName : "";
+						var isBossDeathMatch = (dRoomStr != "" && cRoomStr != "" && StringTools.startsWith(dRoomStr, "boss-") && StringTools.startsWith(cRoomStr, "boss-") && dRoomStr.split("-")[1] == cRoomStr.split("-")[1]);
 						if (data.currentRoom == null || data.currentRoom == currentRoomName || isBossDeathMatch) {
 							var rPlayer = remotePlayers.get(peerKey);
 							var spawnX = (data.x != null) ? data.x : (rPlayer != null ? rPlayer.x : 0);
