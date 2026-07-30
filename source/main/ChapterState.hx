@@ -1,8 +1,8 @@
 package main;
 
+import flixel.util.FlxTimer;
 import character.KrisDeathState;
 import shaders.*;
-import main.bosses.ch1.JevilDirectionalAttack;
 import main.Multiplayer.UdpClient;
 import coop.LocalCoopSubstate.LocalCoopSubState;
 import flixel.sound.FlxSound;
@@ -141,7 +141,8 @@ class ChapterState extends FlxState
 	public var hud:FlxGroup;
 
 	var spikes:FlxGroup;
-	var saveAnimation:FlxSprite;
+	var whiteFade:FlxSprite;
+	var blackFade:FlxSprite;
 	var tiledData:TiledMap;
 	var spawnTimer:Float = 0.1;
 	var inmortal:Bool = false;
@@ -152,6 +153,7 @@ class ChapterState extends FlxState
 	var bossHpBar:FlxBar;
     var bossDebugText:FlxText;
 	public var jevil:main.bosses.ch1.BossJevil.Jevil;
+	public var reznor:main.bosses.ch1.BossReznor.Reznor;
 
 	var udpClient:UdpClient;
 
@@ -235,10 +237,15 @@ class ChapterState extends FlxState
 		playerTrail = new FlxTrail(player, null, 24, 0, 0.2, 0.02);
 		playerTrail.alpha = 0;
 
-		saveAnimation = new FlxSprite();
-		saveAnimation.makeGraphic(FlxG.width + 1, FlxG.height, FlxColor.WHITE, false);
-		saveAnimation.alpha = 0;
-		saveAnimation.scrollFactor.set(0, 0);
+		whiteFade = new FlxSprite();
+		whiteFade.makeGraphic(FlxG.width + 1, FlxG.height, FlxColor.WHITE, false);
+		whiteFade.alpha = 0;
+		whiteFade.scrollFactor.set(0, 0);
+
+		blackFade = new FlxSprite();
+		blackFade.makeGraphic(FlxG.width + 1, FlxG.height, FlxColor.BLACK, false);
+		blackFade.alpha = 0;
+		blackFade.scrollFactor.set(0, 0);
 
 		RoomLoader.loadRoom(this, PlayerData.currentRoom);
 
@@ -532,22 +539,30 @@ class ChapterState extends FlxState
 			FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
 		}
 
-		if (FlxG.keys.justPressed.R)
+		if (FlxG.keys.justPressed.R && player.exists && player.alive)
 		{
 			var currentSeconds = PlayerData.totalSeconds;
-			PlayerData.totalDeaths++;
+			if (PlayerData.tutorialCompleted == true) PlayerData.totalDeaths++;
 			leveldata.misc.SaveManager.saveGameRestart();
 			leveldata.misc.SaveManager.loadGame();
 			PlayerData.totalSeconds = currentSeconds;
 			FlxG.resetState();
 		}
 
-		// trace(player.x + " ||| " + player.y);
-
-		if (FlxG.keys.justPressed.K)
+		if (FlxG.keys.justPressed.K && player.exists)
 		{
+			if (PlayerData.currentChapter == 0) return;
 			killPlayer();
 		}
+
+		if (FlxG.keys.justPressed.S)
+		{
+			trace("===================");
+			trace("Player X:" + player.x);
+			trace("Player Y:" + player.y);
+			trace("===================");
+		}
+
 
 		if (FlxG.keys.justPressed.Z && player.exists) playerShoot();
 		{
@@ -559,24 +574,44 @@ class ChapterState extends FlxState
 
 		
 
-		if (FlxG.keys.justPressed.ESCAPE && player.exists)
+		if (FlxG.keys.justPressed.ESCAPE && player.exists )
 		{
-			if (jevil != null && Reflect.hasField(jevil, "fightingBoss") && Reflect.field(jevil, "fightingBoss") == true)
+			if (fightingBoss)
 			{
-				FlxG.camera.shake(0.01, 0.05);
-            	FlxG.sound.play(AssetPaths.error__ogg, 0.5, false);
+				FlxG.sound.play(AssetPaths.error__ogg, 0.65, false);
+				FlxG.camera.shake(0.01, 0.15);
 				return;
 			}
- 
+
 			isPaused = true;
 			this.persistentUpdate = false;
 			openSubState(new gui.PauseState());
 		}
 		#end
 
-		if (saveAnimation.alpha > 0)
+		if (whiteFade.alpha > 0) { whiteFade.alpha -= 0.01; }
+		if (PlayerData.whiteFadeTrigger == true)
+		{ 
+			PlayerData.whiteFadeTrigger = false;
+			whiteFade.alpha = 1;
+		}
+
+		if (blackFade.alpha > 0) { blackFade.alpha -= 0.01; }
+		if (PlayerData.blackFadeTrigger == true)
+		{ 
+			PlayerData.blackFadeTrigger = false;
+			blackFade.alpha = 1;
+		}
+
+		if (PlayerData.currentChapter >= 1 && player.exists && player.alive)
 		{
-			saveAnimation.alpha -= 0.01;
+			playerDeaths.visible = true;
+			playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
+		}
+
+		else if (playerDeaths != null)
+		{
+			playerDeaths.visible = false;
 		}
 
 		bullets.forEachAlive((bullet) ->
@@ -645,35 +680,57 @@ class ChapterState extends FlxState
 
 		if (currentBoss != null && currentBoss.exists && currentBoss.alive)
 		{
-			FlxG.overlap(bullets, currentBoss, function(bullet, boss)
+			if (currentBossName == "reznor")
 			{
-				if (Std.isOfType(boss, main.bosses.ch1.BossJevil.Jevil))
+				var reznorBoss:main.bosses.ch1.BossReznor.Reznor = cast currentBoss;
+				
+				if (reznorBoss.status != "waiting" && reznorBoss.status != "cutscene")
 				{
-					var jevilBoss:main.bosses.ch1.BossJevil.Jevil = cast boss;
-					
-					if (jevilBoss.isVulnerable)
+					for (minion in reznorBoss.minions)
 					{
-						jevilBoss.takeDamage(1);
-						bullet.kill();
+						if (minion.alive && minion.exists)
+						{
+							FlxG.overlap(bullets, minion, function(bullet, m)
+							{
+								var rm:main.bosses.ch1.BossReznor.ReznorMinion = cast m;
+								rm.takeDamage(30);
+								bullet.kill();
+							});
+						}
 					}
 				}
-				else 
+			}
+			else 
+			{
+				FlxG.overlap(bullets, currentBoss, function(bullet, boss)
 				{
-					var invul:Bool = Reflect.field(boss, "isInvulnerable");
-					if (!invul)
+					if (Std.isOfType(boss, main.bosses.ch1.BossJevil.Jevil))
 					{
-						Reflect.setField(boss, "hp", Reflect.field(boss, "hp") - 1);
-						bullet.kill();
+						var jevilBoss:main.bosses.ch1.BossJevil.Jevil = cast boss;
+						
+						if (jevilBoss.isVulnerable)
+						{
+							jevilBoss.takeDamage(1);
+							bullet.kill();
+						}
 					}
-				}
-			});
+					else 
+					{
+						var invul:Bool = Reflect.field(boss, "isInvulnerable");
+						if (!invul)
+						{
+							bullet.kill();
+						}
+					}
+				});
+			}
 		}
 
 		#if !mobile
 		if (FlxG.keys.justPressed.ONE)
 		{
 			PlayerData.currentChapter = 1;
-			RoomLoader.loadRoom(this, "testing");
+			RoomLoader.loadRoom(this, "map02");
 		}
 		if (FlxG.keys.justPressed.TWO)
 		{
@@ -685,13 +742,35 @@ class ChapterState extends FlxState
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "map09");
 		}
+
+		if (FlxG.keys.justPressed.FOUR)
+		{
+			PlayerData.currentChapter = 1;
+			RoomLoader.loadRoom(this, "map37");
+		}
+
+		if (FlxG.keys.justPressed.SEVEN)
+		{
+			PlayerData.currentChapter = 1;
+			RoomLoader.loadRoom(this, "map23");
+		}
+
+		if (FlxG.keys.justPressed.EIGHT)
+		{
+			PlayerData.currentChapter = 1;
+			RoomLoader.loadRoom(this, "boss-reznor01");
+		}
+
 		if (FlxG.keys.justPressed.NINE)
 		{
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "boss-jevil01");
 		}
 		if (FlxG.keys.justPressed.I)
-			inmortal = true;
+		{
+			inmortal = !inmortal;
+		}
+
 		#end
 
 		if (FlxG.keys.justPressed.P)
@@ -924,7 +1003,8 @@ class ChapterState extends FlxState
 		playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
 		playerDeaths.scrollFactor.set(0, 0);
 		playerDeaths.alpha = 0.5;
-		if (PlayerData.currentChapter != 0) add(hud);
+		playerDeaths.visible = false;
+		add(hud);
 		#end
 
 		#if mobile
@@ -932,6 +1012,7 @@ class ChapterState extends FlxState
 		playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
 		playerDeaths.scrollFactor.set(0, 0);
 		playerDeaths.alpha = 0.5;
+		playerDeaths.visible = false;
 		add(hud);
 		#end
 
@@ -960,7 +1041,7 @@ class ChapterState extends FlxState
 			if (PlayerData.saveCooldown <= 0)
 			{
 				saveObj.pop(player);
-				saveAnimation.alpha = 0.5;
+				whiteFade.alpha = 0.5;
 				FlxG.sound.play(AssetPaths.savedgame__ogg, 0.5, false);
 				SaveManager.saveGame();
 			}
@@ -983,7 +1064,7 @@ class ChapterState extends FlxState
 				PlayerData.collectedCoins.push(redCoin.coinID);
 			}
 
-			saveAnimation.alpha = 0.5;
+			whiteFade.alpha = 0.5;
 			redCoin.pop(player);
 			trace("Collected coin with ID: " + redCoin.coinID);
 			FlxG.sound.play(AssetPaths.coin__ogg, 0.5, false);
@@ -1026,15 +1107,46 @@ class ChapterState extends FlxState
 	{
 		PlayerData.tutorialCompleted = true;
 		PlayerData.currentChapter = 1;
+		PlayerData.currentRoom = "map01";
 		PlayerData.totalDeaths = 0;
+		player.exists = false;
+		
+		whiteFade.alpha = 1;
+		playerDeaths.visible = false;
+		
+		if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
+		FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);
+		FlxG.camera.shake(0.01, 0.25);
+
+		new FlxTimer().start(3, function(_)
+        {
+            FlxTween.tween(blackFade, {alpha: 1}, 3,
+			{
+				ease: FlxEase.quadOut,
+
+			 	onComplete: function(_)
+				{
+					trace("Tutorial Complete!");
+					SaveManager.saveGame();
+					FlxG.switchState(gui.IntroState.new);
+				}
+			});
+
+        });
+
 	}
 
 	function killPlayer():Void
 	{
 		if (PlayerData.currentChapter == 0)
 		{
+			player.x = 250;
+			player.y = 450;
+			player.velocity.set(0, 0);
+			FlxG.sound.play(AssetPaths.warp__ogg, 0.75, false);
+			FlxG.camera.shake(0.01, 0.2);
+			whiteFade.alpha = 0.65;
 
-			// todo
 			return;
 		}
 		
@@ -1078,8 +1190,8 @@ class ChapterState extends FlxState
 				return;
 			}
 
-			openSubState(new KrisDeathState());
-            // openSubState(new DeathState());
+			// openSubState(new KrisDeathState());
+            openSubState(new DeathState());
 
 			if (udpClient != null)
 			{

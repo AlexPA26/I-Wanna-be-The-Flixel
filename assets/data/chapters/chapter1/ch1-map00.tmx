@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="38" nextobjectid="105">
+ <properties>
+  <property name="doubleEffectType" value="dark-cloud"/>
+ </properties>
+ <tileset firstgid="1" source="ch1-tiles.tsx"/>
+ <tileset firstgid="89" source="../../textures/light.tsx"/>
+ <tileset firstgid="91" source="../../textures/spike.tsx"/>
+ <tileset firstgid="99" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="104" source="../../textures/double_jump.tsx"/>
+ <tileset firstgid="105" source="../../textures/misc/portal.tsx"/>
+ <tileset firstgid="106" source="../../textures/flip.tsx"/>
+ <tileset firstgid="107" source="../../textures/small-spike.tsx"/>
+ <tileset firstgid="111" source="../../textures/coins.tsx"/>
+ <tileset firstgid="119" source="../../textures/save.tsx"/>
+ <tileset firstgid="120" source="../../textures/laser.tsx"/>
+ <layer id="1" name="tiles-main" width="28" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,2,2,2,2,2,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,2,2,2,2,0,0,0,0,0,0,0,2,2,2,2,0,0,
+0,0,0,0,0,0,2,2,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,
+0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,0,0,0,0,0,0,
+0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,82,0,0,0,0,0,
+0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,82,2,2,2,2,2,2,2,2,0,0,0,0,
+0,0,0,0,2,0,0,0,0,0,0,0,82,2,2,2,2,0,0,0,0,0,0,2,2,2,2,2,
+0,0,0,0,2,0,0,0,0,0,0,0,82,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,7,0,0,0,0,0,0,7,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,2,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,2,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,2,0,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="8" name="tiles-deco" width="28" height="18">
+  <data encoding="csv">
+10,10,10,10,10,10,10,10,10,10,10,10,10,10,3,10,10,10,10,10,10,10,10,10,3,10,10,10,
+10,10,3,10,10,10,10,10,10,10,3,10,10,10,3,3,10,10,10,3,10,10,10,10,3,3,10,10,
+10,3,10,10,3,10,3,3,10,10,3,3,10,10,10,10,10,10,10,10,10,10,10,10,10,10,3,10,
+10,10,10,10,3,10,10,10,10,3,10,10,10,10,0,0,0,0,0,0,0,0,0,10,10,10,10,3,
+10,3,10,10,10,10,10,10,10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,10,
+10,3,10,10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+10,3,10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+10,3,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+10,10,10,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,84,0,0,0,84,0,0,0,0,0,
+10,10,3,10,0,0,0,0,0,0,0,0,0,0,84,0,0,84,84,84,0,0,0,84,0,0,0,0,
+10,3,10,10,0,0,0,0,0,0,0,0,0,0,84,0,0,0,0,0,0,0,0,0,84,0,0,0,
+10,10,3,10,0,0,0,0,0,0,0,0,0,0,0,0,0,10,10,10,10,10,10,0,0,0,0,0,
+10,3,10,10,0,0,0,0,0,0,0,84,0,0,10,10,10,10,10,10,10,10,10,10,10,10,10,10,
+10,3,10,10,0,0,0,0,0,0,0,0,0,0,10,10,3,10,3,3,3,10,10,3,10,10,3,10,
+10,3,10,10,0,0,0,0,0,0,0,0,10,10,10,3,10,10,3,10,10,3,10,10,10,10,10,3,
+10,10,10,10,0,0,0,0,0,0,84,0,10,3,10,10,10,3,3,3,10,10,10,3,10,3,10,10,
+10,10,3,10,0,0,0,0,0,0,0,0,10,10,3,3,10,10,10,10,10,10,3,10,10,10,10,10,
+10,10,10,10,0,0,0,0,0,0,0,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10
+</data>
+ </layer>
+ <objectgroup id="9" name="bg">
+  <properties>
+   <property name="bgName" value="bgMountains"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="37" name="redCoin">
+  <object id="102" name="redCoin" gid="115" x="300" y="525" width="50" height="50">
+   <properties>
+    <property name="id" value="ch1_01"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="10" name="mapEffect">
+  <properties>
+   <property name="effectType" value="fog"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="25" name="foregroundEffect">
+  <properties>
+   <property name="foregroundEffectType" value="rain"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="36" name="laser">
+  <object id="89" name="laser" gid="120" x="250" y="700" width="50" height="50">
+   <properties>
+    <property name="direction" value="h"/>
+   </properties>
+  </object>
+  <object id="90" name="laser" gid="120" x="300" y="700" width="50" height="50">
+   <properties>
+    <property name="direction" value="h"/>
+   </properties>
+  </object>
+  <object id="91" name="laser" gid="120" x="350" y="700" width="50" height="50">
+   <properties>
+    <property name="direction" value="h"/>
+   </properties>
+  </object>
+  <object id="92" name="laser" gid="120" x="350" y="700" width="50" height="50">
+   <properties>
+    <property name="direction" value="h"/>
+   </properties>
+  </object>
+  <object id="93" name="laser" gid="120" x="400" y="700" width="50" height="50">
+   <properties>
+    <property name="direction" value="h"/>
+   </properties>
+  </object>
+  <object id="99" name="laser" gid="120" x="450" y="700" width="50" height="50">
+   <properties>
+    <property name="direction" value="h"/>
+   </properties>
+  </object>
+  <object id="100" name="laser" gid="120" x="450" y="700" width="50" height="50">
+   <properties>
+    <property name="direction" value="h"/>
+   </properties>
+  </object>
+  <object id="101" name="laser" gid="120" x="500" y="700" width="50" height="50">
+   <properties>
+    <property name="direction" value="h"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="26" name="topEffect">
+  <properties>
+   <property name="topEffectType" value="wind"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="28" name="doubleEffect">
+  <properties>
+   <property name="doubleEffectType" value="redMist"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="33" name="save"/>
+ <objectgroup id="11" name="music">
+  <properties>
+   <property name="songName" value="rain"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="35" name="shaders">
+  <properties>
+   <property name="shaderName" value="rain"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="17" name="warps">
+  <properties>
+   <property name="direction" value="right"/>
+   <property name="target" value="map02"/>
+  </properties>
+  <object id="79" name="warp" gid="100" x="1350" y="350" width="50" height="50">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="target" value="map01"/>
+   </properties>
+  </object>
+  <object id="80" name="warp" gid="100" x="1350" y="400" width="50" height="50">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="target" value="map01"/>
+   </properties>
+  </object>
+  <object id="81" name="warp" gid="100" x="1350" y="400" width="50" height="50">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="target" value="map01"/>
+   </properties>
+  </object>
+  <object id="82" name="warp" gid="100" x="1350" y="450" width="50" height="50">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="target" value="map01"/>
+   </properties>
+  </object>
+  <object id="83" name="warp" gid="100" x="1350" y="500" width="50" height="50">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="target" value="map01"/>
+   </properties>
+  </object>
+  <object id="104" name="warp" gid="100" x="1350" y="550" width="50" height="50">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="target" value="map01"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

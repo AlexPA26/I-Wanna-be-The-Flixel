@@ -1,5 +1,6 @@
 package main.bosses;
 
+import main.bosses.ch1.BossReznor.Reznor;
 import flixel.FlxG;
 import main.ChapterState;
 import main.bosses.ch1.BossJevil;
@@ -18,6 +19,10 @@ class BossLoader
         switch (bossName.toLowerCase())
         {
             case "reznor":
+                var reznor = new Reznor(950, 400, state);
+                state.currentBoss = reznor;
+                state.add(reznor);
+                state.add(reznor.flash);
                 trace("BossLoader: Reznor Spawned");
                 
             case "jevil":

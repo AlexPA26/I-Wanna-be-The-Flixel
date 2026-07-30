@@ -31,8 +31,6 @@ class PauseState extends FlxSubState
 
     var originalFilters:Array<BitmapFilter> = [];
     var isClosing:Bool = false;
-    var filtersRestored:Bool = false;
-    var cleanedUp:Bool = false;
 
     var activeTweens:Map<FlxButton, FlxTween> = new Map();
     var activeLabelTweens:Map<FlxText, FlxTween> = new Map();
@@ -56,6 +54,15 @@ class PauseState extends FlxSubState
         {
             originalFilters = FlxG.camera.filters.copy();
         }
+        // Deliberately NOT copying originalFilters onto uiCamera — it renders the
+        // pause menu itself (buttons, text, stats), which should always look crisp
+        // and untinted regardless of whatever gameplay shader is active underneath.
+
+        // Force the shader/filter chain to do its (apparently expensive) recompile
+        // NOW, while the pause menu is already up and a brief hitch is unnoticeable —
+        // rather than at resume time, where the same hitch felt like a jarring freeze.
+        FlxG.camera.filters = [];
+        FlxG.camera.filters = originalFilters;
 
         #if debug
         traceFilterChain("create() — captured originalFilters");
@@ -118,35 +125,8 @@ class PauseState extends FlxSubState
         assetsGroup.add(statsText);
     }
 
-    function restoreFilters(?onComplete:Void->Void):Void
-    {
-        if (filtersRestored)
-        {
-            if (onComplete != null) onComplete();
-            return;
-        }
-        filtersRestored = true;
-
-        FlxG.camera.filters = [];
-        var filtersToRestore = originalFilters;
-
-        new flixel.util.FlxTimer().start(0.02, function(_)
-        {
-            FlxG.camera.filters = filtersToRestore;
-
-            #if debug
-            traceFilterChain("restoreFilters() — restored");
-            #end
-
-            if (onComplete != null) onComplete();
-        });
-    }
-
     function cleanup():Void
     {
-        if (cleanedUp) return;
-        cleanedUp = true;
-
         if (pauseTween != null) pauseTween.cancel();
 
         for (btn in activeTweens.keys())
@@ -167,7 +147,7 @@ class PauseState extends FlxSubState
 
         FlxG.sound.volume = originalVolume;
 
-        restoreFilters();
+        FlxG.camera.filters = originalFilters;
 
         if (uiCamera != null)
         {
@@ -176,64 +156,7 @@ class PauseState extends FlxSubState
         }
         openfl.ui.Mouse.hide();
 
-        #if debug
-        setWarmShaderDebugMode(0);
-        #end
     }
-
-    #if debug
-
-    function traceFilterChain(label:String):Void
-    {
-        var filters = FlxG.camera.filters;
-        trace('[PauseState] $label — ${filters == null ? 0 : filters.length} filter(s)');
-
-        if (filters == null) return;
-
-        for (f in filters)
-        {
-            var className = Type.getClassName(Type.getClass(f));
-            trace('  - $className');
-
-            if (Std.isOfType(f, openfl.filters.ShaderFilter))
-            {
-                var sf:openfl.filters.ShaderFilter = cast f;
-                if (sf.shader != null)
-                {
-                    var shaderClassName = Type.getClassName(Type.getClass(sf.shader));
-                    trace('      shader = $shaderClassName (id=${Std.string(sf.shader)})');
-                }
-                else
-                {
-                    trace('      shader = null');
-                }
-            }
-        }
-    }
-
-    function setWarmShaderDebugMode(mode:Int):Void
-    {
-        var filters = FlxG.camera.filters;
-        if (filters == null) return;
-
-        for (f in filters)
-        {
-            if (Std.isOfType(f, openfl.filters.ShaderFilter))
-            {
-                var sf:openfl.filters.ShaderFilter = cast f;
-                if (Std.isOfType(sf.shader, SunsetWarmShader))
-                {
-                    var warmShader:SunsetWarmShader = cast sf.shader;
-                    warmShader.setDebugMode(mode);
-                    trace('[PauseState] SunsetWarmShader debug mode -> $mode');
-                    return;
-                }
-            }
-        }
-
-        trace("[PauseState] No SunsetWarmShader found in the active filter chain to toggle debug mode on.");
-    }
-    #end
 
     override public function destroy():Void
     {
@@ -264,37 +187,21 @@ class PauseState extends FlxSubState
 
         if (!isClosing && bg.alpha < 0.4) bg.alpha += bgFadeTimer;
 
-        #if debug
-        // F1 = normal, F2 = show raw vignette as grayscale, F3 = show raw uv as color.
-        // Try these BOTH while paused and right after closing — if F2 looks like a
-        // normal center-bright/edge-dark gradient in both cases, the shader's math is
-        // fine and the bug is downstream of it (compositing). If F2 looks wrong/flat
-        // specifically while paused, the multi-filter chain (shader + blur together)
-        // is the actual culprit.
-        if (FlxG.keys.justPressed.F1) setWarmShaderDebugMode(0);
-        if (FlxG.keys.justPressed.F2) setWarmShaderDebugMode(1);
-        if (FlxG.keys.justPressed.F3) setWarmShaderDebugMode(2);
-        #end
 
         if (FlxG.keys.justPressed.ESCAPE && !isClosing)
         {
             isClosing = true;
             setUIEnabled(false);
 
-            // Restore the filters FIRST, while bg is still fully opaque — the brief
-            // "filters cleared" frame this causes happens entirely behind the
-            // dimmer, invisible to the player. Only once that's confirmed done do
-            // we fade bg out to reveal the (already correctly-filtered) game.
-            restoreFilters(function()
+            FlxG.camera.filters = originalFilters;
+
+            FlxTween.tween(bg, {alpha: 0}, 0.01,
             {
-                FlxTween.tween(bg, {alpha: 0}, 0.1,
+                onComplete: function(_)
                 {
-                    onComplete: function(_)
-                    {
-                        cleanup();
-                        close();
-                    }
-                });
+                    cleanup();
+                    close();
+                }
             });
         }
     }

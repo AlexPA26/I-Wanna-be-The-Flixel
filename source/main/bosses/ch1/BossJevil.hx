@@ -132,7 +132,7 @@ class Jevil extends FlxSprite
 
         phase01Attacks =
         [
-            attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
+            attackBullets, attackSpades, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
         ];
 
         phase02Attacks =
@@ -603,7 +603,7 @@ class Jevil extends FlxSprite
 
         queue[index]();
 
-        new FlxTimer().start(0.005, function(_)
+        new FlxTimer().start(0.01, function(_)
         {
             runPropQueue(queue, index + 1, onComplete);
         });

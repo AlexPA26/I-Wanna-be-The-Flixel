@@ -14,8 +14,8 @@ class PlayerData
     public static var vSync:Bool = false;
     public static var showFPS:Bool = true;
 
-    public static var spawnX:Float;
-    public static var spawnY:Float;
+    public static var spawnX:Float = 250; // Default X position
+    public static var spawnY:Float = 450; // Default Y position
     public static var deathX:Float;
     public static var deathY:Float;
     public static var lastVelX:Float = 0;
@@ -24,6 +24,11 @@ class PlayerData
     public static var lastMusicTime:Float = 0;
     public static var isRespawning:Bool = false;
     public static var saveCooldown:Float = 0;
+
+    /* Cool Fades */
+
+    public static var whiteFadeTrigger:Bool = false;
+    public static var blackFadeTrigger:Bool = false;
 
     /* Character Unlocks */
     public static var reachedSewers:Bool = false;

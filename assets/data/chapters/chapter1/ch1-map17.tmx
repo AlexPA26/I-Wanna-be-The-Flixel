@@ -4,13 +4,13 @@
   <property name="songName" value="castle1"/>
  </properties>
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
- <tileset firstgid="81" source="../../textures/trampoline.tsx"/>
- <tileset firstgid="84" source="../../textures/save.tsx"/>
- <tileset firstgid="85" source="../../textures/spike.tsx"/>
- <tileset firstgid="93" source="../../textures/laser.tsx"/>
- <tileset firstgid="111" source="../../textures/light.tsx"/>
- <tileset firstgid="113" source="../../textures/transition-tiles.tsx"/>
- <tileset firstgid="118" source="../../textures/coins.tsx"/>
+ <tileset firstgid="89" source="../../textures/trampoline.tsx"/>
+ <tileset firstgid="92" source="../../textures/save.tsx"/>
+ <tileset firstgid="93" source="../../textures/spike.tsx"/>
+ <tileset firstgid="101" source="../../textures/laser.tsx"/>
+ <tileset firstgid="119" source="../../textures/light.tsx"/>
+ <tileset firstgid="121" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="126" source="../../textures/coins.tsx"/>
  <layer id="1" name="tiles-main" width="28" height="18">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -110,333 +110,333 @@
   </object>
  </objectgroup>
  <objectgroup id="14" name="light" visible="0">
-  <object id="819" name="light" gid="111" x="76" y="226" width="200" height="200"/>
-  <object id="820" name="light" gid="111" x="324" y="424" width="200" height="200"/>
-  <object id="821" name="light" gid="111" x="578" y="222" width="200" height="200"/>
-  <object id="822" name="light" gid="111" x="825.333" y="221.333" width="200" height="200"/>
-  <object id="823" name="light" gid="111" x="1172" y="222.667" width="200" height="200"/>
-  <object id="824" name="light" gid="111" x="1022.67" y="425.333" width="200" height="200"/>
-  <object id="825" name="light" gid="111" x="1173.33" y="624" width="200" height="200"/>
-  <object id="826" name="light" gid="111" x="821.333" y="621.333" width="200" height="200"/>
-  <object id="827" name="light" gid="111" x="573.333" y="624" width="200" height="200"/>
-  <object id="828" name="light" gid="111" x="322.667" y="873.333" width="200" height="200"/>
-  <object id="829" name="light" gid="111" x="1025.33" y="868" width="200" height="200"/>
-  <object id="830" name="light" gid="111" x="72" y="626.667" width="200" height="200"/>
+  <object id="819" name="light" gid="119" x="76" y="226" width="200" height="200"/>
+  <object id="820" name="light" gid="119" x="324" y="424" width="200" height="200"/>
+  <object id="821" name="light" gid="119" x="578" y="222" width="200" height="200"/>
+  <object id="822" name="light" gid="119" x="825.333" y="221.333" width="200" height="200"/>
+  <object id="823" name="light" gid="119" x="1172" y="222.667" width="200" height="200"/>
+  <object id="824" name="light" gid="119" x="1022.67" y="425.333" width="200" height="200"/>
+  <object id="825" name="light" gid="119" x="1173.33" y="624" width="200" height="200"/>
+  <object id="826" name="light" gid="119" x="821.333" y="621.333" width="200" height="200"/>
+  <object id="827" name="light" gid="119" x="573.333" y="624" width="200" height="200"/>
+  <object id="828" name="light" gid="119" x="322.667" y="873.333" width="200" height="200"/>
+  <object id="829" name="light" gid="119" x="1025.33" y="868" width="200" height="200"/>
+  <object id="830" name="light" gid="119" x="72" y="626.667" width="200" height="200"/>
  </objectgroup>
  <objectgroup id="7" name="trampoline"/>
  <objectgroup id="9" name="spike-normal"/>
  <objectgroup id="10" name="laser">
-  <object id="581" name="laser" gid="93" x="0" y="800" width="50" height="50">
+  <object id="581" name="laser" gid="101" x="0" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="582" name="laser" gid="93" x="0" y="550" width="50" height="50">
+  <object id="582" name="laser" gid="101" x="0" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="583" name="laser" gid="93" x="50" y="550" width="50" height="50">
+  <object id="583" name="laser" gid="101" x="50" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="584" name="laser" gid="93" x="100" y="550" width="50" height="50">
+  <object id="584" name="laser" gid="101" x="100" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="586" name="laser" gid="93" x="50" y="800" width="50" height="50">
+  <object id="586" name="laser" gid="101" x="50" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="587" name="laser" gid="93" x="100" y="800" width="50" height="50">
+  <object id="587" name="laser" gid="101" x="100" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="588" name="laser" gid="93" x="150" y="800" width="50" height="50">
+  <object id="588" name="laser" gid="101" x="150" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="589" name="laser" gid="93" x="200" y="800" width="50" height="50">
+  <object id="589" name="laser" gid="101" x="200" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="590" name="laser" gid="93" x="250" y="800" width="50" height="50">
+  <object id="590" name="laser" gid="101" x="250" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="595" name="laser" gid="93" x="300" y="800" width="50" height="50">
+  <object id="595" name="laser" gid="101" x="300" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="610" name="laser" gid="93" x="200" y="550" width="50" height="50">
+  <object id="610" name="laser" gid="101" x="200" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="611" name="laser" gid="93" x="300" y="550" width="50" height="50">
+  <object id="611" name="laser" gid="101" x="300" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="614" name="laser" gid="93" x="300" y="550" width="50" height="50">
+  <object id="614" name="laser" gid="101" x="300" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="615" name="laser" gid="93" x="250" y="550" width="50" height="50">
+  <object id="615" name="laser" gid="101" x="250" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="652" name="laser" gid="93" x="350" y="550" width="50" height="50">
+  <object id="652" name="laser" gid="101" x="350" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="653" name="laser" gid="93" x="350" y="800" width="50" height="50">
+  <object id="653" name="laser" gid="101" x="350" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="654" name="laser" gid="93" x="450" y="800" width="50" height="50">
+  <object id="654" name="laser" gid="101" x="450" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="655" name="laser" gid="93" x="500" y="800" width="50" height="50">
+  <object id="655" name="laser" gid="101" x="500" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="656" name="laser" gid="93" x="550" y="800" width="50" height="50">
+  <object id="656" name="laser" gid="101" x="550" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="657" name="laser" gid="93" x="600" y="800" width="50" height="50">
+  <object id="657" name="laser" gid="101" x="600" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="658" name="laser" gid="93" x="450" y="550" width="50" height="50">
+  <object id="658" name="laser" gid="101" x="450" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="659" name="laser" gid="93" x="500" y="550" width="50" height="50">
+  <object id="659" name="laser" gid="101" x="500" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="660" name="laser" gid="93" x="550" y="550" width="50" height="50">
+  <object id="660" name="laser" gid="101" x="550" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="661" name="laser" gid="93" x="600" y="550" width="50" height="50">
+  <object id="661" name="laser" gid="101" x="600" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="662" name="laser" gid="93" x="700" y="550" width="50" height="50">
+  <object id="662" name="laser" gid="101" x="700" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="663" name="laser" gid="93" x="750" y="550" width="50" height="50">
+  <object id="663" name="laser" gid="101" x="750" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="664" name="laser" gid="93" x="800" y="550" width="50" height="50">
+  <object id="664" name="laser" gid="101" x="800" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="665" name="laser" gid="93" x="850" y="550" width="50" height="50">
+  <object id="665" name="laser" gid="101" x="850" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="666" name="laser" gid="93" x="700" y="800" width="50" height="50">
+  <object id="666" name="laser" gid="101" x="700" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="667" name="laser" gid="93" x="750" y="800" width="50" height="50">
+  <object id="667" name="laser" gid="101" x="750" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="668" name="laser" gid="93" x="800" y="800" width="50" height="50">
+  <object id="668" name="laser" gid="101" x="800" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="669" name="laser" gid="93" x="850" y="800" width="50" height="50">
+  <object id="669" name="laser" gid="101" x="850" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="670" name="laser" gid="93" x="900" y="800" width="50" height="50">
+  <object id="670" name="laser" gid="101" x="900" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="671" name="laser" gid="93" x="950" y="800" width="50" height="50">
+  <object id="671" name="laser" gid="101" x="950" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="672" name="laser" gid="93" x="1000" y="800" width="50" height="50">
+  <object id="672" name="laser" gid="101" x="1000" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="673" name="laser" gid="93" x="1050" y="800" width="50" height="50">
+  <object id="673" name="laser" gid="101" x="1050" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="674" name="laser" gid="93" x="1050" y="800" width="50" height="50">
+  <object id="674" name="laser" gid="101" x="1050" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="675" name="laser" gid="93" x="1150" y="800" width="50" height="50">
+  <object id="675" name="laser" gid="101" x="1150" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="676" name="laser" gid="93" x="1200" y="800" width="50" height="50">
+  <object id="676" name="laser" gid="101" x="1200" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="677" name="laser" gid="99" x="1250" y="750" width="50" height="50">
+  <object id="677" name="laser" gid="107" x="1250" y="750" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="678" name="laser" gid="99" x="1250" y="700" width="50" height="50">
+  <object id="678" name="laser" gid="107" x="1250" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="679" name="laser" gid="99" x="1250" y="650" width="50" height="50">
+  <object id="679" name="laser" gid="107" x="1250" y="650" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="680" name="laser" gid="99" x="1250" y="600" width="50" height="50">
+  <object id="680" name="laser" gid="107" x="1250" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="681" name="laser" gid="99" x="1250" y="600" width="50" height="50">
+  <object id="681" name="laser" gid="107" x="1250" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="682" name="laser" gid="93" x="1150" y="550" width="50" height="50">
+  <object id="682" name="laser" gid="101" x="1150" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="683" name="laser" gid="93" x="1200" y="550" width="50" height="50">
+  <object id="683" name="laser" gid="101" x="1200" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="684" name="laser" gid="93" x="950" y="550" width="50" height="50">
+  <object id="684" name="laser" gid="101" x="950" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="685" name="laser" gid="93" x="1050" y="550" width="50" height="50">
+  <object id="685" name="laser" gid="101" x="1050" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="686" name="laser" gid="93" x="950" y="350" width="50" height="50">
+  <object id="686" name="laser" gid="101" x="950" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="687" name="laser" gid="93" x="1050" y="350" width="50" height="50">
+  <object id="687" name="laser" gid="101" x="1050" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="688" name="laser" gid="99" x="900" y="500" width="50" height="50">
+  <object id="688" name="laser" gid="107" x="900" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="689" name="laser" gid="93" x="700" y="350" width="50" height="50">
+  <object id="689" name="laser" gid="101" x="700" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="690" name="laser" gid="93" x="750" y="350" width="50" height="50">
+  <object id="690" name="laser" gid="101" x="750" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="691" name="laser" gid="93" x="800" y="350" width="50" height="50">
+  <object id="691" name="laser" gid="101" x="800" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="692" name="laser" gid="93" x="850" y="350" width="50" height="50">
+  <object id="692" name="laser" gid="101" x="850" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="693" name="laser" gid="93" x="450" y="350" width="50" height="50">
+  <object id="693" name="laser" gid="101" x="450" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="694" name="laser" gid="93" x="500" y="350" width="50" height="50">
+  <object id="694" name="laser" gid="101" x="500" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="695" name="laser" gid="93" x="550" y="350" width="50" height="50">
+  <object id="695" name="laser" gid="101" x="550" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="696" name="laser" gid="93" x="600" y="350" width="50" height="50">
+  <object id="696" name="laser" gid="101" x="600" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="697" name="laser" gid="93" x="200" y="350" width="50" height="50">
+  <object id="697" name="laser" gid="101" x="200" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="698" name="laser" gid="93" x="350" y="350" width="50" height="50">
+  <object id="698" name="laser" gid="101" x="350" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="700" name="laser" gid="93" x="200" y="150" width="50" height="50">
+  <object id="700" name="laser" gid="101" x="200" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="702" name="laser" gid="93" x="350" y="150" width="50" height="50">
+  <object id="702" name="laser" gid="101" x="350" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
@@ -446,531 +446,531 @@
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="705" name="laser" gid="93" x="450" y="150" width="50" height="50">
+  <object id="705" name="laser" gid="101" x="450" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="706" name="laser" gid="93" x="500" y="150" width="50" height="50">
+  <object id="706" name="laser" gid="101" x="500" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="707" name="laser" gid="93" x="600" y="150" width="50" height="50">
+  <object id="707" name="laser" gid="101" x="600" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="708" name="laser" gid="93" x="550" y="150" width="50" height="50">
+  <object id="708" name="laser" gid="101" x="550" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="709" name="laser" gid="93" x="700" y="150" width="50" height="50">
+  <object id="709" name="laser" gid="101" x="700" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="710" name="laser" gid="93" x="750" y="150" width="50" height="50">
+  <object id="710" name="laser" gid="101" x="750" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="711" name="laser" gid="93" x="800" y="150" width="50" height="50">
+  <object id="711" name="laser" gid="101" x="800" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="712" name="laser" gid="93" x="850" y="150" width="50" height="50">
+  <object id="712" name="laser" gid="101" x="850" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="713" name="laser" gid="93" x="950" y="150" width="50" height="50">
+  <object id="713" name="laser" gid="101" x="950" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="714" name="laser" gid="93" x="1000" y="150" width="50" height="50">
+  <object id="714" name="laser" gid="101" x="1000" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="715" name="laser" gid="93" x="1050" y="150" width="50" height="50">
+  <object id="715" name="laser" gid="101" x="1050" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="716" name="laser" gid="93" x="1150" y="150" width="50" height="50">
+  <object id="716" name="laser" gid="101" x="1150" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="717" name="laser" gid="93" x="1200" y="150" width="50" height="50">
+  <object id="717" name="laser" gid="101" x="1200" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="718" name="laser" gid="99" x="1250" y="300" width="50" height="50">
+  <object id="718" name="laser" gid="107" x="1250" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="719" name="laser" gid="99" x="1250" y="250" width="50" height="50">
+  <object id="719" name="laser" gid="107" x="1250" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="720" name="laser" gid="99" x="1250" y="250" width="50" height="50">
+  <object id="720" name="laser" gid="107" x="1250" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="721" name="laser" gid="99" x="1250" y="200" width="50" height="50">
+  <object id="721" name="laser" gid="107" x="1250" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="722" name="laser" gid="99" x="1250" y="400" width="50" height="50">
+  <object id="722" name="laser" gid="107" x="1250" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="723" name="laser" gid="99" x="1250" y="450" width="50" height="50">
+  <object id="723" name="laser" gid="107" x="1250" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="724" name="laser" gid="99" x="1250" y="500" width="50" height="50">
+  <object id="724" name="laser" gid="107" x="1250" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="728" name="laser" gid="99" x="400" y="300" width="50" height="50">
+  <object id="728" name="laser" gid="107" x="400" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="729" name="laser" gid="99" x="650" y="400" width="50" height="50">
+  <object id="729" name="laser" gid="107" x="650" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="730" name="laser" gid="99" x="650" y="450" width="50" height="50">
+  <object id="730" name="laser" gid="107" x="650" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="731" name="laser" gid="99" x="400" y="500" width="50" height="50">
+  <object id="731" name="laser" gid="107" x="400" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="735" name="laser" gid="99" x="150" y="400" width="50" height="50">
+  <object id="735" name="laser" gid="107" x="150" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="736" name="laser" gid="99" x="150" y="450" width="50" height="50">
+  <object id="736" name="laser" gid="107" x="150" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="737" name="laser" gid="99" x="150" y="500" width="50" height="50">
+  <object id="737" name="laser" gid="107" x="150" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="738" name="laser" gid="99" x="150" y="300" width="50" height="50">
+  <object id="738" name="laser" gid="107" x="150" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="739" name="laser" gid="99" x="150" y="250" width="50" height="50">
+  <object id="739" name="laser" gid="107" x="150" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="740" name="laser" gid="99" x="150" y="200" width="50" height="50">
+  <object id="740" name="laser" gid="107" x="150" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="741" name="laser" gid="99" x="150" y="100" width="50" height="50">
+  <object id="741" name="laser" gid="107" x="150" y="100" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="742" name="laser" gid="99" x="150" y="50" width="50" height="50">
+  <object id="742" name="laser" gid="107" x="150" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="743" name="laser" gid="99" x="400" y="100" width="50" height="50">
+  <object id="743" name="laser" gid="107" x="400" y="100" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="744" name="laser" gid="99" x="400" y="50" width="50" height="50">
+  <object id="744" name="laser" gid="107" x="400" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="745" name="laser" gid="99" x="650" y="50" width="50" height="50">
+  <object id="745" name="laser" gid="107" x="650" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="746" name="laser" gid="99" x="650" y="100" width="50" height="50">
+  <object id="746" name="laser" gid="107" x="650" y="100" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="747" name="laser" gid="99" x="900" y="50" width="50" height="50">
+  <object id="747" name="laser" gid="107" x="900" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="748" name="laser" gid="99" x="900" y="100" width="50" height="50">
+  <object id="748" name="laser" gid="107" x="900" y="100" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="750" name="laser" gid="99" x="1100" y="50" width="50" height="50">
+  <object id="750" name="laser" gid="107" x="1100" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="751" name="laser" gid="99" x="1100" y="100" width="50" height="50">
+  <object id="751" name="laser" gid="107" x="1100" y="100" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="752" name="laser" gid="99" x="1250" y="50" width="50" height="50">
+  <object id="752" name="laser" gid="107" x="1250" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="753" name="laser" gid="99" x="1250" y="100" width="50" height="50">
+  <object id="753" name="laser" gid="107" x="1250" y="100" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="754" name="laser" gid="93" x="1300" y="150" width="50" height="50">
+  <object id="754" name="laser" gid="101" x="1300" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="755" name="laser" gid="93" x="1350" y="150" width="50" height="50">
+  <object id="755" name="laser" gid="101" x="1350" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="756" name="laser" gid="93" x="1300" y="350" width="50" height="50">
+  <object id="756" name="laser" gid="101" x="1300" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="757" name="laser" gid="93" x="1350" y="350" width="50" height="50">
+  <object id="757" name="laser" gid="101" x="1350" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="758" name="laser" gid="93" x="1300" y="550" width="50" height="50">
+  <object id="758" name="laser" gid="101" x="1300" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="759" name="laser" gid="93" x="1350" y="550" width="50" height="50">
+  <object id="759" name="laser" gid="101" x="1350" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="760" name="laser" gid="93" x="1300" y="800" width="50" height="50">
+  <object id="760" name="laser" gid="101" x="1300" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="761" name="laser" gid="93" x="1350" y="800" width="50" height="50">
+  <object id="761" name="laser" gid="101" x="1350" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="762" name="laser" gid="93" x="1150" y="350" width="50" height="50">
+  <object id="762" name="laser" gid="101" x="1150" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="763" name="laser" gid="93" x="1200" y="350" width="50" height="50">
+  <object id="763" name="laser" gid="101" x="1200" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="764" name="laser" gid="105" x="1100" y="500" width="50" height="50">
+  <object id="764" name="laser" gid="113" x="1100" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="765" name="laser" gid="105" x="1100" y="450" width="50" height="50">
+  <object id="765" name="laser" gid="113" x="1100" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="766" name="laser" gid="105" x="1100" y="400" width="50" height="50">
+  <object id="766" name="laser" gid="113" x="1100" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="767" name="laser" gid="99" x="1100" y="300" width="50" height="50">
+  <object id="767" name="laser" gid="107" x="1100" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="768" name="laser" gid="99" x="1100" y="200" width="50" height="50">
+  <object id="768" name="laser" gid="107" x="1100" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="769" name="laser" gid="99" x="1100" y="600" width="50" height="50">
+  <object id="769" name="laser" gid="107" x="1100" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="770" name="laser" gid="99" x="1100" y="650" width="50" height="50">
+  <object id="770" name="laser" gid="107" x="1100" y="650" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="771" name="laser" gid="105" x="1100" y="700" width="50" height="50">
+  <object id="771" name="laser" gid="113" x="1100" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="772" name="laser" gid="105" x="1100" y="750" width="50" height="50">
+  <object id="772" name="laser" gid="113" x="1100" y="750" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="773" name="laser" gid="105" x="1100" y="250" width="50" height="50">
+  <object id="773" name="laser" gid="113" x="1100" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="774" name="laser" gid="105" x="900" y="450" width="50" height="50">
+  <object id="774" name="laser" gid="113" x="900" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="775" name="laser" gid="105" x="900" y="400" width="50" height="50">
+  <object id="775" name="laser" gid="113" x="900" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="776" name="laser" gid="99" x="400" y="750" width="50" height="50">
+  <object id="776" name="laser" gid="107" x="400" y="750" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="777" name="laser" gid="99" x="400" y="700" width="50" height="50">
+  <object id="777" name="laser" gid="107" x="400" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="778" name="laser" gid="99" x="650" y="750" width="50" height="50">
+  <object id="778" name="laser" gid="107" x="650" y="750" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="779" name="laser" gid="99" x="650" y="600" width="50" height="50">
+  <object id="779" name="laser" gid="107" x="650" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="780" name="laser" gid="105" x="400" y="650" width="50" height="50">
+  <object id="780" name="laser" gid="113" x="400" y="650" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="781" name="laser" gid="105" x="400" y="600" width="50" height="50">
+  <object id="781" name="laser" gid="113" x="400" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="782" name="laser" gid="105" x="650" y="700" width="50" height="50">
+  <object id="782" name="laser" gid="113" x="650" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="783" name="laser" gid="105" x="650" y="650" width="50" height="50">
+  <object id="783" name="laser" gid="113" x="650" y="650" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="784" name="laser" gid="105" x="650" y="500" width="50" height="50">
+  <object id="784" name="laser" gid="113" x="650" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="785" name="laser" gid="105" x="400" y="450" width="50" height="50">
+  <object id="785" name="laser" gid="113" x="400" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="786" name="laser" gid="105" x="400" y="400" width="50" height="50">
+  <object id="786" name="laser" gid="113" x="400" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="787" name="laser" gid="105" x="400" y="200" width="50" height="50">
+  <object id="787" name="laser" gid="113" x="400" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="793" name="laser" gid="107" x="250" y="350" width="50" height="50">
+  <object id="793" name="laser" gid="115" x="250" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="hoff"/>
    </properties>
   </object>
-  <object id="794" name="laser" gid="107" x="300" y="350" width="50" height="50">
+  <object id="794" name="laser" gid="115" x="300" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="hoff"/>
    </properties>
   </object>
-  <object id="795" name="laser" gid="107" x="250" y="150" width="50" height="50">
+  <object id="795" name="laser" gid="115" x="250" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="hoff"/>
    </properties>
   </object>
-  <object id="796" name="laser" gid="107" x="300" y="150" width="50" height="50">
+  <object id="796" name="laser" gid="115" x="300" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="hoff"/>
    </properties>
   </object>
-  <object id="797" name="laser" gid="93" x="0" y="350" width="50" height="50">
+  <object id="797" name="laser" gid="101" x="0" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="798" name="laser" gid="93" x="50" y="350" width="50" height="50">
+  <object id="798" name="laser" gid="101" x="50" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="799" name="laser" gid="93" x="100" y="350" width="50" height="50">
+  <object id="799" name="laser" gid="101" x="100" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="800" name="laser" gid="93" x="0" y="150" width="50" height="50">
+  <object id="800" name="laser" gid="101" x="0" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="801" name="laser" gid="93" x="50" y="150" width="50" height="50">
+  <object id="801" name="laser" gid="101" x="50" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="802" name="laser" gid="93" x="100" y="150" width="50" height="50">
+  <object id="802" name="laser" gid="101" x="100" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="803" name="laser" gid="99" x="400" y="850" width="50" height="50">
+  <object id="803" name="laser" gid="107" x="400" y="850" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="804" name="laser" gid="99" x="400" y="900" width="50" height="50">
+  <object id="804" name="laser" gid="107" x="400" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="805" name="laser" gid="99" x="650" y="850" width="50" height="50">
+  <object id="805" name="laser" gid="107" x="650" y="850" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="806" name="laser" gid="99" x="650" y="900" width="50" height="50">
+  <object id="806" name="laser" gid="107" x="650" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="807" name="laser" gid="99" x="1100" y="850" width="50" height="50">
+  <object id="807" name="laser" gid="107" x="1100" y="850" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="808" name="laser" gid="99" x="1100" y="900" width="50" height="50">
+  <object id="808" name="laser" gid="107" x="1100" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="809" name="laser" gid="99" x="1250" y="850" width="50" height="50">
+  <object id="809" name="laser" gid="107" x="1250" y="850" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="810" name="laser" gid="99" x="1250" y="900" width="50" height="50">
+  <object id="810" name="laser" gid="107" x="1250" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="811" name="laser" gid="107" x="1000" y="550" width="50" height="50">
+  <object id="811" name="laser" gid="115" x="1000" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="hoff"/>
    </properties>
   </object>
-  <object id="812" name="laser" gid="107" x="1000" y="350" width="50" height="50">
+  <object id="812" name="laser" gid="115" x="1000" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="hoff"/>
    </properties>
   </object>
-  <object id="843" name="laser" gid="99" x="650" y="200" width="50" height="50">
+  <object id="843" name="laser" gid="107" x="650" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="844" name="laser" gid="99" x="650" y="300" width="50" height="50">
+  <object id="844" name="laser" gid="107" x="650" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="846" name="laser" gid="99" x="650" y="-150" width="50" height="50">
+  <object id="846" name="laser" gid="107" x="650" y="-150" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="847" name="laser" gid="99" x="900" y="250" width="50" height="50">
+  <object id="847" name="laser" gid="107" x="900" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="848" name="laser" gid="99" x="900" y="300" width="50" height="50">
+  <object id="848" name="laser" gid="107" x="900" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="849" name="laser" gid="105" x="650" y="250" width="50" height="50">
+  <object id="849" name="laser" gid="113" x="650" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="850" name="laser" gid="105" x="900" y="200" width="50" height="50">
+  <object id="850" name="laser" gid="113" x="900" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="851" name="laser" gid="99" x="400" y="250" width="50" height="50">
+  <object id="851" name="laser" gid="107" x="400" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="21" name="coin">
-  <object id="852" name="redCoin" gid="122" x="525" y="250" width="50" height="50">
+  <object id="852" name="redCoin" gid="130" x="525" y="250" width="50" height="50">
    <properties>
-    <property name="id" value="TEST6"/>
+    <property name="id" value="ch1_04"/>
    </properties>
   </object>
  </objectgroup>
@@ -996,49 +996,49 @@
  </objectgroup>
  <objectgroup id="19" name="save"/>
  <objectgroup id="20" name="warps">
-  <object id="831" name="warp" gid="116" x="0" y="600" width="50" height="50">
+  <object id="831" name="warp" gid="124" x="0" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map16"/>
    </properties>
   </object>
-  <object id="832" name="warp" gid="116" x="0" y="650" width="50" height="50">
+  <object id="832" name="warp" gid="124" x="0" y="650" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map16"/>
    </properties>
   </object>
-  <object id="833" name="warp" gid="116" x="0" y="700" width="50" height="50">
+  <object id="833" name="warp" gid="124" x="0" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map16"/>
    </properties>
   </object>
-  <object id="834" name="warp" gid="116" x="0" y="750" width="50" height="50">
+  <object id="834" name="warp" gid="124" x="0" y="750" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map16"/>
    </properties>
   </object>
-  <object id="835" name="warp" gid="113" x="200" y="50" width="50" height="50">
+  <object id="835" name="warp" gid="121" x="200" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
     <property name="target" value="map18"/>
    </properties>
   </object>
-  <object id="836" name="warp" gid="113" x="250" y="50" width="50" height="50">
+  <object id="836" name="warp" gid="121" x="250" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
     <property name="target" value="map18"/>
    </properties>
   </object>
-  <object id="837" name="warp" gid="113" x="300" y="50" width="50" height="50">
+  <object id="837" name="warp" gid="121" x="300" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
     <property name="target" value="map18"/>
    </properties>
   </object>
-  <object id="838" name="warp" gid="113" x="350" y="50" width="50" height="50">
+  <object id="838" name="warp" gid="121" x="350" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
     <property name="target" value="map18"/>

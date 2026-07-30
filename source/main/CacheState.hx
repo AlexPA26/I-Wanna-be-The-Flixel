@@ -62,7 +62,7 @@ class CacheState extends FlxState
         main.mods.ModLoader.loadModGraphic(player, "images/skins/" + PlayerData.currentSkin + ".png", "skin_" + PlayerData.currentSkin, 50, 50);
         player.animation.add("walking", [8, 9, 10, 11, 12, 13], 14, true);
         player.animation.add("idle", [0, 1, 2, 3], 11, true);
-        player.animation.play("walking");
+        player.animation.play("idle");
         player.scale.set(3, 3);
         player.updateHitbox();
         player.screenCenter();
@@ -125,8 +125,7 @@ class CacheState extends FlxState
     {
         cacheTasks.push(function()
         {
-            var filename = path.split("/").pop();
-            loadingText.text = "Caching Image: " + filename;
+            loadingText.text = "Caching Images...";
             FlxG.bitmap.add(path);
         });
     }
@@ -135,8 +134,7 @@ class CacheState extends FlxState
     {
         cacheTasks.push(function()
         {
-            var filename = path.split("/").pop();
-            loadingText.text = "Caching Image: " + filename;
+            loadingText.text = "Caching Music...";
             FlxG.sound.cache(path);
         });
     }
@@ -153,7 +151,8 @@ class CacheState extends FlxState
         else if (!finishedCaching)
         {
             finishedCaching = true;
-            player.animation.play("idle");
+            player.animation.play("walking");
+            player.velocity.x = 600;
 
             FlxTween.tween(fade, {alpha: 1}, 1.5,
             {
@@ -162,7 +161,25 @@ class CacheState extends FlxState
 
             new FlxTimer().start(2, function(_)
             {
-                FlxG.switchState(MenuState.new);
+                var hasSave:Bool = leveldata.misc.SaveManager.loadGame();
+
+                if (!hasSave || PlayerData.currentRoom == null || PlayerData.currentRoom == "")
+                {
+                    PlayerData.currentChapter = 0;
+                    PlayerData.currentRoom = "map01";
+                    PlayerData.spawnX = 250; // Initial tutorial spawn X
+                    PlayerData.spawnY = 450; // Initial tutorial spawn Y
+                }
+
+                if (PlayerData.tutorialCompleted == false)
+                {
+                    FlxG.switchState(ChapterState.new);
+                }
+
+                else
+                {
+                    FlxG.switchState(MenuState.new);
+                }
             });
         }
 

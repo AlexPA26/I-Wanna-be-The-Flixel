@@ -7,7 +7,7 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="I Wanna Be The Flixel v.020 Test" file="IWBTF" main="Main" version="0.20" company="darkuganda" package="com.darkuganda.iwbtf"/>
+	<app title="I Wanna Be The Flixel" file="IWBTF" main="Main" version="0.20" company="DarkuDev" package="com.darkudev.iwbtf"/>
 	<certificate path="release.keystore" alias="release" password="123456" if="android" />
 	<set name="ANDROID_NDK_ROOT" value="C:\Users\darku\AppData\Local\Android\Sdk\ndk\21.4.7075529" force="true" />
 	<set name="no-debug" value="1" />

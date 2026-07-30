@@ -144,7 +144,7 @@
  <objectgroup id="20" name="redCoin">
   <object id="261" name="redCoin" gid="130" x="1050" y="200" width="50" height="50">
    <properties>
-    <property name="id" value="TEST2"/>
+    <property name="id" value="ch1_03"/>
    </properties>
   </object>
  </objectgroup>

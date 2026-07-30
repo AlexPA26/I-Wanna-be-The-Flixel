@@ -4,15 +4,15 @@
   <property name="songName" value="rain"/>
  </properties>
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
- <tileset firstgid="81" source="../../textures/trampoline.tsx"/>
- <tileset firstgid="84" source="../../textures/save.tsx"/>
- <tileset firstgid="85" source="../../textures/spike.tsx"/>
- <tileset firstgid="93" source="../../textures/laser.tsx"/>
- <tileset firstgid="111" source="../../textures/light.tsx"/>
- <tileset firstgid="113" source="../../textures/trampoline-mini.tsx"/>
- <tileset firstgid="122" source="../../textures/transition-tiles.tsx"/>
- <tileset firstgid="127" source="../../textures/small-spike.tsx"/>
- <tileset firstgid="131" source="../../textures/coins.tsx"/>
+ <tileset firstgid="89" source="../../textures/trampoline.tsx"/>
+ <tileset firstgid="92" source="../../textures/save.tsx"/>
+ <tileset firstgid="93" source="../../textures/spike.tsx"/>
+ <tileset firstgid="101" source="../../textures/laser.tsx"/>
+ <tileset firstgid="119" source="../../textures/light.tsx"/>
+ <tileset firstgid="121" source="../../textures/trampoline-mini.tsx"/>
+ <tileset firstgid="130" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="135" source="../../textures/small-spike.tsx"/>
+ <tileset firstgid="139" source="../../textures/coins.tsx"/>
  <layer id="1" name="tiles-main" width="100" height="18">
   <data encoding="csv">
 0,0,0,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33,41,41,37,41,41,41,41,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33,0,0,0,0,0,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,33,0,0,0,33,0,0,0,
@@ -165,7 +165,7 @@
   <object id="1382" name="solid_block" gid="35" x="850" y="250" width="50" height="50"/>
   <object id="1383" name="solid_block" gid="35" x="850" y="450" width="50" height="50"/>
   <object id="1384" name="solid_block" gid="35" x="1550" y="550" width="50" height="50"/>
-  <object id="1385" name="switch-spike" gid="85" x="1550" y="500" width="50" height="50">
+  <object id="1385" name="switch-spike" gid="93" x="1550" y="500" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="disabled"/>
@@ -175,13 +175,13 @@
   <object id="1387" name="solid_block" gid="36" x="1600" y="400" width="50" height="50"/>
   <object id="1413" name="solid_block" gid="35" x="2550" y="200" width="50" height="50"/>
   <object id="1414" name="solid_block" gid="35" x="2550" y="350" width="50" height="50"/>
-  <object id="1415" name="switch-spike" gid="87" x="2550" y="250" width="50" height="50">
+  <object id="1415" name="switch-spike" gid="95" x="2550" y="250" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1416" name="switch-spike" gid="85" x="2550" y="300" width="50" height="50">
+  <object id="1416" name="switch-spike" gid="93" x="2550" y="300" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="disabled"/>
@@ -226,89 +226,89 @@
   <object id="1517" name="slab" gid="48" x="2800" y="550" width="50" height="50"/>
  </objectgroup>
  <objectgroup id="19" name="trampoline-mini">
-  <object id="1439" name="trampoline-mini" gid="113" x="3750" y="350" width="50" height="50">
+  <object id="1439" name="trampoline-mini" gid="121" x="3750" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
    </properties>
   </object>
-  <object id="1450" name="trampoline-mini" gid="113" x="4150" y="500" width="50" height="50">
+  <object id="1450" name="trampoline-mini" gid="121" x="4150" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="9" name="spike-normal">
-  <object id="1407" name="spike" gid="91" x="2200" y="300" width="50" height="50">
+  <object id="1407" name="spike" gid="99" x="2200" y="300" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
    </properties>
   </object>
-  <object id="1408" name="spike" gid="91" x="2350" y="300" width="50" height="50">
+  <object id="1408" name="spike" gid="99" x="2350" y="300" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
    </properties>
   </object>
-  <object id="1409" name="spike" gid="87" x="2300" y="300" width="50" height="50">
+  <object id="1409" name="spike" gid="95" x="2300" y="300" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1410" name="spike" gid="87" x="2250" y="300" width="50" height="50">
+  <object id="1410" name="spike" gid="95" x="2250" y="300" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1456" name="spike" gid="87" x="4600" y="300" width="50" height="50">
+  <object id="1456" name="spike" gid="95" x="4600" y="300" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1457" name="spike" gid="91" x="4650" y="300" width="50" height="50">
+  <object id="1457" name="spike" gid="99" x="4650" y="300" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1458" name="spike" gid="87" x="4800" y="300" width="50" height="50">
+  <object id="1458" name="spike" gid="95" x="4800" y="300" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1481" name="spike" gid="85" x="350" y="500" width="50" height="50">
+  <object id="1481" name="spike" gid="93" x="350" y="500" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1482" name="spike" gid="85" x="600" y="500" width="50" height="50">
+  <object id="1482" name="spike" gid="93" x="600" y="500" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1483" name="spike" gid="87" x="450" y="350" width="50" height="50">
+  <object id="1483" name="spike" gid="95" x="450" y="350" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1484" name="spike" gid="87" x="600" y="250" width="50" height="50">
+  <object id="1484" name="spike" gid="95" x="600" y="250" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1485" name="spike" gid="91" x="300" y="300" width="50" height="50">
+  <object id="1485" name="spike" gid="99" x="300" y="300" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1486" name="spike" gid="91" x="700" y="300" width="50" height="50">
+  <object id="1486" name="spike" gid="99" x="700" y="300" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
     <property name="status" value="active"/>
@@ -316,75 +316,75 @@
   </object>
   <object id="1489" name="solid_block" gid="35" x="4050" y="250" width="50" height="50"/>
   <object id="1490" name="solid_block" gid="35" x="4200" y="300" width="50" height="50"/>
-  <object id="1498" name="spike" gid="85" x="950" y="400" width="50" height="50">
+  <object id="1498" name="spike" gid="93" x="950" y="400" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1499" name="spike" gid="85" x="1150" y="400" width="50" height="50">
+  <object id="1499" name="spike" gid="93" x="1150" y="400" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1500" name="spike" gid="91" x="1400" y="450" width="50" height="50">
+  <object id="1500" name="spike" gid="99" x="1400" y="450" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
    </properties>
   </object>
-  <object id="1502" name="spike" gid="87" x="1700" y="450" width="50" height="50">
+  <object id="1502" name="spike" gid="95" x="1700" y="450" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1514" name="spike" gid="87" x="3750" y="200" width="50" height="50">
+  <object id="1514" name="spike" gid="95" x="3750" y="200" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1525" name="spike" gid="91" x="2850" y="300" width="50" height="50">
+  <object id="1525" name="spike" gid="99" x="2850" y="300" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
    </properties>
   </object>
-  <object id="1526" name="spike" gid="87" x="2750" y="300" width="50" height="50">
+  <object id="1526" name="spike" gid="95" x="2750" y="300" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1527" name="spike" gid="87" x="2900" y="200" width="50" height="50">
+  <object id="1527" name="spike" gid="95" x="2900" y="200" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1528" name="spike" gid="91" x="2950" y="200" width="50" height="50">
+  <object id="1528" name="spike" gid="99" x="2950" y="200" width="50" height="50">
    <properties>
     <property name="id" value="6"/>
    </properties>
   </object>
-  <object id="1529" name="spike" gid="87" x="3050" y="200" width="50" height="50">
+  <object id="1529" name="spike" gid="95" x="3050" y="200" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1530" name="spike" gid="92" x="2700" y="200" width="50" height="50">
+  <object id="1530" name="spike" gid="100" x="2700" y="200" width="50" height="50">
    <properties>
     <property name="id" value="7"/>
    </properties>
   </object>
-  <object id="1531" name="spike" gid="88" x="2700" y="150" width="50" height="50">
+  <object id="1531" name="spike" gid="96" x="2700" y="150" width="50" height="50">
    <properties>
     <property name="id" value="3"/>
    </properties>
   </object>
   <object id="1536" name="solid_block" gid="35" x="4300" y="350" width="50" height="50"/>
-  <object id="1515" name="spike" gid="85" x="4050" y="100" width="50" height="50">
+  <object id="1515" name="spike" gid="93" x="4050" y="100" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
@@ -392,56 +392,56 @@
   </object>
  </objectgroup>
  <objectgroup id="29" name="redCoin">
-  <object id="1375" name="redCoin" gid="135" x="1550" y="200" width="50" height="50">
+  <object id="1375" name="redCoin" gid="143" x="1550" y="200" width="50" height="50">
    <properties>
-    <property name="id" value="TEST7"/>
+    <property name="id" value="ch1_08"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="27" name="switch-spike">
-  <object id="1379" name="switch-spike" gid="85" x="850" y="400" width="50" height="50">
+  <object id="1379" name="switch-spike" gid="93" x="850" y="400" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1380" name="switch-spike" gid="87" x="850" y="300" width="50" height="50">
+  <object id="1380" name="switch-spike" gid="95" x="850" y="300" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1388" name="switch-spike" gid="87" x="1500" y="450" width="50" height="50">
+  <object id="1388" name="switch-spike" gid="95" x="1500" y="450" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1389" name="switch-spike" gid="87" x="1600" y="450" width="50" height="50">
+  <object id="1389" name="switch-spike" gid="95" x="1600" y="450" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1532" name="switch-spike" gid="87" x="1250" y="300" width="50" height="50">
+  <object id="1532" name="switch-spike" gid="95" x="1250" y="300" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="disabled"/>
    </properties>
   </object>
-  <object id="1491" name="switch-spike" gid="87" x="4050" y="300" width="50" height="50">
+  <object id="1491" name="switch-spike" gid="95" x="4050" y="300" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="disabled"/>
    </properties>
   </object>
-  <object id="1492" name="switch-spike" gid="87" x="4200" y="350" width="50" height="50">
+  <object id="1492" name="switch-spike" gid="95" x="4200" y="350" width="50" height="50">
    <properties>
     <property name="id" value="2"/>
     <property name="status" value="disabled"/>
    </properties>
   </object>
-  <object id="1494" name="switch-spike" gid="85" x="4200" y="250" width="50" height="50">
+  <object id="1494" name="switch-spike" gid="93" x="4200" y="250" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
@@ -454,291 +454,291 @@
   </properties>
  </objectgroup>
  <objectgroup id="8" name="save">
-  <object id="1376" name="save" gid="84" x="3000" y="400" width="50" height="50"/>
+  <object id="1376" name="save" gid="92" x="3000" y="400" width="50" height="50"/>
  </objectgroup>
  <objectgroup id="21" name="acidlayer"/>
  <objectgroup id="10" name="laser">
-  <object id="1392" name="laser" gid="99" x="1900" y="450" width="50" height="50">
+  <object id="1392" name="laser" gid="107" x="1900" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1393" name="laser" gid="99" x="1900" y="500" width="50" height="50">
+  <object id="1393" name="laser" gid="107" x="1900" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1395" name="laser" gid="99" x="1900" y="400" width="50" height="50">
+  <object id="1395" name="laser" gid="107" x="1900" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1396" name="laser" gid="99" x="1900" y="250" width="50" height="50">
+  <object id="1396" name="laser" gid="107" x="1900" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1398" name="laser" gid="99" x="1900" y="150" width="50" height="50">
+  <object id="1398" name="laser" gid="107" x="1900" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1399" name="laser" gid="99" x="1900" y="200" width="50" height="50">
+  <object id="1399" name="laser" gid="107" x="1900" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1400" name="laser" gid="99" x="1900" y="50" width="50" height="50">
+  <object id="1400" name="laser" gid="107" x="1900" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1401" name="laser" gid="99" x="1900" y="100" width="50" height="50">
+  <object id="1401" name="laser" gid="107" x="1900" y="100" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1402" name="laser" gid="105" x="1900" y="300" width="50" height="50">
+  <object id="1402" name="laser" gid="113" x="1900" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="1403" name="laser" gid="105" x="1900" y="350" width="50" height="50">
+  <object id="1403" name="laser" gid="113" x="1900" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="1405" name="spike" gid="85" x="2100" y="400" width="50" height="50">
+  <object id="1405" name="spike" gid="93" x="2100" y="400" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1412" name="spike" gid="89" x="2450" y="400" width="50" height="50">
+  <object id="1412" name="spike" gid="97" x="2450" y="400" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
    </properties>
   </object>
-  <object id="1418" name="laser" gid="99" x="3400" y="150" width="50" height="50">
+  <object id="1418" name="laser" gid="107" x="3400" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1420" name="laser" gid="99" x="3400" y="50" width="50" height="50">
+  <object id="1420" name="laser" gid="107" x="3400" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1421" name="laser" gid="99" x="3400" y="100" width="50" height="50">
+  <object id="1421" name="laser" gid="107" x="3400" y="100" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1422" name="laser" gid="99" x="3400" y="500" width="50" height="50">
+  <object id="1422" name="laser" gid="107" x="3400" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1424" name="laser" gid="99" x="3400" y="450" width="50" height="50">
+  <object id="1424" name="laser" gid="107" x="3400" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1425" name="laser" gid="99" x="3400" y="300" width="50" height="50">
+  <object id="1425" name="laser" gid="107" x="3400" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1427" name="laser" gid="99" x="3400" y="750" width="50" height="50">
+  <object id="1427" name="laser" gid="107" x="3400" y="750" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1428" name="laser" gid="99" x="3400" y="650" width="50" height="50">
+  <object id="1428" name="laser" gid="107" x="3400" y="650" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1429" name="laser" gid="99" x="3400" y="700" width="50" height="50">
+  <object id="1429" name="laser" gid="107" x="3400" y="700" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1430" name="laser" gid="99" x="3400" y="550" width="50" height="50">
+  <object id="1430" name="laser" gid="107" x="3400" y="550" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1431" name="laser" gid="99" x="3400" y="600" width="50" height="50">
+  <object id="1431" name="laser" gid="107" x="3400" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1432" name="laser" gid="99" x="3400" y="900" width="50" height="50">
+  <object id="1432" name="laser" gid="107" x="3400" y="900" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1433" name="laser" gid="99" x="3400" y="800" width="50" height="50">
+  <object id="1433" name="laser" gid="107" x="3400" y="800" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1434" name="laser" gid="99" x="3400" y="850" width="50" height="50">
+  <object id="1434" name="laser" gid="107" x="3400" y="850" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1435" name="laser" gid="105" x="3400" y="350" width="50" height="50">
+  <object id="1435" name="laser" gid="113" x="3400" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="1436" name="laser" gid="105" x="3400" y="400" width="50" height="50">
+  <object id="1436" name="laser" gid="113" x="3400" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="1437" name="laser" gid="105" x="3400" y="200" width="50" height="50">
+  <object id="1437" name="laser" gid="113" x="3400" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="1438" name="laser" gid="105" x="3400" y="250" width="50" height="50">
+  <object id="1438" name="laser" gid="113" x="3400" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="1440" name="spike" gid="85" x="3700" y="350" width="50" height="50">
+  <object id="1440" name="spike" gid="93" x="3700" y="350" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1441" name="spike" gid="85" x="3800" y="350" width="50" height="50">
+  <object id="1441" name="spike" gid="93" x="3800" y="350" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1443" name="laser" gid="93" x="3150" y="600" width="50" height="50">
+  <object id="1443" name="laser" gid="101" x="3150" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="1444" name="spike" gid="85" x="3200" y="550" width="50" height="50">
+  <object id="1444" name="spike" gid="93" x="3200" y="550" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1445" name="spike" gid="85" x="4050" y="500" width="50" height="50">
+  <object id="1445" name="spike" gid="93" x="4050" y="500" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1447" name="spike" gid="89" x="4100" y="500" width="50" height="50">
+  <object id="1447" name="spike" gid="97" x="4100" y="500" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
    </properties>
   </object>
-  <object id="1451" name="spike" gid="85" x="4400" y="400" width="50" height="50">
+  <object id="1451" name="spike" gid="93" x="4400" y="400" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1452" name="trampoline" gid="81" x="4600" y="450" width="50" height="50"/>
-  <object id="1453" name="trampoline" gid="81" x="4650" y="450" width="50" height="50"/>
-  <object id="1454" name="trampoline" gid="81" x="4700" y="450" width="50" height="50"/>
-  <object id="1455" name="trampoline" gid="81" x="4750" y="450" width="50" height="50"/>
-  <object id="1508" name="spike" gid="85" x="2650" y="500" width="50" height="50">
+  <object id="1452" name="trampoline" gid="89" x="4600" y="450" width="50" height="50"/>
+  <object id="1453" name="trampoline" gid="89" x="4650" y="450" width="50" height="50"/>
+  <object id="1454" name="trampoline" gid="89" x="4700" y="450" width="50" height="50"/>
+  <object id="1455" name="trampoline" gid="89" x="4750" y="450" width="50" height="50"/>
+  <object id="1508" name="spike" gid="93" x="2650" y="500" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1509" name="spike" gid="89" x="2700" y="500" width="50" height="50">
+  <object id="1509" name="spike" gid="97" x="2700" y="500" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
    </properties>
   </object>
-  <object id="1511" name="spike" gid="85" x="2900" y="500" width="50" height="50">
+  <object id="1511" name="spike" gid="93" x="2900" y="500" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1513" name="spike" gid="85" x="3250" y="300" width="50" height="50">
+  <object id="1513" name="spike" gid="93" x="3250" y="300" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1518" name="laser" gid="99" x="2800" y="300" width="50" height="50">
+  <object id="1518" name="laser" gid="107" x="2800" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1519" name="laser" gid="99" x="2800" y="450" width="50" height="50">
+  <object id="1519" name="laser" gid="107" x="2800" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1520" name="laser" gid="99" x="2800" y="500" width="50" height="50">
+  <object id="1520" name="laser" gid="107" x="2800" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="v"/>
    </properties>
   </object>
-  <object id="1523" name="laser" gid="105" x="2800" y="350" width="50" height="50">
+  <object id="1523" name="laser" gid="113" x="2800" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="1524" name="laser" gid="105" x="2800" y="400" width="50" height="50">
+  <object id="1524" name="laser" gid="113" x="2800" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="voff"/>
    </properties>
   </object>
-  <object id="1533" name="spike" gid="85" x="3600" y="250" width="50" height="50">
+  <object id="1533" name="spike" gid="93" x="3600" y="250" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1535" name="spike" gid="85" x="4200" y="500" width="50" height="50">
+  <object id="1535" name="spike" gid="93" x="4200" y="500" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
    </properties>
   </object>
-  <object id="1538" name="laser" gid="93" x="4350" y="600" width="50" height="50">
+  <object id="1538" name="laser" gid="101" x="4350" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="1539" name="laser" gid="93" x="4400" y="600" width="50" height="50">
+  <object id="1539" name="laser" gid="101" x="4400" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="1540" name="laser" gid="93" x="4450" y="600" width="50" height="50">
+  <object id="1540" name="laser" gid="101" x="4450" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="1541" name="laser" gid="93" x="4500" y="600" width="50" height="50">
+  <object id="1541" name="laser" gid="101" x="4500" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="1542" name="laser" gid="93" x="4550" y="600" width="50" height="50">
+  <object id="1542" name="laser" gid="101" x="4550" y="600" width="50" height="50">
    <properties>
     <property name="direction" value="h"/>
    </properties>
   </object>
-  <object id="1544" name="spike" gid="85" x="4300" y="300" width="50" height="50">
+  <object id="1544" name="spike" gid="93" x="4300" y="300" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
     <property name="status" value="active"/>
@@ -767,79 +767,79 @@
   </properties>
  </objectgroup>
  <objectgroup id="20" name="warps">
-  <object id="1461" name="warp" gid="123" x="4950" y="400" width="50" height="50">
+  <object id="1461" name="warp" gid="131" x="4950" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map35"/>
    </properties>
   </object>
-  <object id="1462" name="warp" gid="123" x="4950" y="450" width="50" height="50">
+  <object id="1462" name="warp" gid="131" x="4950" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map35"/>
    </properties>
   </object>
-  <object id="1463" name="warp" gid="123" x="4950" y="300" width="50" height="50">
+  <object id="1463" name="warp" gid="131" x="4950" y="300" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map35"/>
    </properties>
   </object>
-  <object id="1464" name="warp" gid="123" x="4950" y="350" width="50" height="50">
+  <object id="1464" name="warp" gid="131" x="4950" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map35"/>
    </properties>
   </object>
-  <object id="1465" name="warp" gid="123" x="4950" y="200" width="50" height="50">
+  <object id="1465" name="warp" gid="131" x="4950" y="200" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map35"/>
    </properties>
   </object>
-  <object id="1466" name="warp" gid="123" x="4950" y="250" width="50" height="50">
+  <object id="1466" name="warp" gid="131" x="4950" y="250" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map35"/>
    </properties>
   </object>
-  <object id="1467" name="warp" gid="123" x="4950" y="100" width="50" height="50">
+  <object id="1467" name="warp" gid="131" x="4950" y="100" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map35"/>
    </properties>
   </object>
-  <object id="1468" name="warp" gid="123" x="4950" y="150" width="50" height="50">
+  <object id="1468" name="warp" gid="131" x="4950" y="150" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map35"/>
    </properties>
   </object>
-  <object id="1469" name="warp" gid="123" x="4950" y="50" width="50" height="50">
+  <object id="1469" name="warp" gid="131" x="4950" y="50" width="50" height="50">
    <properties>
     <property name="direction" value="right"/>
     <property name="target" value="map35"/>
    </properties>
   </object>
-  <object id="1470" name="warp" gid="125" x="0" y="500" width="50" height="50">
+  <object id="1470" name="warp" gid="133" x="0" y="500" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map33"/>
    </properties>
   </object>
-  <object id="1471" name="warp" gid="125" x="0" y="450" width="50" height="50">
+  <object id="1471" name="warp" gid="133" x="0" y="450" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map33"/>
    </properties>
   </object>
-  <object id="1472" name="warp" gid="125" x="0" y="400" width="50" height="50">
+  <object id="1472" name="warp" gid="133" x="0" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map33"/>
    </properties>
   </object>
-  <object id="1473" name="warp" gid="125" x="0" y="350" width="50" height="50">
+  <object id="1473" name="warp" gid="133" x="0" y="350" width="50" height="50">
    <properties>
     <property name="direction" value="left"/>
     <property name="target" value="map33"/>

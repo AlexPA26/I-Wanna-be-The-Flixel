@@ -226,7 +226,8 @@ class RoomLoader
 		state.autoScroll();
 		state.cameraScroll();
 		state.updateMusic();
-		state.add(state.saveAnimation);
+		state.add(state.blackFade);
+		state.add(state.whiteFade);
 
 		#if !debug
 			PlayerData.saveCooldown = 0.1;

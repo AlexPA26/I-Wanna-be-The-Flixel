@@ -21,6 +21,7 @@ class SaveManager
         save.data.spawnY = PlayerData.spawnY;
         save.data.skin = PlayerData.currentSkin;
         save.data.antialiasing = PlayerData.antialiasing;
+        save.data.tutorialComplete = PlayerData.tutorialCompleted;
         save.data.vSync = PlayerData.vSync;
         save.data.showFPS = PlayerData.showFPS;
 
@@ -60,8 +61,18 @@ class SaveManager
             PlayerData.currentChapter = save.data.chapterID;
             PlayerData.currentRoom = save.data.roomID;
             PlayerData.totalDeaths = save.data.deaths;
-            PlayerData.spawnX = save.data.spawnX;
-            PlayerData.spawnY = save.data.spawnY;
+
+            PlayerData.spawnX = (save.data.spawnX != null && save.data.spawnX != 0) ? save.data.spawnX : 250;
+            PlayerData.spawnY = (save.data.spawnY != null && save.data.spawnY != 0) ? save.data.spawnY : 450;
+
+            if (save.data.tutorialCompleted != null)
+            {
+                PlayerData.tutorialCompleted = save.data.tutorialCompleted;
+            }
+            else if (save.data.tutorialComplete != null)
+            {
+                PlayerData.tutorialCompleted = save.data.tutorialComplete;
+            }
             
 
             if (save.data.antialiasing != null) PlayerData.antialiasing = save.data.antialiasing;
@@ -96,13 +107,15 @@ class SaveManager
             return true;
         }
 
-        if (save.data.roomID == Exception || save.data.chapterID == Exception)
-        {
-            PlayerData.currentChapter = 1;
-            PlayerData.currentRoom = "map01";
-        }
-
-        trace("[SAVE] No Save Data has been found");
+        trace("[SAVE] No Save Data found. Creating fresh save defaults.");
+        PlayerData.currentChapter = 0;
+        PlayerData.currentRoom = "map01";
+        PlayerData.tutorialCompleted = false;
+        PlayerData.spawnX = 250;
+        PlayerData.spawnY = 450;
+        PlayerData.totalDeaths = 0;
+        PlayerData.totalSeconds = 0;
+        PlayerData.currentSkin = "thekid";
         return false;
     }
 
@@ -115,6 +128,7 @@ class SaveManager
 
         PlayerData.currentChapter = 0;
         PlayerData.currentRoom = "map01";
+        PlayerData.tutorialCompleted = false;
         PlayerData.totalDeaths = 0;
         PlayerData.spawnX = 250;
         PlayerData.spawnY = 450;
@@ -122,7 +136,6 @@ class SaveManager
         PlayerData.totalSeconds = 0;
         PlayerData.currentSkin = "thekid";
 
-        /* Character Unlocks */
         PlayerData.reachedSewers = false;
         saveGame(); 
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="19" nextobjectid="107">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="19" nextobjectid="108">
  <properties>
   <property name="songName" value="rain"/>
  </properties>
@@ -76,12 +76,7 @@
     <property name="id" value="0"/>
    </properties>
   </object>
-  <object id="25" name="spike" gid="108" x="700" y="500" width="50" height="50">
-   <properties>
-    <property name="id" value="0"/>
-   </properties>
-  </object>
-  <object id="30" name="spike" gid="112" x="800" y="350" width="50" height="50">
+  <object id="30" name="spike" gid="112" x="700" y="500" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
    </properties>
@@ -234,6 +229,11 @@
    </properties>
   </object>
   <object id="106" name="spike" gid="112" x="550" y="700" width="50" height="50">
+   <properties>
+    <property name="id" value="4"/>
+   </properties>
+  </object>
+  <object id="107" name="spike" gid="112" x="800" y="350" width="50" height="50">
    <properties>
     <property name="id" value="4"/>
    </properties>

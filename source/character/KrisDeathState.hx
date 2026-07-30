@@ -254,11 +254,12 @@ class KrisDeathState extends FlxSubState
     {
         super.update(elapsed);
 
-        // Always allow Quick Reset (unless they already made a final choice and are fading out)
+        #if !mobile
         if (canReset && FlxG.keys.justPressed.R)
         {
             quickReset();
         }
+        
 
         if (isChoosing)
         {
@@ -291,6 +292,7 @@ class KrisDeathState extends FlxSubState
                 else executeNo();
             }
         }
+        #end
     }
 
     // ------------------------------------------------------------------------

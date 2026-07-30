@@ -144,7 +144,7 @@ class MenuState extends FlxState
         FlxTween.tween(logo, {y: logo.y - 3}, 0.8, {type: PINGPONG, ease: FlxEase.sineInOut});
         add(logo);
 
-        versionText = new FlxText(0, 0, FlxG.width, "v.0.20");
+        versionText = new FlxText(0, 0, FlxG.width, "Chapter 1 Beta");
         versionText.setFormat(null, 24, FlxColor.WHITE, CENTER);
         versionText.setBorderStyle(OUTLINE, FlxColor.BLACK, 1);
         versionText.x = 350;
