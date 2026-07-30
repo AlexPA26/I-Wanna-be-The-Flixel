@@ -75,8 +75,8 @@ class RemotePlayer extends FlxSprite {
 		var currentRoomMatch = true;
 		if (Std.isOfType(FlxG.state, ChapterState)) {
 			var state:ChapterState = cast FlxG.state;
-			var currentRoomName = state.currentRoomName;
-			if (roomVal == null || roomVal == "" || roomVal == currentRoomName) {
+			var isBossRoomMatch = (roomVal != null && currentRoomName != null && roomVal.startsWith("boss-") && currentRoomName.startsWith("boss-") && roomVal.split("-")[1] == currentRoomName.split("-")[1]);
+			if (roomVal == null || roomVal == "" || roomVal == currentRoomName || isBossRoomMatch) {
 				this.exists = true;
 				this.visible = true;
 			} else {

@@ -196,6 +196,9 @@ class RoomLoader
 			}
 		}
 
+		state.add(state.roomImages);
+		state.add(state.player);
+
 		/**Remote player logic**/
 		for (rPlayer in state.remotePlayers) {
 			if (rPlayer != null) {
@@ -208,8 +211,6 @@ class RoomLoader
 			}
 		}
 
-		state.add(state.roomImages);
-		state.add(state.player);
 		state.add(state.dangerObjects);
 		state.add(state.player.doubleJumpEffect);
 		state.add(state.doubleJumpGroup);

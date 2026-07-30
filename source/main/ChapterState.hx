@@ -934,7 +934,8 @@ class ChapterState extends FlxState
 					}
 
 					if (data.death == true) {
-						if (data.currentRoom == null || data.currentRoom == currentRoomName) {
+						var isBossDeathMatch = (data.currentRoom != null && currentRoomName != null && data.currentRoom.startsWith("boss-") && currentRoomName.startsWith("boss-") && data.currentRoom.split("-")[1] == currentRoomName.split("-")[1]);
+						if (data.currentRoom == null || data.currentRoom == currentRoomName || isBossDeathMatch) {
 							var rPlayer = remotePlayers.get(peerKey);
 							var spawnX = (data.x != null) ? data.x : (rPlayer != null ? rPlayer.x : 0);
 							var spawnY = (data.y != null) ? data.y : (rPlayer != null ? rPlayer.y : 0);
