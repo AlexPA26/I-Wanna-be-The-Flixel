@@ -236,6 +236,19 @@ class RoomLoader
 		});
 
 		BackgroundManager.updateAllEffects(state, state.tiledData);
+
+		/**Remote player logic (re-add after BG effects so they stay on top)**/
+		for (rPlayer in state.remotePlayers) {
+			if (rPlayer != null) {
+				state.remove(rPlayer);
+				state.add(rPlayer);
+				if (rPlayer.usernameText != null) {
+					state.remove(rPlayer.usernameText);
+					state.add(rPlayer.usernameText);
+				}
+			}
+		}
+
 		state.add(state.lightsGroup);
 		state.setupHUD();
 		state.autoScroll();
