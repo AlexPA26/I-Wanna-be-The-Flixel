@@ -1,5 +1,6 @@
 package main.bosses.ch1;
 
+import main.bosses.ch1.ReznorAttacks.ReznorFlame;
 import flixel.FlxObject;
 import flixel.effects.FlxFlicker;
 import flixel.util.FlxColor;
@@ -24,6 +25,7 @@ class Reznor extends FlxSprite
     var parentState:ChapterState;
     public var wheelAngle:Float = 0;
     var rotationSpeed:Float = 50;
+    var attackTimer:FlxTimer;
 
     public function new(x:Float, y:Float, stateRef:ChapterState)
     {
@@ -38,8 +40,8 @@ class Reznor extends FlxSprite
         spinSprite.loadGraphic(AssetPaths.reznor_spin__png, false);
         spinSprite.x = x - (spinSprite.width / 2);
         spinSprite.y = y - (spinSprite.height / 2);
-        
-        parentState.eventEffectGroup.add(spinSprite);
+
+        parentState.add(spinSprite);
 
         var platformCoords =
         [
@@ -55,7 +57,7 @@ class Reznor extends FlxSprite
             plat.immovable = true;
             plat.allowCollisions = FlxDirectionFlags.UP;
             plat.loadGraphic(AssetPaths.reznor_platform__png, false);
-            parentState.eventEffectGroup.insert(1, plat);
+            parentState.add(plat);
 
             var platCenterX = plat.x + (plat.width / 2);
             var platCenterY = plat.y + (plat.height / 2);
@@ -116,12 +118,41 @@ class Reznor extends FlxSprite
             {
                 if (data.plat != null && data.plat.exists)
                 {
+                    var oldPlatX = data.plat.x;
+                    var oldPlatY = data.plat.y;
+
                     var currentAngleRad = (wheelAngle + data.initialAngle) * (Math.PI / 180);
                     var newPlatCenterX = this.x + Math.cos(currentAngleRad) * data.radius;
                     var newPlatCenterY = this.y + Math.sin(currentAngleRad) * data.radius;
 
-                    data.plat.x = newPlatCenterX - (data.plat.width / 2);
-                    data.plat.y = newPlatCenterY - (data.plat.height / 2);
+                    var targetX = newPlatCenterX - (data.plat.width / 2);
+                    var targetY = newPlatCenterY - (data.plat.height / 2);
+
+                    var deltaX = targetX - oldPlatX;
+
+                    data.plat.x = targetX;
+                    data.plat.y = targetY;
+
+                    if (parentState.player != null && parentState.player.exists && parentState.player.alive)
+                    {
+                        var player = parentState.player;
+                        var playerBottom = player.y + player.height;
+
+                        var isHorizontallyOn = (player.x + player.width > data.plat.x + 2) && (player.x < data.plat.x + data.plat.width - 2);
+                        
+                        var isVerticallyOn = Math.abs(playerBottom - oldPlatY) <= 12 || Math.abs(playerBottom - data.plat.y) <= 12;
+
+                        if (isHorizontallyOn && isVerticallyOn && player.velocity.y >= 0)
+                        {
+                            player.x += deltaX;
+                            player.y = data.plat.y - player.height;
+
+                            player.velocity.y = 0;
+
+                            player.isRidingPlatform = true;
+                            player.touching = flixel.util.FlxDirectionFlags.DOWN;
+                        }
+                    }
                 }
             }
         }
@@ -158,6 +189,11 @@ class Reznor extends FlxSprite
         FlxG.sound.play(AssetPaths.jevil_laugh01__ogg, 1, false);
         parentState.fightingBoss = true;
 
+        for (reznor in minions)
+        {
+            reznor.animation.play("scream");
+        }
+
         new FlxTimer().start(2, function(_)
         {
             flash.alpha = 0.35;
@@ -171,13 +207,55 @@ class Reznor extends FlxSprite
             parentState.player.active = active;
             for (reznor in minions)
             {
+                reznor.animation.play("idle");
                 reznor.canBeHit = true;
             }
             startAttacking();
         });
     }
 
-    public function startAttacking():Void {}
+    public function startAttacking():Void
+    {
+        scheduleNextAttack();
+    }
+
+    function scheduleNextAttack():Void
+    {
+        if (status == "dead" || status == "ending" || !parentState.player.exists || !parentState.player.active) return;
+
+        var randomDelay = FlxG.random.float(1.0, 4.0);
+
+        attackTimer = new FlxTimer().start(randomDelay, function(timer:FlxTimer)
+        {
+            if (status == "dead" || status == "ending") 
+            {
+                return;
+            }
+
+            for (minion in minions)
+            {
+                if (minion.alive && minion.exists)
+                {
+                    if (FlxG.random.bool(20))
+                    {
+                        var attacks =
+                        [
+                            "attackFlames"
+                        ];
+
+                        var chosenAttack = FlxG.random.getObject(attacks);
+                        
+                        if (chosenAttack == "attackFlames")
+                        {
+                            minion.attackFlames();
+                        }
+                    }
+                }
+            }
+
+            scheduleNextAttack();
+        });
+    }
 
     function checkPhases()
     {
@@ -211,6 +289,7 @@ class Reznor extends FlxSprite
             FlxG.sound.music.pitch = 1.25;
         }
     }
+
 
     public function endingCutscene():Void
     {
@@ -262,6 +341,47 @@ class Reznor extends FlxSprite
 
     override public function destroy():Void
     {
+        if (spinSprite != null)
+        {
+            if (parentState != null) parentState.remove(spinSprite, true);
+            spinSprite.destroy();
+            spinSprite = null;
+        }
+
+        for (data in platformData)
+        {
+            if (data.plat != null)
+            {
+                if (parentState != null) parentState.remove(data.plat, true);
+                data.plat.destroy();
+            }
+        }
+
+        if (flash != null)
+        {
+            if (parentState != null) parentState.eventEffectGroup.remove(flash, true);
+            flash.destroy();
+            flash = null;
+        }
+
+        for (m in minions)
+        {
+            if (m != null && m.exists)
+            {
+                if (parentState != null) parentState.dangerObjects.remove(m, true);
+                m.destroy();
+            }
+        }
+
+        for (slab in createdSlabs)
+        {
+            if (slab != null)
+            {
+                if (parentState != null) parentState.slabs.remove(slab, true);
+                slab.destroy();
+            }
+        }
+
         createdSlabs = [];
         minions = [];
         platformData = [];
@@ -288,6 +408,7 @@ class ReznorMinion extends FlxSprite
 
         loadGraphic(AssetPaths.reznor__png, true, 96, 96);
         animation.add("idle", [1], 1, false);
+        animation.add("scream", [0, 1], 1, false);
         animation.add("attacking", [0, 1], 3, true);
         animation.play("idle");
 
@@ -338,6 +459,44 @@ class ReznorMinion extends FlxSprite
         }
     }
 
+    
+    public function attackFlames():Void
+    {
+        if (!alive) return;
+
+        animation.play("attacking");
+        FlxG.sound.play(AssetPaths.beep__ogg, 0.6, false);
+
+        new FlxTimer().start(0.5, function(_) 
+        {
+            if (alive) animation.play("idle");
+        });
+
+        var mouthX = this.x + (this.width / 2) - 10;
+        var mouthY = this.y + 45; 
+
+        var particles = new flixel.effects.particles.FlxEmitter(mouthX, mouthY);
+        particles.makeParticles(3, 3, FlxColor.WHITE, 15);
+        particles.color.set(FlxColor.RED, FlxColor.RED, FlxColor.ORANGE, FlxColor.YELLOW);
+        particles.launchMode = CIRCLE;
+        particles.speed.set(50, 150);
+        particles.lifespan.set(0.2, 0.5);
+        parentState.eventEffectGroup.add(particles);
+        particles.start(true, 0, 15);
+        
+        new FlxTimer().start(1, function(_) 
+        {
+            if (parentState != null) parentState.eventEffectGroup.remove(particles, true);
+            particles.destroy();
+        });
+
+        if (parentState.player != null && parentState.player.alive)
+        {
+            var flame = new ReznorFlame(mouthX, mouthY, parentState.player.x + (parentState.player.width / 2), parentState.player.y + (parentState.player.height / 2), parentState);
+            parentState.dangerObjects.add(flame);
+        }
+    }
+
     public function takeDamage(damage:Int)
     {
         if (!alive || !canBeHit) return;
@@ -352,7 +511,7 @@ class ReznorMinion extends FlxSprite
             this.alive = false;
             this.flipY = true;
 
-            this.velocity.y = 500; 
+            this.velocity.y = 650; 
 
             FlxG.camera.shake(0.015, 0.1);
             FlxG.sound.play(AssetPaths.reznor_down__ogg, 1, false);

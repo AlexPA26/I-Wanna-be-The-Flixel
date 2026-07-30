@@ -18,6 +18,7 @@ class Player extends FlxSprite
 {
     public var canDoubleJump:Bool = true;
     public var doubleJumpEffect:FlxEmitter;
+    public var isRidingPlatform:Bool = false;
 
     var safeJump:Float = 0;
     var safeJumpMax:Float = 0.1;
@@ -110,6 +111,7 @@ public function flipGravity():Void
 
         var floorDir:FlxDirectionFlags = isFlipped ? UP : DOWN;
         var gravMult:Int = isFlipped ? -1 : 1;
+        var isGrounded:Bool = isTouching(floorDir) || isRidingPlatform;
 
         if (tapTimer > 0)
         {
@@ -129,7 +131,7 @@ public function flipGravity():Void
             }
         }
         
-        if (isTouching(floorDir))
+        if (isGrounded)
         {
             safeJump = safeJumpMax;
             canDoubleJump = true;
@@ -198,7 +200,7 @@ public function flipGravity():Void
             if (maxVelocity.x < 400) maxVelocity.x = 400;
         }
 
-        if (isTouching(floorDir))
+        if (isGrounded) 
         {
             maxVelocity.x = mapMaxSpeed;
             drag.x = 4000;
@@ -218,8 +220,7 @@ public function flipGravity():Void
             animationJumpDown = true;
             animationJumpUp = false;
         }
-        // FIX: Use floorDir instead of DOWN so it knows you're in the air when upside down
-        else if (!isTouching(floorDir) && Math.abs(velocity.y) > 50) 
+        else if (!isGrounded && Math.abs(velocity.y) > 50) 
         {
             if (isMovingUp) animation.play("jumpUp");
             else animation.play("jumpDown");
@@ -229,6 +230,7 @@ public function flipGravity():Void
             if (Math.abs(velocity.x) > 20) animation.play("walking");
             else animation.play("idle");
         }
+        isRidingPlatform = false;
     }
 
     function updateInputs():Void

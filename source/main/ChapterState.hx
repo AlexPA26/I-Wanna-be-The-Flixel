@@ -448,35 +448,70 @@ class ChapterState extends FlxState
 			}
 		});
 
-		FlxG.collide(player, platforms, function(p:Player, plat:MovingBlock)
+		if (player != null && player.exists)
 		{
-			if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP))
+			platforms.forEachAlive(function(plat:MovingBlock)
 			{
-				if (plat.velocity.y != 0)
+				var deltaX = plat.x - plat.last.x;
+				var deltaY = plat.y - plat.last.y;
+
+				if (deltaX != 0 || deltaY != 0)
 				{
-					p.y = plat.y - p.height;
+					var playerBottom = player.y + player.height;
+					var standingOnThis = player.x + player.width > plat.x &&
+										 player.x < plat.x + plat.width &&
+										 playerBottom >= plat.last.y - 4 &&
+										 playerBottom <= plat.last.y + 8 &&
+										 player.velocity.y >= 0;
+
+					if (standingOnThis)
+					{
+						player.x += deltaX;
+						player.y = plat.y - player.height;
+						player.velocity.y = 0;
+						player.isRidingPlatform = true;
+						player.touching = flixel.util.FlxDirectionFlags.DOWN;
+					}
 				}
-				p.velocity.y = 0;
-			}
-		});
+			});
+
+			fallingBlock.forEachAlive(function(plat:FallingBlock)
+			{
+				var deltaX = plat.x - plat.last.x;
+				var deltaY = plat.y - plat.last.y;
+
+				if (deltaX != 0 || deltaY != 0)
+				{
+					var playerBottom = player.y + player.height;
+					var standingOnThis = player.x + player.width > plat.x &&
+										 player.x < plat.x + plat.width &&
+										 playerBottom >= plat.last.y - 4 &&
+										 playerBottom <= plat.last.y + 8 &&
+										 player.velocity.y >= 0;
+
+					if (standingOnThis)
+					{
+						player.x += deltaX;
+
+						player.y = plat.y - player.height;
+
+						player.velocity.y = 0;
+						
+						player.isRidingPlatform = true;
+						player.touching = flixel.util.FlxDirectionFlags.DOWN;
+					}
+				}
+			});
+		}
+
+		FlxG.collide(player, platforms);
 
 		FlxG.collide(platforms, map, function(plat:MovingBlock, wall:FlxObject)
 		{
 			plat.stopMovement();
 		});
 
-		FlxG.collide(player, fallingBlock, function(p:Player, plat:FallingBlock)
-		{
-			if (p.touching.has(FlxDirectionFlags.DOWN) && plat.touching.has(FlxDirectionFlags.UP))
-			{
-				if (plat.velocity.y != 0)
-				{
-					p.y = plat.y - p.height;
-				}
-
-				p.velocity.y = 0;
-			}
-		});
+		FlxG.collide(player, fallingBlock);
 
 		if (spawnTimer > 0 || inmortal)
 		{
@@ -765,6 +800,13 @@ class ChapterState extends FlxState
 		{
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "boss-jevil01");
+		}
+
+		
+		if (FlxG.keys.justPressed.ZERO)
+		{
+			PlayerData.currentChapter = 1;
+			RoomLoader.loadRoom(this, "testing");
 		}
 		if (FlxG.keys.justPressed.I)
 		{

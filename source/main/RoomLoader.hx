@@ -112,7 +112,15 @@ class RoomLoader
 		state.saveParticlesGroup.clear();
 		state.redCoinParticlesGroup.clear();
 		state.hud.clear();
+		state.eventEffectGroup.clear();
+
+		if (state.currentBoss != null)
+		{
+			state.remove(state.currentBoss, true);
+			state.currentBoss.destroy();
+		}
 		state.currentBoss = null;
+
 		leveldata.hazards.SwitchSpike.clear();
 
 		if (state.roomImages != null)
