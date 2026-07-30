@@ -1315,6 +1315,13 @@ class ChapterState extends FlxState
 
 			bloodParticles();
 
+			/* if multiplayer */
+			if (udpClient != null) {
+				var userStr = (Multiplayer.activeMode == Server) ? Multiplayer.username : "peer";
+				var payload:String = '{"death": true, "x": ' + player.x + ', "y": ' + player.y + ', "currentRoom": "' + currentRoomName + '","username":"' + userStr + '"}';
+				udpClient.send(payload);
+			}
+
 			if (currentBossName == "jevil")
 			{
 				if (jevil != null && jevil.ultimateManager != null)
@@ -1329,13 +1336,6 @@ class ChapterState extends FlxState
 
 			// openSubState(new KrisDeathState());
             openSubState(new DeathState());
-
-			/* if multiplayer */
-			if (udpClient != null) {
-				var userStr = (Multiplayer.activeMode == Server) ? Multiplayer.username : "peer";
-				var payload:String = '{"death": true, "x": ' + player.x + ', "y": ' + player.y + ', "currentRoom": "' + currentRoomName + '","username":"' + userStr + '"}';
-				udpClient.send(payload);
-			}
 		}
 	}
 

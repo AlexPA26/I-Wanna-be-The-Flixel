@@ -93,26 +93,23 @@ class RemotePlayer extends FlxSprite {
 		}
 
 		if (currentRoomMatch) {
-			if (Multiplayer.usingTCP) {
-				// Snap directly for TCP connections
+			if (Multiplayer.usingTCP || !hasReceivedPacket) {
+				// Snap directly
 				this.x = xVal;
 				this.y = yVal;
+				netX = xVal;
+				netY = yVal;
+				hasReceivedPacket = true;
 			} else {
 				// Smooth LERP target setup for UDP
 				netX = xVal;
 				netY = yVal;
-				if (!hasReceivedPacket) {
-					this.x = xVal;
-					this.y = yVal;
-					hasReceivedPacket = true;
-				} else {
-					var dx = netX - this.x;
-					var dy = netY - this.y;
-					var dist = Math.sqrt(dx * dx + dy * dy);
-					if (dist > SNAP_DISTANCE) {
-						this.x = netX;
-						this.y = netY;
-					}
+				var dx = netX - this.x;
+				var dy = netY - this.y;
+				var dist = Math.sqrt(dx * dx + dy * dy);
+				if (dist > SNAP_DISTANCE) {
+					this.x = netX;
+					this.y = netY;
 				}
 			}
 		}
