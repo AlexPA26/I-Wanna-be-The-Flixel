@@ -849,11 +849,12 @@ class ChapterState extends FlxState
 				if (cameraSnapTimer <= 0)
 				{
 					FlxG.camera.follow(cameraTarget, PLATFORMER, 0.1);
-					return;
 				}
-
-				FlxG.camera.follow(cameraTarget, PLATFORMER, 1);
-				cameraSnapTimer -= 1;
+				else
+				{
+					FlxG.camera.follow(cameraTarget, PLATFORMER, 1);
+					cameraSnapTimer -= 1;
+				}
 			}
 		}
 		if (udpClient != null) {
