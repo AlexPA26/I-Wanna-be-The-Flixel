@@ -1323,19 +1323,18 @@ class ChapterState extends FlxState
 				udpClient.send(payload);
 			}
 
-			if (currentBossName == "jevil")
+			var isJevilRoom = (currentRoomName != null && StringTools.startsWith(currentRoomName, "boss-jevil")) || (currentBossName == "jevil");
+			if (isJevilRoom)
 			{
 				if (jevil != null && jevil.ultimateManager != null)
 				{
 					jevil.ultimateManager.cancelBarrage();
-
 				}
 
 				openSubState(new KrisDeathState());
 				return;
 			}
 
-			// openSubState(new KrisDeathState());
             openSubState(new DeathState());
 		}
 	}
