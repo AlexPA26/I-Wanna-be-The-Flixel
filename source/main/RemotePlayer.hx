@@ -2,37 +2,37 @@ package main;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.text.FlxText;
+import flixel.util.FlxColor;
 import main.mods.ModLoader;
+import main.Multiplayer;
+import main.Multiplayer.CoopMode;
+import main.ChapterState;
 
 class RemotePlayer extends FlxSprite {
 	public var skinName:String = "";
+	public var username:String = "";
+	public var usernameText:FlxText;
+	public var timeSincePacket:Float = 0;
 
-	// Last network package
+	// Target position for LERP (used when using UDP)
 	var netX:Float = 0;
 	var netY:Float = 0;
-	var netVelX:Float = 0; // estimated horizontal speed
-	var netVelY:Float = 0; // estimated vertical speed
-	var netAnim:String = "idle";
-	var netFacingRight:Bool = true;
-	var netFlipped:Bool = false;
+	var hasReceivedPacket:Bool = false;
 
-	var prevNetX:Float = 0;
-	var prevNetY:Float = 0;
-	var lastPacketTime:Float = 0; // accumulated time since last packet
-	var timeSincePacket:Float = 0; // seconds since last packet received
-
-	// Simulation constants
-	static inline var GRAVITY:Float = 2000; // same as Player
-	static inline var WALK_SPEED:Float = 300; // estimated walking speed
-	static inline var MAX_FALL_SPEED:Float = 1000;
-	static inline var PACKET_TIMEOUT:Float = 0.5; // no package on that time = freeze
 	static inline var LERP_SPEED:Float = 12.0;
+	static inline var SNAP_DISTANCE:Float = 150.0;
 
-	public function new(x:Float, y:Float) {
+	public function new(x:Float, y:Float, username:String) {
 		super(x, y);
+		this.username = username;
 		loadSkin("thekid");
 		netX = x;
 		netY = y;
+
+		usernameText = new FlxText(0, 0, 150, username);
+		usernameText.setFormat(null, 12, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+		usernameText.visible = false;
 	}
 
 	public function loadSkin(skin:String):Void {
@@ -54,34 +54,9 @@ class RemotePlayer extends FlxSprite {
 	}
 
 	/**
-	 * Estimated network speed from the movement between the previous and current packet.
+	 * Restored original direct position update algorithm from main repository
 	 */
-	public function applyNetworkPacket(xVal:Float, yVal:Float, flipVal:Bool, facingRightVal:Bool, animVal:String):Void {
-		// The position difference between the previous and current packet
-		if (timeSincePacket > 0.001) {
-			netVelX = (xVal - netX) / timeSincePacket;
-			netVelY = (yVal - netY) / timeSincePacket;
-		}
-
-		// Si el jugador se teletransporta lejos (cambio de sala, spawn, etc.), reposicionar de inmediato
-		var distSq = (xVal - this.x) * (xVal - this.x) + (yVal - this.y) * (yVal - this.y);
-		if (distSq > 150 * 150) {
-			this.x = xVal;
-			this.y = yVal;
-			netVelX = 0;
-			netVelY = 0;
-		}
-
-		prevNetX = netX;
-		prevNetY = netY;
-		netX = xVal;
-		netY = yVal;
-		netAnim = (animVal != null && animVal != "") ? animVal : "idle";
-		netFacingRight = facingRightVal;
-		netFlipped = flipVal;
-		timeSincePacket = 0;
-
-		// Apply orientation and flip immediately
+	public function applyNetworkPacket(xVal:Float, yVal:Float, flipVal:Bool, facingRightVal:Bool, animVal:String, roomVal:String):Void {
 		this.flipY = flipVal;
 		this.offset.y = flipVal ? 0 : 20;
 		this.facing = facingRightVal ? RIGHT : LEFT;
@@ -89,43 +64,87 @@ class RemotePlayer extends FlxSprite {
 
 		setFacingFlip(LEFT, true, flipVal);
 		setFacingFlip(RIGHT, false, flipVal);
+
+		if (animVal != null && animVal != "") {
+			animation.play(animVal);
+		}
+
+		timeSincePacket = 0;
+
+		// Handle room visibility
+		var currentRoomMatch = true;
+		if (Std.isOfType(FlxG.state, ChapterState)) {
+			var state:ChapterState = cast FlxG.state;
+			var currentRoomName = state.currentRoomName;
+			if (roomVal == null || roomVal == "" || roomVal == currentRoomName) {
+				this.exists = true;
+				this.visible = true;
+			} else {
+				this.exists = false;
+				this.visible = false;
+				currentRoomMatch = false;
+				if (usernameText != null) {
+					usernameText.visible = false; // Hide username immediately when exists is set to false
+				}
+			}
+		}
+
+		if (currentRoomMatch) {
+			if (Multiplayer.usingTCP) {
+				// Snap directly for TCP connections
+				this.x = xVal;
+				this.y = yVal;
+			} else {
+				// Smooth LERP target setup for UDP
+				netX = xVal;
+				netY = yVal;
+				if (!hasReceivedPacket) {
+					this.x = xVal;
+					this.y = yVal;
+					hasReceivedPacket = true;
+				} else {
+					var dx = netX - this.x;
+					var dy = netY - this.y;
+					var dist = Math.sqrt(dx * dx + dy * dy);
+					if (dist > SNAP_DISTANCE) {
+						this.x = netX;
+						this.y = netY;
+					}
+				}
+			}
+		}
+	}
+
+	override public function kill():Void {
+		super.kill();
+		if (usernameText != null) {
+			usernameText.visible = false;
+		}
 	}
 
 	override public function update(elapsed:Float):Void {
 		timeSincePacket += elapsed;
 
-		if (timeSincePacket < PACKET_TIMEOUT) {
-			// --- Movimiento continuo por predicción local ---
-			var speedX = 0.0;
-			var speedY = 0.0;
-
-			if (netAnim == "walking") {
-				speedX = netFacingRight ? WALK_SPEED : -WALK_SPEED;
-			} else if (netAnim == "jumpUp" || netAnim == "jumpDown") {
-				speedX = netVelX;
-				// Simular gravedad localmente sobre la velocidad recibida
-				var gravMult = netFlipped ? -1.0 : 1.0;
-				netVelY += GRAVITY * gravMult * elapsed;
-				if (netFlipped) {
-					if (netVelY < -MAX_FALL_SPEED) netVelY = -MAX_FALL_SPEED;
-				} else {
-					if (netVelY > MAX_FALL_SPEED) netVelY = MAX_FALL_SPEED;
-				}
-				speedY = netVelY;
-			}
-
-			// Aplicar movimiento físico predicho
-			this.x += speedX * elapsed;
-			this.y += speedY * elapsed;
-
-			// Corrección suave hacia la posición de red (para absorber errores de predicción)
+		if (!Multiplayer.usingTCP && hasReceivedPacket && this.exists) {
+			// Smooth interpolation (only for UDP)
 			this.x += (netX - this.x) * LERP_SPEED * elapsed;
 			this.y += (netY - this.y) * LERP_SPEED * elapsed;
 		}
 
-		if (netAnim != null && netAnim != "" && (animation.curAnim == null || animation.curAnim.name != netAnim))
-			animation.play(netAnim);
-
 		super.update(elapsed);
+
+		if (usernameText != null) {
+			usernameText.x = this.x + (this.width / 2) - (usernameText.width / 2);
+			usernameText.y = this.y - 20;
+			usernameText.visible = (Multiplayer.activeMode == Server) && this.visible && this.exists;
+		}
+	}
+
+	override public function destroy():Void {
+		if (usernameText != null) {
+			usernameText.destroy();
+			usernameText = null;
+		}
+		super.destroy();
 	}
 }

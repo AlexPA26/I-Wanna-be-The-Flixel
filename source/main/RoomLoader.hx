@@ -196,10 +196,16 @@ class RoomLoader
 			}
 		}
 
-		if (state.remotePlayer != null)
-		{
-			state.remove(state.remotePlayer);
-			state.add(state.remotePlayer);
+		/**Remote player logic**/
+		for (rPlayer in state.remotePlayers) {
+			if (rPlayer != null) {
+				state.remove(rPlayer);
+				state.add(rPlayer);
+				if (rPlayer.usernameText != null) {
+					state.remove(rPlayer.usernameText);
+					state.add(rPlayer.usernameText);
+				}
+			}
 		}
 
 		state.add(state.roomImages);
