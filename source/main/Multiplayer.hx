@@ -1,10 +1,11 @@
 package main;
 
+#if !html5
 import sys.net.Host;
 import sys.net.UdpSocket;
 import sys.net.Address;
 import haxe.io.Bytes;
-
+#end
 enum CoopMode {
     None;
     Local;

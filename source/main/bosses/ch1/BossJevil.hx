@@ -31,7 +31,6 @@ class Jevil extends FlxSprite
     public var ultimateTriggered:Bool = false;
     public var ultimateUsed:Bool = false;
     var cubeTriggered:Bool = false;
-    public var fightingBoss:Bool = false;
     var scytheTimeAccumulator:Float = 0;
     
     public var blackFade:FlxSprite;
@@ -319,7 +318,7 @@ class Jevil extends FlxSprite
         parentState.player.active = false; 
         parentState.player.velocity.set(0, 0);
         parentState.player.acceleration.x = 0;
-        fightingBoss = true;
+        parentState.fightingBoss = true;
 
         this.visible = true;
         this.animation.play("teleport", true, false);
@@ -1652,7 +1651,7 @@ class Jevil extends FlxSprite
                         RoomLoader.loadRoom(parentState, "boss-jevil05");
                         FlxG.camera.stopShake;
                         jevilEnding.destroy();
-                        fightingBoss = false;
+                        parentState.fightingBoss = false;
                         this.destroy();
 
                         var currentSeconds = PlayerData.totalSeconds;

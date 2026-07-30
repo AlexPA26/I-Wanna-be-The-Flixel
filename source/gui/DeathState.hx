@@ -29,10 +29,7 @@ class DeathState extends FlxSubState
 
     override public function create():Void
     {
-        // A dedicated camera for the death screen — never touched by whatever
-        // gameplay shader was active on FlxG.camera, and never needs any
-        // clear/restore dance since it's simply created and destroyed alongside
-        // this substate.
+
         deathCamera = new flixel.FlxCamera(0, 0, FlxG.width, FlxG.height);
         deathCamera.bgColor = FlxColor.TRANSPARENT;
         FlxG.cameras.add(deathCamera, false);

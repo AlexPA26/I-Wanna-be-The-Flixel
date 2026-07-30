@@ -168,6 +168,7 @@ class ChapterState extends FlxState
 	var testingUDP:Bool = false;
 	var udpTestTimer:Float = 0;
 	var udpReceivedResponse:Bool = false;
+	public var teleportCooldownTimer:Float = 0;
 
 	static var loopPoints:Map<String, Float> = null;
 
@@ -629,7 +630,7 @@ class ChapterState extends FlxState
 
 		
 
-		if (FlxG.keys.justPressed.ESCAPE && player.exists )
+		if (FlxG.keys.justPressed.ESCAPE && player.exists && !fightingBoss)
 		{
 			if (fightingBoss)
 			{
@@ -842,6 +843,46 @@ class ChapterState extends FlxState
 			trace("IDs in memory: " + PlayerData.collectedCoins);
 		}
 
+		if (FlxG.keys.justPressed.F && udpClient != null && player != null && player.alive && teleportCooldownTimer <= 0)
+		{
+			var nearestPlayer:main.RemotePlayer = null;
+			var minDistance:Float = 999999;
+			for (rPlayer in remotePlayers)
+			{
+				if (rPlayer != null && rPlayer.exists && rPlayer.visible)
+				{
+					var dx = rPlayer.x - player.x;
+					var dy = rPlayer.y - player.y;
+					var dist = Math.sqrt(dx * dx + dy * dy);
+					if (dist < minDistance)
+					{
+						minDistance = dist;
+						nearestPlayer = rPlayer;
+					}
+				}
+			}
+
+			if (nearestPlayer != null)
+			{
+				teleportCooldownTimer = 2.0;
+				player.x = nearestPlayer.x;
+				player.y = nearestPlayer.y;
+
+				// Spawn colorful savepoint-like particles
+				var emitter = new flixel.effects.particles.FlxEmitter(player.x + (player.width / 2), player.y + (player.height / 2), 20);
+				emitter.makeParticles(3, 3, FlxColor.WHITE, 20);
+				emitter.color.set(FlxColor.RED, FlxColor.YELLOW, FlxColor.BLUE, FlxColor.LIME);
+				emitter.lifespan.set(0.4, 0.8);
+				emitter.speed.set(50, 150);
+				emitter.launchMode = CIRCLE;
+				add(emitter);
+				emitter.start(true, 0, 20);
+
+				FlxG.sound.play(AssetPaths.warp__ogg, 0.6, false);
+				trace("Teleported to remote player: " + nearestPlayer.username);
+			}
+		}
+
 		if (cameraType != "normal" && !isAutoscrolling)
 		{
 			if (cameraSnapTimer >= 0)
@@ -857,17 +898,20 @@ class ChapterState extends FlxState
 				}
 			}
 		}
-		if (udpClient != null) {
-			if (testingUDP) {
+		if (udpClient != null)
+		{
+			if (testingUDP)
+			{
 				udpTestTimer += elapsed;
 				
-				// Send a probe ping every 0.3 seconds to test connection quickly
-				if (Math.floor(udpTestTimer / 0.3) > Math.floor((udpTestTimer - elapsed) / 0.3)) {
+				if (Math.floor(udpTestTimer / 0.3) > Math.floor((udpTestTimer - elapsed) / 0.3))
+				{
 					var payload = '{"ping":true,"reply":false,"time":' + haxe.Timer.stamp() + '}';
 					udpClient.send(payload);
 				}
 				
-				if (udpTestTimer >= 1.5) {
+				if (udpTestTimer >= 1.5)
+				{
 					testingUDP = false;
 					trace("[Multiplayer] UDP test timed out. Falling back to TCP...");
 					udpClient.close();
@@ -880,13 +924,15 @@ class ChapterState extends FlxState
 			}
 
 			pingTimer += elapsed;
-			if (pingTimer >= 2.0) {
+			if (pingTimer >= 2.0)
+			{
 				pingTimer = 0;
 				var payload = '{"ping":true,"reply":false,"time":' + haxe.Timer.stamp() + '}';
 				udpClient.send(payload);
 			}
 
-			if (player != null && player.alive) {
+			if (player != null && player.alive)
+			{
 				networkTimer += elapsed;
 				if (networkTimer >= tickRate)
 				{
@@ -899,24 +945,29 @@ class ChapterState extends FlxState
 				}
 			}
 
-			// Recibir todos los paquetes pendientes
 			var packet:String = null;
-			while ((packet = udpClient.receive()) != null) {
-				if (testingUDP) {
+			while ((packet = udpClient.receive()) != null)
+			{
+				if (testingUDP)
+				{
 					testingUDP = false;
 					udpReceivedResponse = true;
 					trace("[Multiplayer] UDP connection verified! Using UDP mode.");
 				}
-				try {
+				try
+				{
 					var data = haxe.Json.parse(packet);
 
-					// Handle Ping packets
-					if (data.ping == true) {
+					if (data.ping == true)
+					{
 						var timeVal:Float = cast data.time;
-						if (data.reply == false) {
+						if (data.reply == false)
+						{
 							var replyPayload = '{"ping":true,"reply":true,"time":' + timeVal + '}';
 							udpClient.send(replyPayload);
-						} else {
+						}
+						else
+						{
 							var rtt = haxe.Timer.stamp() - timeVal;
 							Multiplayer.currentPing = rtt * 1000;
 							trace("Current Ping: " + Multiplayer.currentPing + "ms");
@@ -924,36 +975,46 @@ class ChapterState extends FlxState
 						continue;
 					}
 					
-					// Ignore packets sent by ourselves in Server mode
-					if (Multiplayer.activeMode == Server && data.username != null && data.username == Multiplayer.username) {
+					if (Multiplayer.activeMode == Server && data.username != null && data.username == Multiplayer.username)
+					{
 						continue;
 					}
 
 					var peerKey = (Multiplayer.activeMode == Server) ? data.username : "peer";
-					if (peerKey == null || peerKey == "") {
+					if (peerKey == null || peerKey == "")
+					{
 						peerKey = "peer";
 					}
 
-					if (data.death == true) {
+					if (data.death == true)
+					{
 						var dRoomStr:String = data.currentRoom != null ? cast data.currentRoom : "";
 						var cRoomStr:String = currentRoomName != null ? cast currentRoomName : "";
-						var isBossDeathMatch = (dRoomStr != "" && cRoomStr != "" && StringTools.startsWith(dRoomStr, "boss-") && StringTools.startsWith(cRoomStr, "boss-") && dRoomStr.split("-")[1] == cRoomStr.split("-")[1]);
-						if (data.currentRoom == null || data.currentRoom == currentRoomName || isBossDeathMatch) {
+						var isBossDeathMatch = (dRoomStr != "" && cRoomStr != "" && StringTools.startsWith(dRoomStr, "boss-")
+						&& StringTools.startsWith(cRoomStr, "boss-") && dRoomStr.split("-")[1] == cRoomStr.split("-")[1]);
+						if (data.currentRoom == null || data.currentRoom == currentRoomName || isBossDeathMatch) 
+						{
 							var rPlayer = remotePlayers.get(peerKey);
 							var spawnX = (data.x != null) ? data.x : (rPlayer != null ? rPlayer.x : 0);
 							var spawnY = (data.y != null) ? data.y : (rPlayer != null ? rPlayer.y : 0);
+							FlxG.sound.play(AssetPaths.kill_sound_effect__ogg, 0.75, false);
 							bloodParticles(spawnX, spawnY);
-							if (rPlayer != null) {
+							if (rPlayer != null)
+							{
 								rPlayer.visible = false;
 								rPlayer.exists = false;
-								if (rPlayer.usernameText != null) {
+								if (rPlayer.usernameText != null)
+								{
 									rPlayer.usernameText.visible = false;
 								}
 							}
 						}
-					} else if (data.x != null && data.y != null) {
+					}
+					else if (data.x != null && data.y != null)
+					{
 						var rPlayer = remotePlayers.get(peerKey);
-						if (rPlayer == null) {
+						if (rPlayer == null)
+						{
 							rPlayer = new main.RemotePlayer(data.x, data.y, peerKey);
 							remotePlayers.set(peerKey, rPlayer);
 							add(rPlayer);
@@ -971,17 +1032,21 @@ class ChapterState extends FlxState
 				}
 			}
 
-			// Clean up inactive players (timeout after 10 seconds)
 			var inactiveKeys:Array<String> = [];
-			for (key in remotePlayers.keys()) {
+			for (key in remotePlayers.keys())
+			{
 				var rPlayer = remotePlayers.get(key);
-				if (rPlayer != null && rPlayer.timeSincePacket >= 10.0) {
+				if (rPlayer != null && rPlayer.timeSincePacket >= 10.0)
+				{
 					inactiveKeys.push(key);
 				}
 			}
-			for (key in inactiveKeys) {
+			for (key in inactiveKeys)
+			{
 				var rPlayer = remotePlayers.get(key);
-				if (rPlayer != null) {
+				if (rPlayer != null)
+				{
+					FlxG.sound.play(AssetPaths.kill_sound_effect__ogg, 0.75, false);
 					bloodParticles(rPlayer.x, rPlayer.y);
 					remove(rPlayer.usernameText);
 					remove(rPlayer);
@@ -1284,6 +1349,7 @@ class ChapterState extends FlxState
 			FlxG.sound.play(AssetPaths.warp__ogg, 0.75, false);
 			FlxG.camera.shake(0.01, 0.2);
 			whiteFade.alpha = 0.65;
+			FlxG.sound.music.pitch = 1.0;
 
 			return;
 		}
@@ -1316,16 +1382,16 @@ class ChapterState extends FlxState
 
 			bloodParticles();
 
-			/* if multiplayer */
 			if (udpClient != null) {
 				var userStr = (Multiplayer.activeMode == Server) ? Multiplayer.username : "peer";
 				var payload:String = '{"death": true, "x": ' + player.x + ', "y": ' + player.y + ', "currentRoom": "' + currentRoomName + '","username":"' + userStr + '"}';
 				udpClient.send(payload);
 			}
 
-			var isJevilRoom = (currentRoomName != null && StringTools.startsWith(currentRoomName, "boss-jevil")) || (currentBossName == "jevil");
+			var isJevilRoom = (currentBossName == "jevil");
 			if (isJevilRoom)
 			{
+				trace(fightingBoss);
 				if (jevil != null && jevil.ultimateManager != null)
 				{
 					jevil.ultimateManager.cancelBarrage();

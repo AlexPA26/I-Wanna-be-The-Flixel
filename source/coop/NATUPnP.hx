@@ -1,10 +1,12 @@
 package coop;
 
+#if !html5
 import haxe.Http;
 import sys.net.Host;
 import sys.net.UdpSocket;
 import sys.net.Address;
 import sys.thread.Thread;
+#end
 
 class NATUPnP {
 	public static function mapPortAsync(port:Int):Void {
