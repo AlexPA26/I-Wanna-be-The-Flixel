@@ -114,12 +114,12 @@ class RoomLoader
 		state.hud.clear();
 		state.eventEffectGroup.clear();
 
-		if (state.currentBoss != null)
-		{
-			state.remove(state.currentBoss, true);
-			state.currentBoss.destroy();
-		}
-		state.currentBoss = null;
+		// if (state.currentBoss != null)
+		// {
+		// 	state.remove(state.currentBoss, true);
+		// 	state.currentBoss.destroy();
+		// }
+		// state.currentBoss = null;
 
 		leveldata.hazards.SwitchSpike.clear();
 
