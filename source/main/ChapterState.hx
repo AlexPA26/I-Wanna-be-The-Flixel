@@ -940,9 +940,32 @@ class ChapterState extends FlxState
 						var isBossDeathMatch = (dRoomStr != "" && cRoomStr != "" && StringTools.startsWith(dRoomStr, "boss-") && StringTools.startsWith(cRoomStr, "boss-") && dRoomStr.split("-")[1] == cRoomStr.split("-")[1]);
 						if (data.currentRoom == null || data.currentRoom == currentRoomName || isBossDeathMatch) {
 							var rPlayer = remotePlayers.get(peerKey);
-							var spawnX = (data.x != null) ? data.x : (rPlayer != null ? rPlayer.x : 0);
-							var spawnY = (data.y != null) ? data.y : (rPlayer != null ? rPlayer.y : 0);
-							bloodParticles(spawnX, spawnY);
+							var spawnX:Float = (data.x != null) ? data.x : (rPlayer != null ? rPlayer.x : 0);
+							var spawnY:Float = (data.y != null) ? data.y : (rPlayer != null ? rPlayer.y : 0);
+							
+							var isJevilDeath = (cRoomStr != "" && StringTools.startsWith(cRoomStr, "boss-jevil")) || (currentBossName == "jevil");
+							if (isJevilDeath)
+							{
+								var remoteSoul = new flixel.FlxSprite(spawnX, spawnY);
+								remoteSoul.loadGraphic(AssetPaths.soul__png, true, 20, 16);
+								remoteSoul.animation.add("break", [0, 1], 16, false);
+								remoteSoul.animation.play("break");
+								remoteSoul.scale.set(1.5, 1.5);
+								add(remoteSoul);
+
+								flixel.FlxG.sound.play(AssetPaths.kris_hit__ogg, 1);
+
+								new flixel.util.FlxTimer().start(1.2, function(_) {
+									remove(remoteSoul);
+									remoteSoul.destroy();
+									bloodParticles(spawnX, spawnY);
+								});
+							}
+							else
+							{
+								bloodParticles(spawnX, spawnY);
+							}
+
 							if (rPlayer != null) {
 								rPlayer.visible = false;
 								rPlayer.exists = false;
