@@ -222,8 +222,6 @@ class ChapterState extends FlxState
 		virtualPad = new FlxVirtualPad(LEFT_RIGHT, A);
 
 		FlxG.bitmap.clearUnused();
-		imgCache();
-		sfxCache();
 
 		roomImages = new FlxTypedGroup();
 		dangerObjects = new FlxGroup();
@@ -269,19 +267,6 @@ class ChapterState extends FlxState
 		blackFade.scrollFactor.set(0, 0);
 
 		RoomLoader.loadRoom(this, PlayerData.currentRoom);
-
-		switch (PlayerData.currentChapter)
-		{
-			case 1:
-				chapter1Cache();
-			case 2:
-				currentConfig = new ChapterConfig(2, "");
-			default:
-				currentConfig = new ChapterConfig(0, "");
-		}
-
-		// currentConfig.cacheAssets();
-		// FlxG.stage.addEventListener(openfl.events.Event.DEACTIVATE, onFocusLost);
 
 		super.create();
 	}
@@ -1076,33 +1061,6 @@ class ChapterState extends FlxState
 		remotePlayers.clear();
 
 		super.destroy();
-	}
-
-	function imgCache():Void
-	{
-		FlxG.bitmap.add(AssetPaths.save__png);
-		FlxG.bitmap.add(AssetPaths.playerGlow__png);
-	}
-
-	function sfxCache():Void
-	{
-		FlxG.sound.cache(AssetPaths.jump__ogg);
-		FlxG.sound.cache(AssetPaths.doublejump__ogg);
-		FlxG.sound.cache(AssetPaths.break_block__ogg);
-		FlxG.sound.cache(AssetPaths.savedgame__ogg);
-		FlxG.sound.cache(AssetPaths.death_bgm__ogg);
-	}
-
-	function chapter1Cache():Void
-	{
-		FlxG.sound.cache(AssetPaths.castle1__ogg);
-		FlxG.sound.cache(AssetPaths.castle_underground__ogg);
-		FlxG.bitmap.add(AssetPaths.ch1tiles__png);
-	}
-
-	function chapter2Cache():Void
-	{
-		// TODO:
 	}
 
 	function playerShoot():Void

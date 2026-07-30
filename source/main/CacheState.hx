@@ -110,6 +110,8 @@ class CacheState extends FlxState
         queueSound(AssetPaths.death_bgm__ogg);
 
         queueSound(AssetPaths.tutorial__ogg);
+        queueSound(AssetPaths.jevil_fight__ogg);
+        queueSound(AssetPaths.reznor_fight__ogg);
         queueSound(AssetPaths.castle_underground__ogg);
         queueSound(AssetPaths.castle1__ogg);
         queueSound(AssetPaths.rain__ogg);
