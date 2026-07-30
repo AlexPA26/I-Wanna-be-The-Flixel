@@ -4,6 +4,9 @@ import flixel.util.FlxTimer;
 import character.KrisDeathState;
 import shaders.*;
 import main.Multiplayer.UdpClient;
+import main.Multiplayer.Multiplayer;
+import main.Multiplayer.CoopMode;
+import coop.NATUPnP;
 import coop.LocalCoopSubstate.LocalCoopSubState;
 import flixel.sound.FlxSound;
 import openfl.media.Sound;
@@ -157,15 +160,20 @@ class ChapterState extends FlxState
 
 	var udpClient:UdpClient;
 
-	public var remotePlayer:main.RemotePlayer = null;
+	public var remotePlayers:Map<String, main.RemotePlayer> = new Map();
 
 	var networkTimer:Float = 0;
 	var tickRate:Float = 0.05; // 20 ticks per second
+	var pingTimer:Float = 0;
+	var testingUDP:Bool = false;
+	var udpTestTimer:Float = 0;
+	var udpReceivedResponse:Bool = false;
 
 	static var loopPoints:Map<String, Float> = null;
 
 	override public function create():Void
 	{
+		Multiplayer.usingTCP = false;
 		#if !debug
 		#if !mobile
 		FlxG.mouse.visible = false;
@@ -181,15 +189,27 @@ class ChapterState extends FlxState
 		var clientAddr = UdpClient.getClientAddress();
 		if (clientAddr != null)
 		{
-			udpClient = new UdpClient(clientAddr.host, clientAddr.port, clientAddr.localPort);
 			trace("Multiplayer client active: " + clientAddr.host + ":" + clientAddr.port + " (bound to local port " + clientAddr.localPort + ")");
+			NATUPnP.mapPortAsync(clientAddr.localPort);
 		}
-		else if (LocalCoopSubState.isMultiplayerActive)
+		else if (Multiplayer.activeMode == Local)
 		{
-			var host = LocalCoopSubState.targetIP;
-			var port = LocalCoopSubState.targetPort;
+			var host = Multiplayer.targetIP;
+			var port = Multiplayer.targetPort;
 			udpClient = new UdpClient(host, port, port);
-			trace("Multiplayer client active (via Coop Substate): " + host + ":" + port + " (bound to local port " + port + ")");
+			trace("Multiplayer client active (via Local Coop): " + host + ":" + port + " (bound to local port " + port + ")");
+			NATUPnP.mapPortAsync(port);
+		}
+		else if (Multiplayer.activeMode == Server)
+		{
+			var host = Multiplayer.targetIP;
+			var port = Multiplayer.targetPort;
+			// Start with UDP to check if NAT is open
+			udpClient = new UdpClient(host, port, 0, false);
+			testingUDP = true;
+			udpTestTimer = 0;
+			udpReceivedResponse = false;
+			trace("Multiplayer client active (via Server Coop): " + host + ":" + port + " (testing UDP connectivity...)");
 		}
 		else
 		{
@@ -829,73 +849,144 @@ class ChapterState extends FlxState
 				if (cameraSnapTimer <= 0)
 				{
 					FlxG.camera.follow(cameraTarget, PLATFORMER, 0.1);
-					return;
 				}
-
-				FlxG.camera.follow(cameraTarget, PLATFORMER, 1);
-				cameraSnapTimer -= 1;
+				else
+				{
+					FlxG.camera.follow(cameraTarget, PLATFORMER, 1);
+					cameraSnapTimer -= 1;
+				}
 			}
 		}
+		if (udpClient != null) {
+			if (testingUDP) {
+				udpTestTimer += elapsed;
+				
+				// Send a probe ping every 0.3 seconds to test connection quickly
+				if (Math.floor(udpTestTimer / 0.3) > Math.floor((udpTestTimer - elapsed) / 0.3)) {
+					var payload = '{"ping":true,"reply":false,"time":' + haxe.Timer.stamp() + '}';
+					udpClient.send(payload);
+				}
+				
+				if (udpTestTimer >= 1.5) {
+					testingUDP = false;
+					trace("[Multiplayer] UDP test timed out. Falling back to TCP...");
+					udpClient.close();
+					
+					var host = Multiplayer.targetIP;
+					var port = Multiplayer.targetPort;
+					udpClient = new UdpClient(host, port, 0, true);
+					Multiplayer.usingTCP = true;
+				}
+			}
 
-		if (udpClient != null)
-		{
-			if (player != null && player.alive)
-			{
+			pingTimer += elapsed;
+			if (pingTimer >= 2.0) {
+				pingTimer = 0;
+				var payload = '{"ping":true,"reply":false,"time":' + haxe.Timer.stamp() + '}';
+				udpClient.send(payload);
+			}
+
+			if (player != null && player.alive) {
 				networkTimer += elapsed;
 				if (networkTimer >= tickRate)
 				{
 					networkTimer = 0;
 					var currentAnim = (player.animation.curAnim != null ? player.animation.curAnim.name : "idle");
+					var userStr = (Multiplayer.activeMode == Server) ? Multiplayer.username : "peer";
 					var payload:String = '{"x":' + player.x + ',"y":' + player.y + ',"flip":' + player.isFlipped + ',"facingRight":' + Player.isFacingRIGHT
-						+ ',"skin":"' + PlayerData.currentSkin + '","anim":"' + currentAnim + '","currentRoom":"' + currentRoomName + '"}';
+						+ ',"skin":"' + PlayerData.currentSkin + '","anim":"' + currentAnim + '","currentRoom":"' + currentRoomName + '","username":"' + userStr + '"}';
 					udpClient.send(payload);
 				}
 			}
 
 			// Recibir todos los paquetes pendientes
 			var packet:String = null;
-			while ((packet = udpClient.receive()) != null)
-			{
-				try
-				{
+			while ((packet = udpClient.receive()) != null) {
+				if (testingUDP) {
+					testingUDP = false;
+					udpReceivedResponse = true;
+					trace("[Multiplayer] UDP connection verified! Using UDP mode.");
+				}
+				try {
 					var data = haxe.Json.parse(packet);
-					if (data.death == true)
-					{
-						if (data.currentRoom == currentRoomName)
-						{
-							var spawnX = (data.x != null) ? data.x : (remotePlayer != null ? remotePlayer.x : 0);
-							var spawnY = (data.y != null) ? data.y : (remotePlayer != null ? remotePlayer.y : 0);
+
+					// Handle Ping packets
+					if (data.ping == true) {
+						var timeVal:Float = cast data.time;
+						if (data.reply == false) {
+							var replyPayload = '{"ping":true,"reply":true,"time":' + timeVal + '}';
+							udpClient.send(replyPayload);
+						} else {
+							var rtt = haxe.Timer.stamp() - timeVal;
+							Multiplayer.currentPing = rtt * 1000;
+							trace("Current Ping: " + Multiplayer.currentPing + "ms");
+						}
+						continue;
+					}
+					
+					// Ignore packets sent by ourselves in Server mode
+					if (Multiplayer.activeMode == Server && data.username != null && data.username == Multiplayer.username) {
+						continue;
+					}
+
+					var peerKey = (Multiplayer.activeMode == Server) ? data.username : "peer";
+					if (peerKey == null || peerKey == "") {
+						peerKey = "peer";
+					}
+
+					if (data.death == true) {
+						var dRoomStr:String = data.currentRoom != null ? cast data.currentRoom : "";
+						var cRoomStr:String = currentRoomName != null ? cast currentRoomName : "";
+						var isBossDeathMatch = (dRoomStr != "" && cRoomStr != "" && StringTools.startsWith(dRoomStr, "boss-") && StringTools.startsWith(cRoomStr, "boss-") && dRoomStr.split("-")[1] == cRoomStr.split("-")[1]);
+						if (data.currentRoom == null || data.currentRoom == currentRoomName || isBossDeathMatch) {
+							var rPlayer = remotePlayers.get(peerKey);
+							var spawnX = (data.x != null) ? data.x : (rPlayer != null ? rPlayer.x : 0);
+							var spawnY = (data.y != null) ? data.y : (rPlayer != null ? rPlayer.y : 0);
 							bloodParticles(spawnX, spawnY);
-							if (remotePlayer != null)
-							{
-								remotePlayer.visible = false;
-								remotePlayer.exists = false;
+							if (rPlayer != null) {
+								rPlayer.visible = false;
+								rPlayer.exists = false;
+								if (rPlayer.usernameText != null) {
+									rPlayer.usernameText.visible = false;
+								}
 							}
 						}
-					}
-					else if (data.x != null && data.y != null)
-					{
-						if (remotePlayer == null)
-						{
-							remotePlayer = new main.RemotePlayer(data.x, data.y);
-							add(remotePlayer);
+					} else if (data.x != null && data.y != null) {
+						var rPlayer = remotePlayers.get(peerKey);
+						if (rPlayer == null) {
+							rPlayer = new main.RemotePlayer(data.x, data.y, peerKey);
+							remotePlayers.set(peerKey, rPlayer);
+							add(rPlayer);
+							add(rPlayer.usernameText);
 						}
-						remotePlayer.loadSkin(data.skin != null ? data.skin : "thekid");
-						if (data.currentRoom == currentRoomName)
-						{
-							remotePlayer.exists = true;
-							remotePlayer.visible = true;
-							remotePlayer.applyNetworkPacket(data.x, data.y, data.flip == true, data.facingRight == true, data.anim);
-						}
-						else
-						{
-							remotePlayer.exists = false;
-						}
+						rPlayer.exists = true;
+						rPlayer.visible = true;
+						rPlayer.loadSkin(data.skin != null ? data.skin : "thekid");
+						rPlayer.applyNetworkPacket(data.x, data.y, data.flip == true, data.facingRight == true, data.anim, data.currentRoom != null ? data.currentRoom : "");
 					}
 				}
 				catch (e:Dynamic)
 				{
 					trace("Error al procesar el paquete recibido: " + e);
+				}
+			}
+
+			// Clean up inactive players (timeout after 10 seconds)
+			var inactiveKeys:Array<String> = [];
+			for (key in remotePlayers.keys()) {
+				var rPlayer = remotePlayers.get(key);
+				if (rPlayer != null && rPlayer.timeSincePacket >= 10.0) {
+					inactiveKeys.push(key);
+				}
+			}
+			for (key in inactiveKeys) {
+				var rPlayer = remotePlayers.get(key);
+				if (rPlayer != null) {
+					bloodParticles(rPlayer.x, rPlayer.y);
+					remove(rPlayer.usernameText);
+					remove(rPlayer);
+					rPlayer.destroy();
+					remotePlayers.remove(key);
 				}
 			}
 		}
@@ -908,11 +999,16 @@ class ChapterState extends FlxState
 			udpClient.close();
 			udpClient = null;
 		}
-		if (remotePlayer != null)
-		{
-			remotePlayer.destroy();
-			remotePlayer = null;
+		for (rPlayer in remotePlayers) {
+			if (rPlayer != null) {
+				remove(rPlayer.usernameText);
+				rPlayer.destroy();
+			}
 		}
+		remotePlayers.clear();
+
+		super.destroy();
+		remotePlayers.clear();
 
 		super.destroy();
 	}
@@ -1220,26 +1316,26 @@ class ChapterState extends FlxState
 
 			bloodParticles();
 
-			if (currentBossName == "jevil")
+			/* if multiplayer */
+			if (udpClient != null) {
+				var userStr = (Multiplayer.activeMode == Server) ? Multiplayer.username : "peer";
+				var payload:String = '{"death": true, "x": ' + player.x + ', "y": ' + player.y + ', "currentRoom": "' + currentRoomName + '","username":"' + userStr + '"}';
+				udpClient.send(payload);
+			}
+
+			var isJevilRoom = (currentRoomName != null && StringTools.startsWith(currentRoomName, "boss-jevil")) || (currentBossName == "jevil");
+			if (isJevilRoom)
 			{
 				if (jevil != null && jevil.ultimateManager != null)
 				{
 					jevil.ultimateManager.cancelBarrage();
-
 				}
 
 				openSubState(new KrisDeathState());
 				return;
 			}
 
-			// openSubState(new KrisDeathState());
             openSubState(new DeathState());
-
-			if (udpClient != null)
-			{
-				var payload:String = '{"death": true, "x": ' + player.x + ', "y": ' + player.y + ', "currentRoom": "' + currentRoomName + '"}';
-				udpClient.send(payload);
-			}
 		}
 	}
 

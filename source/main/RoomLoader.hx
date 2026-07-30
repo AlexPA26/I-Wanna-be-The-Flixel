@@ -196,14 +196,21 @@ class RoomLoader
 			}
 		}
 
-		if (state.remotePlayer != null)
-		{
-			state.remove(state.remotePlayer);
-			state.add(state.remotePlayer);
-		}
-
 		state.add(state.roomImages);
 		state.add(state.player);
+
+		/**Remote player logic**/
+		for (rPlayer in state.remotePlayers) {
+			if (rPlayer != null) {
+				state.remove(rPlayer);
+				state.add(rPlayer);
+				if (rPlayer.usernameText != null) {
+					state.remove(rPlayer.usernameText);
+					state.add(rPlayer.usernameText);
+				}
+			}
+		}
+
 		state.add(state.dangerObjects);
 		state.add(state.player.doubleJumpEffect);
 		state.add(state.doubleJumpGroup);
@@ -229,6 +236,19 @@ class RoomLoader
 		});
 
 		BackgroundManager.updateAllEffects(state, state.tiledData);
+
+		/**Remote player logic (re-add after BG effects so they stay on top)**/
+		for (rPlayer in state.remotePlayers) {
+			if (rPlayer != null) {
+				state.remove(rPlayer);
+				state.add(rPlayer);
+				if (rPlayer.usernameText != null) {
+					state.remove(rPlayer.usernameText);
+					state.add(rPlayer.usernameText);
+				}
+			}
+		}
+
 		state.add(state.lightsGroup);
 		state.setupHUD();
 		state.autoScroll();
