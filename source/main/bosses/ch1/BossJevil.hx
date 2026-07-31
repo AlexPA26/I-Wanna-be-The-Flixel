@@ -691,7 +691,7 @@ class Jevil extends FlxSprite
         {
             new FlxTimer().start(i * interval, function(_)
             {
-                if (parentState.player == null && !parentState.player.exists && !parentState.player.alive) return;
+                if (!parentState.player.exists && !parentState.player.alive) return;
                 FlxG.sound.play(AssetPaths.playershoot__ogg, 1, false);
                 var angle = flixel.math.FlxAngle.angleBetween(this, parentState.player, true);
                 angle += FlxG.random.float(-15, 15);
@@ -731,6 +731,7 @@ class Jevil extends FlxSprite
             animation.play("dance");
         });
 
+        if (!parentState.player.exists && !parentState.player.alive) return;
         FlxG.sound.play(AssetPaths.jevil_laugh03__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.scythe_explosion__ogg, 0.65, false);
         this.flash.alpha = 0.2;
@@ -773,7 +774,6 @@ class Jevil extends FlxSprite
     
     function attackSpades()
     {
-        if (parentState.player == null && !parentState.player.exists && !parentState.player.alive) return;
         var randomY:Float = FlxG.random.float(250, 500);
         var goLeft:Bool = false;
         
@@ -812,7 +812,7 @@ class Jevil extends FlxSprite
         particlesJevil();
 
         FlxTween.globalManager.cancelTweensOf(this);
-        
+        if (!parentState.player.exists && !parentState.player.alive) return;
         FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.beep__ogg, 0.5, false);
         
@@ -1167,6 +1167,7 @@ class Jevil extends FlxSprite
         {
             new FlxTimer().start(i * waveInterval, function(_)
             {
+                if (!parentState.player.exists && !parentState.player.alive) return;
                 if (state != "attacking_hearts" || !exists) return;
 
                 var spawnLeft:Bool = FlxG.random.bool(50);
