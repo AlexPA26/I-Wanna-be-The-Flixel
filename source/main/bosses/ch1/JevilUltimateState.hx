@@ -291,7 +291,6 @@ class JevilUltimateState
             PlayerData.currentSkin = Jevil.playerSkin;
             main.RoomLoader.loadRoom(cast FlxG.state, "boss-jevil04");
             if (parentState.bossHpBar.exists) FlxTween.tween(parentState.bossHpBar, {alpha: 1}, 1, { ease: FlxEase.backIn });
-            boss.createPropsUlt();
             boss.ultimateTriggered = false; 
         }
     }

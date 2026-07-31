@@ -55,7 +55,8 @@ class CircusBackground extends FlxGroup
         
         _rect = new Rectangle(0, 0, 0, 1);
 
-        palette = [
+        palette =
+        [
             0xff050d80, 0xff1f2463
         ];
 
@@ -205,7 +206,6 @@ class CircusBackground extends FlxGroup
             return 0;
         };
 
-        // Populate Outer Queues
         for (i in 0...numSides)
         {
             var i1 = i + 1;
@@ -215,7 +215,8 @@ class CircusBackground extends FlxGroup
             var floorColor = palette[i % palette.length];
             var ceilingColor = palette[(i + 1) % palette.length]; // Swapped colors for ceiling
 
-            floorOuterQueue.push({
+            floorOuterQueue.push
+            ({
                 x1: projX_floor[i1], y1: projY_floor[i1],
                 x2: projX_floor[i2], y2: projY_floor[i2],
                 x3: projX_floor[i3], y3: projY_floor[i3],
@@ -223,7 +224,8 @@ class CircusBackground extends FlxGroup
                 avgZ: (worldZ_floor[i1] + worldZ_floor[i2] + worldZ_floor[i3]) / 3.0
             });
 
-            ceilingOuterQueue.push({
+            ceilingOuterQueue.push
+            ({
                 x1: projX_ceiling[i1], y1: projY_ceiling[i1],
                 x2: projX_ceiling[i2], y2: projY_ceiling[i2],
                 x3: projX_ceiling[i3], y3: projY_ceiling[i3],
@@ -232,7 +234,6 @@ class CircusBackground extends FlxGroup
             });
         }
 
-        // Populate Inner Queues
         var innerStartIndex = innerApex + 1;
         for (i in 0...numSidesInner)
         {
@@ -243,7 +244,8 @@ class CircusBackground extends FlxGroup
             var floorInnerColor = innerPalette[i % innerPalette.length];
             var ceilingInnerColor = innerPalette[(i + 1) % innerPalette.length]; // Swapped colors for inner ceiling
 
-            floorInnerQueue.push({
+            floorInnerQueue.push
+            ({
                 x1: projX_floor[i1], y1: projY_floor[i1],
                 x2: projX_floor[i2], y2: projY_floor[i2],
                 x3: projX_floor[i3], y3: projY_floor[i3],
@@ -251,7 +253,8 @@ class CircusBackground extends FlxGroup
                 avgZ: (worldZ_floor[i1] + worldZ_floor[i2] + worldZ_floor[i3]) / 3.0
             });
 
-            ceilingInnerQueue.push({
+            ceilingInnerQueue.push
+            ({
                 x1: projX_ceiling[i1], y1: projY_ceiling[i1] + Std.int(ceilingInnerOffsetY),
                 x2: projX_ceiling[i2], y2: projY_ceiling[i2] + Std.int(ceilingInnerOffsetY),
                 x3: projX_ceiling[i3], y3: projY_ceiling[i3] + Std.int(ceilingInnerOffsetY),
@@ -260,7 +263,6 @@ class CircusBackground extends FlxGroup
             });
         }
 
-        // Sort each queue individually by depth
         floorOuterQueue.sort(sortByDepth);
         floorInnerQueue.sort(sortByDepth);
         ceilingOuterQueue.sort(sortByDepth);
@@ -270,25 +272,21 @@ class CircusBackground extends FlxGroup
         // 5. RENDER IN THE CORRECT OVERLAP ORDER
         // ==========================================
         
-        // 1. Draw Ceiling Inner first (so the platform can cover it)
         for (t in ceilingInnerQueue)
         {
             drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
         }
         
-        // 2. Draw Ceiling Outer platform on top (hides the root of the ceiling inner triangle)
         for (t in ceilingOuterQueue)
         {
             drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
         }
         
-        // 3. Draw Floor Outer platform
         for (t in floorOuterQueue)
         {
             drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
         }
         
-        // 4. Draw Floor Inner shape on top of the floor platform
         for (t in floorInnerQueue)
         {
             drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);

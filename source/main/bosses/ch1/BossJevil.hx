@@ -29,6 +29,10 @@ class Jevil extends FlxSprite
     public var ultimateUsed:Bool = false;
     var cubeTriggered:Bool = false;
     var scytheTimeAccumulator:Float = 0;
+
+    public var pirouetteManager:main.bosses.ch1.JevilPirouetteManager;
+    public var forceTiredTurn:Bool = false;
+    public var isForcingTired:Bool = false;
     
     public var blackFade:FlxSprite;
     var whiteFade = new FlxSprite();
@@ -43,7 +47,7 @@ class Jevil extends FlxSprite
     public var shield:FlxSprite;
     var trailEffect:main.bosses.ch1.JevilEffect;
     var jailObjects:flixel.group.FlxGroup;
-    var battleMusicStarted:Bool = false;
+    public var battleMusicStarted:Bool = false;
     var jailManager:main.bosses.ch1.JevilJailManager;
 
     var spadeComboCount:Int = 0;
@@ -122,13 +126,14 @@ class Jevil extends FlxSprite
         FlxTween.tween(this, {y: y - 10}, 0.75, {type: PINGPONG, ease: FlxEase.sineInOut});
 
         trailEffect = new main.bosses.ch1.JevilEffect(this, parentState);
+        pirouetteManager = new JevilPirouetteManager(this, parentState);
         if (parentState != null) parentState.add(trailEffect);
 
-        // phase01Attacks = [attackScythe];
+        phase01Attacks = [attackSpades];
 
         phase01Attacks =
         [
-            attackBullets, attackSpades, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
+            attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
         ];
 
         phase02Attacks =
@@ -151,6 +156,11 @@ class Jevil extends FlxSprite
     {
         super.update(elapsed);
 
+        if (pirouetteManager != null)
+        {
+            pirouetteManager.update(elapsed);
+        }
+
         if (this.shield != null && this.shield.exists && this.alpha == 1 && this.visible == true && this.active == true)
         {
             this.shield.alpha = 1 - Math.random() * 0.25;
@@ -165,7 +175,11 @@ class Jevil extends FlxSprite
         }
 
         if (state == "startCube" || state == "attackingCube" || state == "returningCube") { parentState.inmortal = true; }
-        else { parentState.inmortal = false; }
+
+        else if (pirouetteManager == null || (!pirouetteManager.isPirouetting && pirouetteManager.invenciblePlayerTimer <= 0))
+        { 
+            parentState.inmortal = false; 
+        }
 
         if (FlxG.keys.justPressed.U)
         {
@@ -191,7 +205,7 @@ class Jevil extends FlxSprite
             PlayerData.currentSkin = playerSkin;
         }
 
-        if (FlxG.keys.justPressed.ENTER) { hp -= 10; }
+        if (FlxG.keys.justPressed.L) { hp -= 10; }
 
         if (FlxG.keys.justPressed.C)
         {
@@ -306,6 +320,23 @@ class Jevil extends FlxSprite
                 teleport(null);
             });
         }
+
+        if (!parentState.player.alive && !parentState.player.exists)
+        {
+            if (parentState.dangerObjects != null)
+            {
+                parentState.dangerObjects.forEach(function(obj:flixel.FlxBasic)
+                {
+                    if (obj != null)
+                    {
+                        obj.destroy();
+                    }
+                });
+                
+                parentState.dangerObjects.clear();
+            }
+
+        }
     }
 
     public function preCutscene()
@@ -351,155 +382,6 @@ class Jevil extends FlxSprite
     
     }
     
-    public function createPropsUlt()
-    {
-
-        parentState.trampolinesMini.add(new NormalTrampolineMini(820, 535, "up"));
-
-        parentState.slabs.add(new NormalSlab(620, 385, 71));
-        parentState.dangerObjects.add(new SmallSpike(620, 406, 2));
-        parentState.dangerObjects.add(new SmallSpike(645, 406, 2));
-
-        parentState.slabs.add(new NormalSlab(570, 385, 71));
-        parentState.dangerObjects.add(new SmallSpike(595, 406, 2));
-        parentState.dangerObjects.add(new SmallSpike(570, 406, 2));
-
-        parentState.slabs.add(new NormalSlab(670, 385, 71));
-        parentState.dangerObjects.add(new SmallSpike(670, 406, 2));
-        parentState.dangerObjects.add(new SmallSpike(695, 406, 2));
-
-        parentState.slabs.add(new NormalSlab(320, 354, 71));
-        parentState.dangerObjects.add(new SmallSpike(345, 375, 2));
-        parentState.dangerObjects.add(new SmallSpike(320, 375, 2));
-
-        parentState.slabs.add(new NormalSlab(270, 354, 71));
-        parentState.dangerObjects.add(new SmallSpike(295, 375, 2));
-        parentState.dangerObjects.add(new SmallSpike(270, 375, 2));
-
-        parentState.slabs.add(new NormalSlab(220, 354, 71));
-        parentState.dangerObjects.add(new SmallSpike(245, 375, 2));
-        parentState.dangerObjects.add(new SmallSpike(220, 375, 2));
-
-        parentState.slabs.add(new NormalSlab(170, 354, 71));
-        parentState.dangerObjects.add(new SmallSpike(195, 375, 2));
-        parentState.dangerObjects.add(new SmallSpike(170, 375, 2));
-
-        parentState.slabs.add(new NormalSlab(270, 200, 71));
-        parentState.slabs.add(new NormalSlab(220, 200, 71));
-
-        parentState.slabs.add(new NormalSlab(920, 354, 71));
-        parentState.dangerObjects.add(new SmallSpike(945, 375, 2));
-        parentState.dangerObjects.add(new SmallSpike(920, 375, 2));
-
-        parentState.slabs.add(new NormalSlab(970, 354, 71));
-        parentState.dangerObjects.add(new SmallSpike(970, 375, 2));
-        parentState.dangerObjects.add(new SmallSpike(995, 375, 2));
-
-        parentState.slabs.add(new NormalSlab(1020, 354, 71));
-        parentState.dangerObjects.add(new SmallSpike(1020, 375, 2));
-        parentState.dangerObjects.add(new SmallSpike(1045, 375, 2));
-
-        parentState.slabs.add(new NormalSlab(1070, 354, 71));
-        parentState.dangerObjects.add(new SmallSpike(1070, 375, 2));
-        parentState.dangerObjects.add(new SmallSpike(1095, 375, 2));
-
-        parentState.slabs.add(new NormalSlab(970, 200, 71));
-        parentState.slabs.add(new NormalSlab(1020, 200, 71));
-
-        parentState.solidBlock.add(new SolidBlock(0, -16, 59));
-        parentState.solidBlock.add(new SolidBlock(0, 34, 59));
-        parentState.solidBlock.add(new SolidBlock(0, 84, 59));
-        parentState.solidBlock.add(new SolidBlock(0, 134, 59));
-        parentState.solidBlock.add(new SolidBlock(0, 184, 59));
-        parentState.solidBlock.add(new SolidBlock(0, 234, 59)); 
-        parentState.solidBlock.add(new SolidBlock(0, 284, 59));
-        parentState.solidBlock.add(new SolidBlock(0, 334, 59));
-        parentState.solidBlock.add(new SolidBlock(0, 384, 59)); 
-        parentState.solidBlock.add(new SolidBlock(0, 434, 59));
-        parentState.solidBlock.add(new SolidBlock(0, 484, 59)); 
-        parentState.solidBlock.add(new SolidBlock(0, 534, 59));
-
-        parentState.solidBlock.add(new SolidBlock(1250, -16, 60));
-        parentState.solidBlock.add(new SolidBlock(1250, 34, 60));
-        parentState.solidBlock.add(new SolidBlock(1250, 84, 60));
-        parentState.solidBlock.add(new SolidBlock(1250, 134, 60));
-        parentState.solidBlock.add(new SolidBlock(1250, 184, 60));
-        parentState.solidBlock.add(new SolidBlock(1250, 234, 60)); 
-        parentState.solidBlock.add(new SolidBlock(1250, 284, 60));
-        parentState.solidBlock.add(new SolidBlock(1250, 334, 60)); 
-        parentState.solidBlock.add(new SolidBlock(1250, 384, 60));
-        parentState.solidBlock.add(new SolidBlock(1250, 434, 60));
-        parentState.solidBlock.add(new SolidBlock(1250, 484, 60));
-        parentState.solidBlock.add(new SolidBlock(1250, 534, 60));
-
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, -16, 1, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 34, 1, "disabled", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 84, 1, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 134, 1, "disabled", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 184, 1, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 234, 1, "disabled", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 284, 1, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 334, 1, "disabled", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 384, 1, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 434, 1, "disabled", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 484, 1, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 534, 1, "disabled", 25, true, 0.5));
-
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, -16, 3, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 34, 3, "disabled", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 84, 3, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 134, 3, "disabled", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 184, 3, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 234, 3, "disabled", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 284, 3, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 334, 3, "disabled", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 384, 3, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 434, 3, "disabled", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 484, 3, "active", 25, true, 0.5));
-        parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 534, 3, "disabled", 25, true, 0.5));
-
-    }
-
-    function queueProp(queue:Array<Void->Void>, x:Float, y:Float, create:Void->Void):Void
-    {
-        queue.push(function()
-        {
-            create();
-            spawnPropEffect(x, y);
-        });
-    }
-
-    function runPropQueue(queue:Array<Void->Void>, index:Int, onComplete:Void->Void):Void
-    {
-        if (index >= queue.length)
-        {
-            onComplete();
-            return;
-        }
-
-        queue[index]();
-
-        new FlxTimer().start(0.01, function(_)
-        {
-            runPropQueue(queue, index + 1, onComplete);
-        });
-
-    }
-
-    function spawnPropEffect(x:Float, y:Float):Void
-    {
-        var particle = new flixel.effects.particles.FlxEmitter(x + 5, y + 5, 8);
-        particle.makeParticles(3, 3, FlxColor.WHITE, 12);
-        particle.color.set(FlxColor.WHITE);
-        particle.launchMode = CIRCLE;
-        particle.drag.set(100, 100);
-        particle.speed.set(50, 100);
-        particle.angularVelocity.set(-300, 300);
-        particle.lifespan.set(0.3, 0.5);
-        parentState.add(particle);
-        particle.start(true, 0, 12);
-    }
-    
     public function startCutscene()
     {
         state = "cutscene";
@@ -514,7 +396,7 @@ class Jevil extends FlxSprite
         {
             if (parentState.player != null && parentState.player.exists && parentState.player.alive)
             {
-                var scythe = new IntroScythe(parentState.player.x -50, parentState.map.y - 100, parentState);
+                var scythe = new IntroScythe(parentState.player.x -50, parentState.map.y - 100, parentState, 1200);
                 FlxG.sound.play(AssetPaths.scythe_intro__ogg, 1, false);
                 parentState.dangerObjects.add(scythe);
                 parentState.player.active = true;
@@ -546,30 +428,15 @@ class Jevil extends FlxSprite
             });
         });
 
-        new FlxTimer().start(1.0, function(_)
-        {
-            FlxTween.tween(this, {x: 590, y: 100}, 0.5,
-            {
-                ease: FlxEase.sineIn,
-                onComplete: function(_)
-                {
-                    FlxTween.cancelTweensOf(this);
-                }
-            
-            });
-
-        });
     }
 
     function startAttack()
     {
+        if (checkForceTired()) return;
         if (ultimateTriggered || state == "ultimate_barrage"|| state == "ultimate_cutscene" || state == "ultimate_transition" || state == "startCube") return;
         if (hp <= 0) { return; }
 
-        if (parentState.player == null || !parentState.player.exists || !parentState.player.alive)
-        {
-            return;
-        }
+        if (!parentState.player.exists && !parentState.player.alive) return;
 
         FlxTween.cancelTweensOf(this);
         var phaseID = getPhaseID();
@@ -682,10 +549,10 @@ class Jevil extends FlxSprite
         FlxG.sound.play(AssetPaths.jevil_random_talk01__ogg, 0.75, false);
         this.x = 590;
         this.y = 100;
-        var bulletCount:Int = 10;
+        var bulletCount:Int = 12;
         var interval:Float = 0.2;
 
-        if (hp <= 50) {bulletCount = 15; interval = 0.15; }
+        if (hp <= 50) {bulletCount = 15; interval = 0.175; }
 
         for (i in 0...bulletCount)
         {
@@ -694,7 +561,7 @@ class Jevil extends FlxSprite
                 if (!parentState.player.exists && !parentState.player.alive) return;
                 FlxG.sound.play(AssetPaths.playershoot__ogg, 1, false);
                 var angle = flixel.math.FlxAngle.angleBetween(this, parentState.player, true);
-                angle += FlxG.random.float(-15, 15);
+                angle += FlxG.random.float(-20, 20);
                 var b = new JevilBullet(x, y, "circle", angle, parentState);
                 parentState.dangerObjects.add(b);
             });
@@ -774,16 +641,16 @@ class Jevil extends FlxSprite
     
     function attackSpades()
     {
-        var randomY:Float = FlxG.random.float(250, 500);
+        var randomY:Float = FlxG.random.float(200, 500);
         var goLeft:Bool = false;
         
         if (spadeComboCount == 0 && hp >= 90)
         {
-            targetSpadeCombos = FlxG.random.int(4, 8);
+            targetSpadeCombos = FlxG.random.int(3, 6);
         }
         else
         {
-            targetSpadeCombos = FlxG.random.int(6, 12);
+            targetSpadeCombos = FlxG.random.int(4, 8);
         }
         
         if (spadeComboCount == 0)
@@ -813,11 +680,12 @@ class Jevil extends FlxSprite
 
         FlxTween.globalManager.cancelTweensOf(this);
         if (!parentState.player.exists && !parentState.player.alive) return;
+        if (checkForceTired()) return;
         FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.beep__ogg, 0.5, false);
         
-        var cooldownAttack:Float = 0.75;
-        if (hp <= 90) { cooldownAttack = 0.5; }
+        var cooldownAttack:Float = 0.85;
+        if (hp <= 90) { cooldownAttack = 0.65; }
 
         var bulletSpawnX:Float = x + (width / 2) - 25;
         var bulletSpawnY:Float = y + (height / 2) - 50;
@@ -904,6 +772,7 @@ class Jevil extends FlxSprite
 
     function spawnScythe(sX:Float, sY:Float)
     {
+        if (!parentState.player.alive && !parentState.player.exists) return;
         var s = new JevilDiamondScythe(sX, sY, parentState);
         parentState.dangerObjects.add(s);
     }
@@ -913,20 +782,20 @@ class Jevil extends FlxSprite
         state = "attacking_jail";
         isVulnerable = false;
 
-        x = 875;
-        y = 58;
+        x = 900;
+        y = 125;
 
         particlesJevil();
         
         animation.play("laugh");
-        this.flash.alpha = 0.2;
+        this.flash.alpha = 0.25;
         FlxG.sound.play(AssetPaths.scythe_intro__ogg, 0.5, false);
         FlxG.sound.play(AssetPaths.jevil_laugh01__ogg);
         jailManager.createJail(0);
 
         var midX:Float = FlxG.width / 2;
         var midY:Float = FlxG.height / 2;
-        var cellBottomY:Float = (midY - 25);
+        var cellBottomY:Float = (midY + 50);
         var cellLeftX:Float = (midX - 200) + 10;
         var cellRightX:Float = (midX + 200) - 25;
 
@@ -949,6 +818,7 @@ class Jevil extends FlxSprite
             {
                 new FlxTimer().start(i * spawnInterval, function(t:FlxTimer)
                 {
+                    if (!parentState.player.exists && !parentState.player.alive) return;
                     if (state != "attacking_jail" || !exists) return;
 
                     var randomX:Float = FlxG.random.float(cellLeftX + 50, cellRightX);
@@ -958,14 +828,17 @@ class Jevil extends FlxSprite
 
                     if (i == totalJewels - 1)
                     {
+                        if (!parentState.player.exists && !parentState.player.alive) return;
+                        animation.play("laugh");
+                        FlxG.sound.play(AssetPaths.jevil_laugh02__ogg, 1, false);
                         new FlxTimer().start(1, function(_)
                         {
-                            animation.play("laugh");
+                            if (!parentState.player.exists && !parentState.player.alive) return;
+                            
                             FlxG.sound.play(AssetPaths.jevil_explosion__ogg, 0.75, false);
                             FlxG.camera.shake(0.01, 0.15);
-                            FlxG.sound.play(AssetPaths.jevil_laugh02__ogg, 1, false);
 
-                            var particle = new flixel.effects.particles.FlxEmitter(650, 200);
+                            var particle = new flixel.effects.particles.FlxEmitter(650, 275);
                             particle.makeParticles(5, 5, FlxColor.WHITE, 150);
                             particle.color.set(FlxColor.RED, FlxColor.RED, FlxColor.ORANGE, FlxColor.YELLOW);
                             particle.launchMode = CIRCLE;
@@ -1027,6 +900,7 @@ class Jevil extends FlxSprite
         {
             new FlxTimer().start(i * spawnInterval, function(t:FlxTimer)
             {
+                if (!parentState.player.alive && !parentState.player.exists) return;
                 if (state != "attacking_circle" || !exists) return;
 
                 var angleDeg:Float = i * (360 / totalSpades);
@@ -1127,6 +1001,7 @@ class Jevil extends FlxSprite
         {
             new FlxTimer().start(i * dropInterval, function(t:FlxTimer)
             {
+                if (!parentState.player.alive && !parentState.player.exists) return;
                 if (state != "attacking_bombarding" || !exists) return;
 
                 var randomX:Float = FlxG.random.bool(50) ? 150 : 1150;
@@ -1266,7 +1141,6 @@ class Jevil extends FlxSprite
                 if (!exists) return;
                 state = "ultimate_transition";
                 PlayerData.lastMusicTime = FlxG.sound.music.time;
-                PlayerData.currentSkin = "thekris";
                 FlxTween.cancelTweensOf(this);
                 this.flipX = true;
                 main.RoomLoader.loadRoom(parentState, "boss-jevil03");
@@ -1321,7 +1195,6 @@ class Jevil extends FlxSprite
             new FlxTimer().start(0.3, function(_)
             {
                 state = "attackingCube";
-                PlayerData.currentSkin = "thekris";
                 var jailDir = new JevilDirectionalAttack(this, parentState);
                 jailDir.start();
             });
@@ -1334,6 +1207,7 @@ class Jevil extends FlxSprite
         if (ultimateTriggered || state == "ultimate_barrage" || state == "ultimate_cutscene"
             || state == "ultimate_transition" || state == "dead" ) return;
 
+        if (!parentState.player.alive && !parentState.player.exists) return;
         teleportCount++;
         FlxTween.cancelTweensOf(this);
         if (parentState.bossHpBar != null) FlxTween.tween(parentState.bossHpBar, {alpha: 1}, 0.5, { ease: FlxEase.backIn });
@@ -1379,10 +1253,12 @@ class Jevil extends FlxSprite
                 flipX = !flipX;
                 isVulnerable = true;
                 canBeHit = true;
-                shield.visible = false;
                 teleportCount = 0;
+                isForcingTired = false;
                 animation.play("tired");
-                FlxTween.tween(this, { x: 590, y: 250 }, 0.5, { ease: FlxEase.quadOut });
+                if (shield.visible && shield != null) shield.visible = false;
+                FlxG.sound.play(AssetPaths.jevil_tired__ogg, 0.75, false);
+                FlxTween.tween(this, { x: 590, y: 350 }, 0.5, { ease: FlxEase.quadOut });
 
                 new FlxTimer().start(0.6, function(_)
                 {
@@ -1390,7 +1266,7 @@ class Jevil extends FlxSprite
                     FlxTween.tween(this, {y: this.y - 5}, 0.5, {type: PINGPONG, ease: FlxEase.sineInOut});
                 });
 
-                new FlxTimer().start(2, function(_)
+                new FlxTimer().start(3.25, function(_)
                 {
                     FlxTween.cancelTweensOf(this);
                     FlxTween.tween(this, { x: 590, y: 100 }, 0.5, { ease: FlxEase.quadIn });
@@ -1408,6 +1284,22 @@ class Jevil extends FlxSprite
         });
     }
 
+    public function checkForceTired():Bool
+    {
+        if (forceTiredTurn)
+        {
+            forceTiredTurn = false;
+            isForcingTired = true;
+            FlxTween.cancelTweensOf(this);
+            teleportCount = 3;
+            teleport();
+            return true;
+        }
+        if (isForcingTired) return true; 
+        
+        return false;
+    }
+
     public function createTrail()
     {
         trail = new FlxTrail(this, null, 20, 2, 0.35, 0.04);
@@ -1417,6 +1309,9 @@ class Jevil extends FlxSprite
 
     function jevilDeath()
     {
+        if (parentState.tpBar != null && parentState.tpBar.exists) parentState.tpBar.visible = false;
+        if (parentState.tpBarDeco != null && parentState.tpBarDeco.exists) parentState.tpBarDeco.visible = false;
+
         var jevilEnding = new FlxSprite();
         jevilEnding.frames = FlxAtlasFrames.fromSparrow(AssetPaths.jevil__png, AssetPaths.jevil__xml);
         jevilEnding.animation.addByPrefix("laugh", "jevil_laugh", 12, true);
@@ -1614,17 +1509,16 @@ class Jevil extends FlxSprite
     {
         if (trail != null)
         {
+            if (parentState != null)
+                parentState.remove(trail, true);
+
             trail.destroy();
             trail = null;
         }
 
         if (trailEffect != null)
         {
-            try
-            {
-                trailEffect.destroy();
-            }
-            catch (e:Dynamic) {}
+            trailEffect.destroy();
             trailEffect = null;
         }
 

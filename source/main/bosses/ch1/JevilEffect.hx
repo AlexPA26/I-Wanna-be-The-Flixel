@@ -2,17 +2,13 @@ package main.bosses.ch1;
 
 import flixel.FlxBasic;
 import flixel.FlxSprite;
+import flixel.FlxG;
 import main.ChapterState;
 import main.bosses.ch1.BossJevil.Jevil;
 
 class JevilEffect extends FlxBasic
 {
     static inline var ORBIT_RADIUS:Float = 75;
-    static inline var BASE_SPEED:Float = 160;
-    static inline var CRAZY_SPEED:Float = 500;
-    static inline var DIRECTION_FLIP_INTERVAL:Float = 2.0;
-    static inline var GHOST_ALPHA:Float = 0.2;
-    static inline var GHOST_ALPHA_CRAZINESS:Float = 0.4;
 
     var jevil:Jevil;
     var parentState:ChapterState;
@@ -21,12 +17,19 @@ class JevilEffect extends FlxBasic
     var orbitAngle:Float = 0;
     var direction:Int = 1;
     var directionFlipTimer:Float = 0;
+    var pulseTimer:Float = 0; 
+
+    var currentFlipInterval:Float = 0.5;
+    var currentSpeed:Float = 160;
 
     public function new(jevil:Jevil, parentState:ChapterState)
     {
         super();
         this.jevil = jevil;
         this.parentState = parentState;
+
+        currentFlipInterval = FlxG.random.float(0.35, 1.0);
+        currentSpeed = FlxG.random.float(100, 300);
 
         try
         {
@@ -39,7 +42,7 @@ class JevilEffect extends FlxBasic
             ghost.visible = false;
             ghost.solid = false;
             ghost.moves = false;
-            ghost.active = false; // driven manually below, doesn't need its own update logic
+            ghost.active = false;
 
             if (parentState != null)
             {
@@ -80,8 +83,14 @@ class JevilEffect extends FlxBasic
             && jevil.animation.curAnim != null
             && jevil.animation.curAnim.name == "tired";
 
-        var shouldShow:Bool = jevil.alpha >= 1 && jevil.visible && !isTired
-        && jevil.state != "waiting" && jevil.state != "precutscene" && jevil.state != "cutscene";
+        // ONLY SHOW IF CRAZINESS IS ACTIVE
+        var shouldShow:Bool = jevil.alpha >= 1 
+            && jevil.visible 
+            && !isTired
+            && jevil.craziness // Check craziness here!
+            && jevil.state != "waiting" 
+            && jevil.state != "precutscene" 
+            && jevil.state != "cutscene";
 
         if (!shouldShow)
         {
@@ -89,29 +98,21 @@ class JevilEffect extends FlxBasic
             return;
         }
 
-        var speed:Float = BASE_SPEED;
-        var ghostAlpha:Float = GHOST_ALPHA;
-
-        if (jevil.craziness)
+        // --- 1. DIRECTION FLIP & RANDOMIZATION ---
+        directionFlipTimer += elapsed;
+        if (directionFlipTimer >= currentFlipInterval)
         {
-
-            speed = CRAZY_SPEED;
-
-
-            directionFlipTimer += elapsed;
-            if (directionFlipTimer >= DIRECTION_FLIP_INTERVAL)
-            {
-                directionFlipTimer -= DIRECTION_FLIP_INTERVAL;
-                direction *= -1;
-            }
-        }
-        else
-        {
-            direction = 1;
             directionFlipTimer = 0;
+            direction *= -1;
+            orbitAngle += 180;
+            
+            currentFlipInterval = FlxG.random.float(0.35, 1.0);
+            currentSpeed = FlxG.random.float(250, 600); // Speed during craziness
         }
 
-        orbitAngle += speed * direction * elapsed;
+        // --- 2. ORBIT CALCULATIONS ---
+        orbitAngle += currentSpeed * direction * elapsed;
+        
         if (orbitAngle > 360) orbitAngle -= 360;
         if (orbitAngle < -360) orbitAngle += 360;
 
@@ -132,9 +133,20 @@ class JevilEffect extends FlxBasic
         ghost.x = jevil.x + jevil.width / 2 - ghost.width / 2 + offsetX;
         ghost.y = jevil.y + jevil.height / 2 - ghost.height / 2 + offsetY;
 
+        // --- 3. PULSE & FLICKER ALPHA ---
+        pulseTimer += elapsed;
+        var sineWave:Float = (Math.sin(pulseTimer * Math.PI * 2) + 1) / 2.0; 
+        var pulsedBaseAlpha:Float = sineWave * 0.2; 
+
+        var flickerNoise:Float = (Math.random() * 0.5) - 0.1; 
+        
+        var finalAlpha:Float = pulsedBaseAlpha + flickerNoise;
+
+        if (finalAlpha < 0) finalAlpha = 0;
+        if (finalAlpha > 0.425) finalAlpha = 0.425;
+
         ghost.color = jevil.color;
-        if (!jevil.craziness) ghost.alpha = GHOST_ALPHA;
-        else { ghost.alpha = GHOST_ALPHA_CRAZINESS; }
+        ghost.alpha = finalAlpha;
         ghost.visible = true;
     }
 

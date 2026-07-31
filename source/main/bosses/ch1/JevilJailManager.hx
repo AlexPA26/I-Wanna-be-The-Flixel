@@ -28,13 +28,13 @@ class JevilJailManager
         var arenaWidth:Float = 300;
         var arenaHeight:Float = 250;
 
-        state.player.setPosition(midX - (state.player.width / 2), midY - (state.player.height / 2) - 200);
+        state.player.setPosition(midX - (state.player.width / 2), midY - (state.player.height / 2) - 125);
         state.player.velocity.set(0, 0);
 
         var tileSize:Float = 50;
         
         var startX:Float = Math.floor((midX - (arenaWidth / 2)) / tileSize) * tileSize;
-        var startY:Float = (Math.floor((midY - (arenaHeight / 2)) / tileSize) * tileSize) - 185;
+        var startY:Float = (Math.floor((midY - (arenaHeight / 2)) / tileSize) * tileSize) - 110;
         
         var columns:Int = Std.int(arenaWidth / tileSize) + 2;
         var rows:Int = Std.int(arenaHeight / tileSize) + 2;

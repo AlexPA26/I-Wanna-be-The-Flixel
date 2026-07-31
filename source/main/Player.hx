@@ -19,6 +19,7 @@ class Player extends FlxSprite
     public var canDoubleJump:Bool = true;
     public var doubleJumpEffect:FlxEmitter;
     public var isRidingPlatform:Bool = false;
+    public var isGrounded:Bool = false;
 
     var safeJump:Float = 0;
     var safeJumpMax:Float = 0.1;
@@ -26,6 +27,7 @@ class Player extends FlxSprite
     public var currentOffsetY:Float = 20;
 
     public var isFlipped:Bool = false;
+    public var controlsReversed:Bool = false;
     var isFlipping:Bool;
     var flippingTimer:Float;
     static var baseOffsetY:Null<Float> = null;
@@ -111,7 +113,7 @@ public function flipGravity():Void
 
         var floorDir:FlxDirectionFlags = isFlipped ? UP : DOWN;
         var gravMult:Int = isFlipped ? -1 : 1;
-        var isGrounded:Bool = isTouching(floorDir) || isRidingPlatform;
+        isGrounded = isTouching(floorDir) || isRidingPlatform;
 
         if (tapTimer > 0)
         {
@@ -289,7 +291,7 @@ public function flipGravity():Void
         }
         #end
 
-        if (isFlipped)
+        if (controlsReversed)
         {
             var temp = inputLeft;
             inputLeft = inputRight;

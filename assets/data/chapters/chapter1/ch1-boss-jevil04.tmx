@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="21" nextobjectid="132">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="22" nextobjectid="190">
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
  <tileset firstgid="89" source="../../textures/save.tsx"/>
  <tileset firstgid="90" source="../../textures/transition-tiles.tsx"/>
@@ -22,11 +22,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,57,58,58,58,58,58,58,58,58,58,59,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,61,0,0,0,0,0,0,0,0,0,60,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,61,62,0,0,0,0,0,0,0,62,60,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,61,0,0,0,0,0,0,0,0,0,60,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,61,0,0,0,0,0,0,0,0,0,60,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="11" name="tiles-deco" width="28" height="18">
@@ -45,10 +45,10 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,62,62,62,62,62,62,62,62,62,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,56,62,62,62,62,62,62,62,56,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,62,62,62,62,62,62,62,62,62,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,62,62,62,62,62,62,62,62,62,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="14" name="tiles-deco2" width="28" height="18">
@@ -80,17 +80,66 @@
  </objectgroup>
  <objectgroup id="13" name="camera"/>
  <objectgroup id="16" name="solid_block"/>
- <objectgroup id="15" name="light">
-  <object id="8" name="light" gid="96" x="424" y="872" width="200" height="200">
-   <properties>
-    <property name="color" value="blue"/>
-   </properties>
-  </object>
-  <object id="9" name="light" gid="96" x="824" y="870.667" width="200" height="200">
-   <properties>
-    <property name="color" value="blue"/>
-   </properties>
-  </object>
+ <objectgroup id="15" name="light"/>
+ <objectgroup id="21" name="invisBlock">
+  <object id="132" name="invisBlock" gid="8" x="0" y="50" width="50" height="50"/>
+  <object id="133" name="invisBlock" gid="8" x="0" y="150" width="50" height="50"/>
+  <object id="134" name="invisBlock" gid="8" x="0" y="100" width="50" height="50"/>
+  <object id="135" name="invisBlock" gid="8" x="0" y="200" width="50" height="50"/>
+  <object id="136" name="invisBlock" gid="8" x="0" y="300" width="50" height="50"/>
+  <object id="137" name="invisBlock" gid="8" x="0" y="350" width="50" height="50"/>
+  <object id="138" name="invisBlock" gid="8" x="0" y="250" width="50" height="50"/>
+  <object id="139" name="invisBlock" gid="8" x="0" y="400" width="50" height="50"/>
+  <object id="140" name="invisBlock" gid="8" x="0" y="450" width="50" height="50"/>
+  <object id="141" name="invisBlock" gid="8" x="0" y="500" width="50" height="50"/>
+  <object id="142" name="invisBlock" gid="8" x="0" y="550" width="50" height="50"/>
+  <object id="143" name="invisBlock" gid="8" x="0" y="600" width="50" height="50"/>
+  <object id="144" name="invisBlock" gid="8" x="0" y="650" width="50" height="50"/>
+  <object id="145" name="invisBlock" gid="8" x="0" y="750" width="50" height="50"/>
+  <object id="146" name="invisBlock" gid="8" x="0" y="700" width="50" height="50"/>
+  <object id="147" name="invisBlock" gid="8" x="0" y="800" width="50" height="50"/>
+  <object id="148" name="invisBlock" gid="8" x="0" y="850" width="50" height="50"/>
+  <object id="149" name="invisBlock" gid="8" x="0" y="900" width="50" height="50"/>
+  <object id="150" name="invisBlock" gid="8" x="1350" y="50" width="50" height="50"/>
+  <object id="151" name="invisBlock" gid="8" x="1350" y="150" width="50" height="50"/>
+  <object id="152" name="invisBlock" gid="8" x="1350" y="100" width="50" height="50"/>
+  <object id="153" name="invisBlock" gid="8" x="1350" y="200" width="50" height="50"/>
+  <object id="154" name="invisBlock" gid="8" x="1350" y="300" width="50" height="50"/>
+  <object id="155" name="invisBlock" gid="8" x="1350" y="350" width="50" height="50"/>
+  <object id="156" name="invisBlock" gid="8" x="1350" y="250" width="50" height="50"/>
+  <object id="157" name="invisBlock" gid="8" x="1350" y="400" width="50" height="50"/>
+  <object id="158" name="invisBlock" gid="8" x="1350" y="450" width="50" height="50"/>
+  <object id="159" name="invisBlock" gid="8" x="1350" y="500" width="50" height="50"/>
+  <object id="160" name="invisBlock" gid="8" x="1350" y="550" width="50" height="50"/>
+  <object id="161" name="invisBlock" gid="8" x="1350" y="600" width="50" height="50"/>
+  <object id="162" name="invisBlock" gid="8" x="1350" y="650" width="50" height="50"/>
+  <object id="163" name="invisBlock" gid="8" x="1350" y="750" width="50" height="50"/>
+  <object id="164" name="invisBlock" gid="8" x="1350" y="700" width="50" height="50"/>
+  <object id="165" name="invisBlock" gid="8" x="1350" y="800" width="50" height="50"/>
+  <object id="166" name="invisBlock" gid="8" x="1350" y="850" width="50" height="50"/>
+  <object id="167" name="invisBlock" gid="8" x="1350" y="900" width="50" height="50"/>
+  <object id="168" name="invisBlock" gid="23" x="200" y="700" width="50" height="50"/>
+  <object id="169" name="invisBlock" gid="23" x="250" y="700" width="50" height="50"/>
+  <object id="170" name="invisBlock" gid="23" x="300" y="700" width="50" height="50"/>
+  <object id="171" name="invisBlock" gid="23" x="350" y="700" width="50" height="50"/>
+  <object id="172" name="invisBlock" gid="23" x="400" y="700" width="50" height="50"/>
+  <object id="173" name="invisBlock" gid="23" x="450" y="700" width="50" height="50"/>
+  <object id="174" name="invisBlock" gid="23" x="500" y="700" width="50" height="50"/>
+  <object id="175" name="invisBlock" gid="23" x="550" y="700" width="50" height="50"/>
+  <object id="176" name="invisBlock" gid="23" x="600" y="700" width="50" height="50"/>
+  <object id="177" name="invisBlock" gid="23" x="650" y="700" width="50" height="50"/>
+  <object id="178" name="invisBlock" gid="23" x="700" y="700" width="50" height="50"/>
+  <object id="179" name="invisBlock" gid="23" x="750" y="700" width="50" height="50"/>
+  <object id="180" name="invisBlock" gid="23" x="800" y="700" width="50" height="50"/>
+  <object id="181" name="invisBlock" gid="23" x="850" y="700" width="50" height="50"/>
+  <object id="182" name="invisBlock" gid="23" x="900" y="700" width="50" height="50"/>
+  <object id="183" name="invisBlock" gid="23" x="950" y="700" width="50" height="50"/>
+  <object id="184" name="invisBlock" gid="23" x="1000" y="700" width="50" height="50"/>
+  <object id="185" name="invisBlock" gid="23" x="1050" y="700" width="50" height="50"/>
+  <object id="186" name="invisBlock" gid="23" x="1100" y="700" width="50" height="50"/>
+  <object id="187" name="invisBlock" gid="23" x="1150" y="700" width="50" height="50"/>
+  <object id="188" name="invisBlock" gid="23" x="150" y="700" width="50" height="50"/>
+  <object id="189" name="invisBlock" gid="23" x="1200" y="700" width="50" height="50"/>
  </objectgroup>
  <objectgroup id="3" name="bg">
   <properties>

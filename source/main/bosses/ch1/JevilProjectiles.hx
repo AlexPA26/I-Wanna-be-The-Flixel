@@ -18,14 +18,14 @@ class IntroScythe extends FlxSprite
     var jevil:Jevil;
     var stateRef:ChapterState;
 
-    public function new(x:Float, y:Float, state:ChapterState)
+    public function new(x:Float, y:Float, state:ChapterState, speed:Int)
     {
         super(x, y);
         this.stateRef = state;
         loadGraphic(AssetPaths.jevil_scythe__png, false);
         scale.set(2, 2);
         updateHitbox();
-        velocity.y = 1200;
+        velocity.y = speed;
         angularVelocity = 600;
 
         trail = new FlxTrail(this, null, 20, 2, 0.5, 0.05);
@@ -75,7 +75,7 @@ class JevilBullet extends FlxSprite
         if (type == "spade") animation.frameIndex = 1;
         else animation.frameIndex = 0;
 
-        var speed:Float = (type == "spade") ? 450 : 300;
+        var speed:Float = (type == "spade") ? 350 : 400;
 
         if (angleOverride != null)
         {
@@ -668,7 +668,7 @@ class JevilUltimateScythe extends flixel.FlxSprite
             {
                 if (slash != null && slash.exists) 
                 {
-                    slash.destroy();
+                    slash.kill();
                 }
             }
         });
@@ -690,6 +690,20 @@ class JevilUltimateScythe extends flixel.FlxSprite
             trail = null;
         }
         destroy();
+    }
+
+    override public function destroy()
+    {
+        if (trail != null)
+        {
+            if (stateRef != null)
+                stateRef.remove(trail, true);
+
+            trail.destroy();
+            trail = null;
+        }
+
+        super.destroy();
     }
 }
 

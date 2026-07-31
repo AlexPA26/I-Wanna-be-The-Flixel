@@ -26,7 +26,7 @@ class BossLoader
                 trace("BossLoader: Reznor Spawned");
                 
             case "jevil":
-                var jevil = new Jevil(590, 200, state);
+                var jevil = new Jevil(900, 235, state);
                 state.currentBoss = jevil;
                 state.add(jevil);
                 state.add(jevil.shield);

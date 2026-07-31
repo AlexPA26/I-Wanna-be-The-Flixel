@@ -160,8 +160,12 @@ class ChapterState extends FlxState
 	public var jevil:main.bosses.ch1.BossJevil.Jevil;
 	public var reznor:main.bosses.ch1.BossReznor.Reznor;
 
-	var udpClient:UdpClient;
+	public var tpBar:FlxBar; public var currentTP:Float = 0; public var maxTP:Float = 100;
+	public var tpBarDeco:FlxSprite; public var tpText:FlxText;
+    public var grazeHitbox:FlxSprite;
+    public var grazedObjects:Array<flixel.FlxObject> = [];
 
+	var udpClient:UdpClient;
 	public var remotePlayers:Map<String, main.RemotePlayer> = new Map();
 
 	var networkTimer:Float = 0;
@@ -538,7 +542,60 @@ class ChapterState extends FlxState
 			});
 		}
 
-		if (currentBoss != null && currentBoss.exists && currentBoss.alive && currentBoss.visible && currentBoss.alpha > 0)
+		if (grazeHitbox != null && player != null && player.exists)
+        {
+            grazeHitbox.x = player.x + (player.width / 2) - (grazeHitbox.width / 2);
+            grazeHitbox.y = player.y + (player.height / 2) - (grazeHitbox.height / 2);
+
+            if (grazeHitbox.alpha > 0)
+            {
+                grazeHitbox.alpha -= elapsed * 3;
+                if (grazeHitbox.alpha < 0) grazeHitbox.alpha = 0;
+            }
+
+            var i:Int = grazedObjects.length;
+            while (i-- > 0)
+            {
+                var obj = grazedObjects[i];
+                if (obj == null || !obj.exists || !obj.alive)
+                {
+                    grazedObjects.splice(i, 1);
+                }
+            }
+
+            if (fightingBoss && !inmortal)
+            {
+                FlxG.overlap(grazeHitbox, dangerObjects, function(hitbox:flixel.FlxObject, hazard:flixel.FlxObject)
+                {
+                    if (!grazedObjects.contains(hazard))
+                    {
+                        grazedObjects.push(hazard);
+                        
+                        currentTP += 22;
+                        if (currentTP > maxTP) currentTP = maxTP;
+
+                        grazeHitbox.alpha = 0.4;
+                        FlxG.sound.play(AssetPaths.jevil_graze__ogg, 0.8, false);
+                    }
+                });
+            }
+
+			if (tpText != null && tpText.exists)
+			{
+				if (currentTP >= maxTP)
+				{
+					tpText.text = "MAX";
+					tpText.color = flixel.util.FlxColor.YELLOW;
+				}
+				else
+				{
+					tpText.text = Std.string(Std.int(currentTP));
+					tpText.color = flixel.util.FlxColor.WHITE;
+				}
+			}
+        }
+
+		if (currentBoss != null && currentBoss.exists && currentBoss.alive && currentBoss.visible && currentBoss.alpha > 0 && !inmortal)
 		{
 			if (Std.isOfType(currentBoss, main.bosses.ch1.BossJevil.Jevil))
 			{
@@ -599,14 +656,6 @@ class ChapterState extends FlxState
 			killPlayer();
 		}
 
-		if (FlxG.keys.justPressed.S)
-		{
-			trace("===================");
-			trace("Player X:" + player.x);
-			trace("Player Y:" + player.y);
-			trace("===================");
-		}
-
 
 		if (FlxG.keys.justPressed.Z && player.exists) playerShoot();
 		{
@@ -618,7 +667,7 @@ class ChapterState extends FlxState
 
 		
 
-		if (FlxG.keys.justPressed.ESCAPE && player.exists && !fightingBoss)
+		if (FlxG.keys.justPressed.ESCAPE && player.exists)
 		{
 			if (fightingBoss)
 			{
@@ -771,48 +820,48 @@ class ChapterState extends FlxState
 		}
 
 		#if !mobile
-		if (FlxG.keys.justPressed.ONE)
+		if (FlxG.keys.justPressed.ONE && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "map02");
 		}
-		if (FlxG.keys.justPressed.TWO)
+		if (FlxG.keys.justPressed.TWO && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "map41");
 		}
-		if (FlxG.keys.justPressed.THREE)
+		if (FlxG.keys.justPressed.THREE && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "map09");
 		}
 
-		if (FlxG.keys.justPressed.FOUR)
+		if (FlxG.keys.justPressed.FOUR && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "map37");
 		}
 
-		if (FlxG.keys.justPressed.SEVEN)
+		if (FlxG.keys.justPressed.SEVEN && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "map23");
 		}
 
-		if (FlxG.keys.justPressed.EIGHT)
+		if (FlxG.keys.justPressed.EIGHT && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "boss-reznor01");
 		}
 
-		if (FlxG.keys.justPressed.NINE)
+		if (FlxG.keys.justPressed.NINE && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "boss-jevil01");
 		}
 
 		
-		if (FlxG.keys.justPressed.ZERO)
+		if (FlxG.keys.justPressed.ZERO && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
 			RoomLoader.loadRoom(this, "testing");
@@ -1357,7 +1406,6 @@ class ChapterState extends FlxState
 			var isJevilRoom = (currentBossName == "jevil");
 			if (isJevilRoom)
 			{
-				trace(fightingBoss);
 				if (jevil != null && jevil.ultimateManager != null)
 				{
 					jevil.ultimateManager.cancelBarrage();
@@ -1720,6 +1768,32 @@ class ChapterState extends FlxState
         bossHpBar.scrollFactor.set(0, 0);
 		bossHpBar.visible = true;
         if (player.alive && player.active) { add(bossHpBar); }
+
+		tpBar = new FlxBar(70, (FlxG.height / 2) - 250, BOTTOM_TO_TOP, 30, 300, this, "currentTP", 0, maxTP);
+        tpBar.createFilledBar(0xff8b0d00, 0xFFFFA500, false, 0xFF000000);
+        tpBar.scrollFactor.set(0, 0);
+        if (player.alive && player.active) { add(tpBar); }
+
+		tpBarDeco = new FlxSprite();
+		tpBarDeco.loadGraphic(AssetPaths.jevil_tpBar__png, false);
+		tpBarDeco.x = 20;
+		tpBarDeco.y = 110;
+		tpBarDeco.scrollFactor.set(0, 0);
+		if (player.alive && player.active) { add(tpBarDeco); }
+
+		tpText = new flixel.text.FlxText(tpBar.x + tpBar.width - 86, tpBar.y + (tpBar.height / 2) - 46, 0, "0", 22);
+        tpText.setFormat("assets/fonts/deltarune.otf", 28, flixel.util.FlxColor.WHITE, "center", flixel.text.FlxText.FlxTextBorderStyle.OUTLINE, flixel.util.FlxColor.TRANSPARENT);
+        tpText.scrollFactor.set(0, 0);
+        if (player.alive && player.active) { add(tpText); }
+		
+		grazeHitbox = new FlxSprite();
+        grazeHitbox.loadGraphic(AssetPaths.glaze_boss__png, false);
+        grazeHitbox.alpha = 0;
+		grazeHitbox.y -= 5;
+        add(grazeHitbox);
+
+		currentTP = 0;
+        grazedObjects = [];
 
     }
 }
