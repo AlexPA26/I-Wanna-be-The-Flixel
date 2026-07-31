@@ -1,13 +1,10 @@
 package main.bosses.ch1;
 
-import flixel.math.FlxRandom;
+import backgrounds3D.CircusBackground;
 import leveldata.hazards.SolidBlock;
 import leveldata.hazards.SmallSpike;
 import leveldata.blockdata.NormalSlab;
 import leveldata.events.NormalTrampolineMini;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import leveldata.events.NormalTrampoline;
-import leveldata.hazards.NormalSpike;
 import flixel.effects.FlxFlicker;
 import flixel.addons.effects.FlxTrail;
 import flixel.math.FlxPoint;
@@ -346,134 +343,14 @@ class Jevil extends FlxSprite
 
         });
 
-        new FlxTimer().start(0, function(t:FlxTimer)
-        {
-            createProps();
-        });
-        
-    
-    }
-    
-    public function createProps()
-    {
-        var propQueue:Array<Void->Void> = [];
-
-        queueProp(propQueue, 820, 535, function() { parentState.trampolinesMini.add(new NormalTrampolineMini(820, 535, "up")); });
-        queueProp(propQueue, 570, 385, function() { parentState.slabs.add(new NormalSlab(570, 385, 71)); });
-        queueProp(propQueue, 595, 406, function() { parentState.dangerObjects.add(new SmallSpike(595, 406, 2)); });
-        queueProp(propQueue, 570, 406, function() { parentState.dangerObjects.add(new SmallSpike(570, 406, 2)); });
-        
-
-        queueProp(propQueue, 820, 535, function() { parentState.trampolinesMini.add(new NormalTrampolineMini(820, 535, "up")); });
-
-        queueProp(propQueue, 620, 385, function() { parentState.slabs.add(new NormalSlab(620, 385, 71)); });
-        queueProp(propQueue, 620, 406, function() { parentState.dangerObjects.add(new SmallSpike(620, 406, 2)); });
-        queueProp(propQueue, 645, 406, function() { parentState.dangerObjects.add(new SmallSpike(645, 406, 2)); });
-
-        queueProp(propQueue, 620, 385, function() { parentState.slabs.add(new NormalSlab(570, 385, 71)); });
-        queueProp(propQueue, 595, 406, function() { parentState.dangerObjects.add(new SmallSpike(595, 406, 2)); });
-        queueProp(propQueue, 570, 406, function() { parentState.dangerObjects.add(new SmallSpike(570, 406, 2)); });
-
-        queueProp(propQueue, 670, 385, function() { parentState.slabs.add(new NormalSlab(670, 385, 71)); });
-        queueProp(propQueue, 670, 406, function() { parentState.dangerObjects.add(new SmallSpike(670, 406, 2)); });
-        queueProp(propQueue, 695, 406, function() { parentState.dangerObjects.add(new SmallSpike(695, 406, 2)); });
-
-        queueProp(propQueue, 320, 354, function() { parentState.slabs.add(new NormalSlab(320, 354, 71)); });
-        queueProp(propQueue, 345, 375, function() { parentState.dangerObjects.add(new SmallSpike(345, 375, 2)); });
-        queueProp(propQueue, 320, 375, function() { parentState.dangerObjects.add(new SmallSpike(320, 375, 2)); });
-
-        queueProp(propQueue, 270, 354, function() { parentState.slabs.add(new NormalSlab(270, 354, 71)); });
-        queueProp(propQueue, 295, 375, function() { parentState.dangerObjects.add(new SmallSpike(295, 375, 2)); });
-        queueProp(propQueue, 270, 375, function() { parentState.dangerObjects.add(new SmallSpike(270, 375, 2)); });
-
-        queueProp(propQueue, 220, 354, function() { parentState.slabs.add(new NormalSlab(220, 354, 71)); });
-        queueProp(propQueue, 245, 375, function() { parentState.dangerObjects.add(new SmallSpike(245, 375, 2)); });
-        queueProp(propQueue, 220, 375, function() { parentState.dangerObjects.add(new SmallSpike(220, 375, 2)); });
-
-        queueProp(propQueue, 170, 354, function() { parentState.slabs.add(new NormalSlab(170, 354, 71)); });
-        queueProp(propQueue, 195, 375, function() { parentState.dangerObjects.add(new SmallSpike(195, 375, 2)); });
-        queueProp(propQueue, 170, 375, function() { parentState.dangerObjects.add(new SmallSpike(170, 375, 2)); });
-
-        queueProp(propQueue, 270, 200, function() { parentState.slabs.add(new NormalSlab(270, 200, 71)); });
-        queueProp(propQueue, 220, 200, function() { parentState.slabs.add(new NormalSlab(220, 200, 71)); });
-
-        queueProp(propQueue, 920, 354, function() { parentState.slabs.add(new NormalSlab(920, 354, 71)); });
-        queueProp(propQueue, 945, 375, function() { parentState.dangerObjects.add(new SmallSpike(945, 375, 2)); });
-        queueProp(propQueue, 920, 375, function() { parentState.dangerObjects.add(new SmallSpike(920, 375, 2)); });
-
-        queueProp(propQueue, 970, 354, function() { parentState.slabs.add(new NormalSlab(970, 354, 71)); });
-        queueProp(propQueue, 970, 375, function() { parentState.dangerObjects.add(new SmallSpike(970, 375, 2)); });
-        queueProp(propQueue, 995, 375, function() { parentState.dangerObjects.add(new SmallSpike(995, 375, 2)); });
-
-        queueProp(propQueue, 1020, 354, function() { parentState.slabs.add(new NormalSlab(1020, 354, 71)); });
-        queueProp(propQueue, 1020, 375, function() { parentState.dangerObjects.add(new SmallSpike(1020, 375, 2)); });
-        queueProp(propQueue, 1045, 375, function() { parentState.dangerObjects.add(new SmallSpike(1045, 375, 2)); });
-
-        queueProp(propQueue, 1070, 354, function() { parentState.slabs.add(new NormalSlab(1070, 354, 71)); });
-        queueProp(propQueue, 1070, 375, function() { parentState.dangerObjects.add(new SmallSpike(1070, 375, 2)); });
-        queueProp(propQueue, 1095, 375, function() { parentState.dangerObjects.add(new SmallSpike(1095, 375, 2)); });
-
-        queueProp(propQueue, 970, 200, function() { parentState.slabs.add(new NormalSlab(970, 200, 71)); });
-        queueProp(propQueue, 1020, 200, function() { parentState.slabs.add(new NormalSlab(1020, 200, 71)); });
-
-        queueProp(propQueue, 0, -16, function() { parentState.solidBlock.add(new SolidBlock(0, -16, 59)); });
-        queueProp(propQueue, 0, 34, function() { parentState.solidBlock.add(new SolidBlock(0, 34, 59)); });
-        queueProp(propQueue, 0, 84, function() { parentState.solidBlock.add(new SolidBlock(0, 84, 59)); });
-        queueProp(propQueue, 0, 134, function() { parentState.solidBlock.add(new SolidBlock(0, 134, 59)); });
-        queueProp(propQueue, 0, 184, function() { parentState.solidBlock.add(new SolidBlock(0, 184, 59)); });
-        queueProp(propQueue, 0, 234, function() { parentState.solidBlock.add(new SolidBlock(0, 234, 59)); });
-        queueProp(propQueue, 0, 284, function() { parentState.solidBlock.add(new SolidBlock(0, 284, 59)); });
-        queueProp(propQueue, 0, 334, function() { parentState.solidBlock.add(new SolidBlock(0, 334, 59)); });
-        queueProp(propQueue, 0, 384, function() { parentState.solidBlock.add(new SolidBlock(0, 384, 59)); });
-        queueProp(propQueue, 0, 434, function() { parentState.solidBlock.add(new SolidBlock(0, 434, 59)); });
-        queueProp(propQueue, 0, 484, function() { parentState.solidBlock.add(new SolidBlock(0, 484, 59)); });
-        queueProp(propQueue, 0, 534, function() { parentState.solidBlock.add(new SolidBlock(0, 534, 59)); });
-
-        queueProp(propQueue, 1250, -16, function() { parentState.solidBlock.add(new SolidBlock(1250, -16, 60)); });
-        queueProp(propQueue, 1250, 34, function() { parentState.solidBlock.add(new SolidBlock(1250, 34, 60)); });
-        queueProp(propQueue, 1250, 84, function() { parentState.solidBlock.add(new SolidBlock(1250, 84, 60)); });
-        queueProp(propQueue, 1250, 134, function() { parentState.solidBlock.add(new SolidBlock(1250, 134, 60)); });
-        queueProp(propQueue, 1250, 184, function() { parentState.solidBlock.add(new SolidBlock(1250, 184, 60)); });
-        queueProp(propQueue, 1250, 234, function() { parentState.solidBlock.add(new SolidBlock(1250, 234, 60)); });
-        queueProp(propQueue, 1250, 284, function() { parentState.solidBlock.add(new SolidBlock(1250, 284, 60)); });
-        queueProp(propQueue, 1250, 334, function() { parentState.solidBlock.add(new SolidBlock(1250, 334, 60)); });
-        queueProp(propQueue, 1250, 384, function() { parentState.solidBlock.add(new SolidBlock(1250, 384, 60)); });
-        queueProp(propQueue, 1250, 434, function() { parentState.solidBlock.add(new SolidBlock(1250, 434, 60)); });
-        queueProp(propQueue, 1250, 484, function() { parentState.solidBlock.add(new SolidBlock(1250, 484, 60)); });
-        queueProp(propQueue, 1250, 534, function() { parentState.solidBlock.add(new SolidBlock(1250, 534, 60)); });
-
-        queueProp(propQueue, 50, -16, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, -16, 1, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 34, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 34, 1, "disabled", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 84, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 84, 1, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 134, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 134, 1, "disabled", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 184, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 184, 1, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 234, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 234, 1, "disabled", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 284, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 284, 1, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 334, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 334, 1, "disabled", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 384, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 384, 1, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 434, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 434, 1, "disabled", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 484, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 484, 1, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 50, 534, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(50, 534, 1, "disabled", 25, true, 0.5)); });
-
-        queueProp(propQueue, 1200, -16, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, -16, 3, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 34, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 34, 3, "disabled", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 84, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 84, 3, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 134, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 134, 3, "disabled", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 184, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 184, 3, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 234, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 234, 3, "disabled", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 284, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 284, 3, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 334, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 334, 3, "disabled", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 384, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 384, 3, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 434, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 434, 3, "disabled", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 484, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 484, 3, "active", 25, true, 0.5)); });
-        queueProp(propQueue, 1200, 534, function() { parentState.dangerObjects.add(new leveldata.hazards.SwitchSpike(1200, 534, 3, "disabled", 25, true, 0.5)); });
-
-        runPropQueue(propQueue, 3, function()
+        new FlxTimer().start(0.75, function(t:FlxTimer)
         {
             startCutscene();
         });
+        
+    
     }
-
+    
     public function createPropsUlt()
     {
 
@@ -646,6 +523,12 @@ class Jevil extends FlxSprite
 
             new FlxTimer().start(1.0, function(_)
             {
+                if (parentState.circusBG.rotationSpeed == 0) parentState.circusBG.rotationSpeed = 80;
+
+                if (parentState.bg != null)
+                {
+                    FlxTween.tween(parentState.bg, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
+                }
                 state = "phase1";
                 isVulnerable = false;
                 if (!battleMusicStarted)
@@ -808,6 +691,7 @@ class Jevil extends FlxSprite
         {
             new FlxTimer().start(i * interval, function(_)
             {
+                if (parentState.player == null && !parentState.player.exists && !parentState.player.alive) return;
                 FlxG.sound.play(AssetPaths.playershoot__ogg, 1, false);
                 var angle = flixel.math.FlxAngle.angleBetween(this, parentState.player, true);
                 angle += FlxG.random.float(-15, 15);
@@ -889,6 +773,7 @@ class Jevil extends FlxSprite
     
     function attackSpades()
     {
+        if (parentState.player == null && !parentState.player.exists && !parentState.player.alive) return;
         var randomY:Float = FlxG.random.float(250, 500);
         var goLeft:Bool = false;
         
@@ -927,6 +812,7 @@ class Jevil extends FlxSprite
         particlesJevil();
 
         FlxTween.globalManager.cancelTweensOf(this);
+        
         FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.beep__ogg, 0.5, false);
         

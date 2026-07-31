@@ -192,6 +192,7 @@ class ObjectLoader
                             light.x -= light.width / 2;
                             light.y -= light.height / 2;
                             state.lightsGroup.add(light);
+
                         case "slab":
                             var tileset = tiledData.getGidOwner(obj.gid);
                             var localID:Int = obj.gid - tileset.firstGID;
@@ -204,6 +205,12 @@ class ObjectLoader
                             var solid = new SolidBlock(spawnX, spawnY, localID);
                             state.solidBlock.add(solid);
 
+                        case "invisBlock":
+                            var tileset = tiledData.getGidOwner(obj.gid);
+                            var localID:Int = obj.gid - tileset.firstGID;
+                            var invBlock = new InvisibleBlock(spawnX, spawnY, localID);
+                            state.invisBlock.add(invBlock);
+                            
                         case "image":
                             var imageName:String = "";
                             var opacity:Float = 1;

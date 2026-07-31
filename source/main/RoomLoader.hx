@@ -107,6 +107,7 @@ class RoomLoader
 		state.lightsGroup.clear();
 		state.fallingBlock.clear();
 		state.solidBlock.clear();
+		state.invisBlock.clear();
 		state.slabs.clear();
 		state.popups.clear();
 		state.saveParticlesGroup.clear();
@@ -196,15 +197,18 @@ class RoomLoader
 			}
 		}
 
+
 		state.add(state.roomImages);
 		state.add(state.player);
 
-		/**Remote player logic**/
-		for (rPlayer in state.remotePlayers) {
-			if (rPlayer != null) {
+		for (rPlayer in state.remotePlayers)
+		{
+			if (rPlayer != null)
+			{
 				state.remove(rPlayer);
 				state.add(rPlayer);
-				if (rPlayer.usernameText != null) {
+				if (rPlayer.usernameText != null)
+				{
 					state.remove(rPlayer.usernameText);
 					state.add(rPlayer.usernameText);
 				}
@@ -220,6 +224,7 @@ class RoomLoader
 		state.add(state.warpsGroup);
 		state.add(state.platforms);
 		state.add(state.solidBlock);
+		state.add(state.invisBlock);
 		state.add(state.fallingBlock);
 		state.add(state.flipGroup);
 		state.add(state.portalGroup);

@@ -78,6 +78,11 @@ class BackgroundManager
             else state.bg.scrollFactor.set(0, 0);
             state.bg.active = false;
 
+            if (state.currentRoomName != null && StringTools.startsWith(state.currentRoomName, "boss-jevil"))
+            {
+                state.bg.alpha = 0;
+            }
+
             state.currentBGName = newBG;
             state.insert(0, state.bg);
         }
@@ -186,8 +191,6 @@ class BackgroundManager
     {
         var layer = tiledData.getLayer("mapEffect");
         var boost = getScrollBoost(tiledData);
-        var circusBG = new CircusBackground();
-        var circusDoubleBG = new CircusBackground();
 
         if (layer != null && layer.properties.contains("effectType"))
         {
@@ -231,23 +234,22 @@ class BackgroundManager
                     state.backEffectObj.alpha = 0.5;
                 case "circus":
                     
-                    circusBG.innerCenterHeight = -200;
-                    circusBG.canvas.scrollFactor.set(0, 0);
-                    state.insert(1, circusBG);
+                    if (state.circusBG == null)
+                    {
+                        state.circusBG = new CircusBackground();
+                        state.circusBG.canvas.scrollFactor.set(0, 0);
+                    }
 
-                    circusDoubleBG.centerHeight = -circusBG.centerHeight;
-                    circusDoubleBG.innerCenterHeight = -circusBG.innerCenterHeight + 65;
-                    circusDoubleBG.floorY = -circusBG.floorY - 200;
-                    circusDoubleBG.canvas.scrollFactor.set(0, 0);
-                    state.insert(1, circusDoubleBG);
+                    state.insert(1, state.circusBG);
 
-                    state.backEffectObj = null;
                     state.currentBackEffectName = effect;
                     state.lastBackScrollBoost = boost;
 
                 case "none":
-                    circusBG.destroy();
-                    circusDoubleBG.destroy();
+                    state.circusBG.destroy();
+
+                case null:
+                    state.circusBG.destroy();
 
             }
 

@@ -1,5 +1,6 @@
 package main.bosses.ch1;
 
+import main.bosses.ch1.ReznorAttacks.ReznorFireball;
 import main.bosses.ch1.ReznorAttacks.ReznorFlame;
 import flixel.FlxObject;
 import flixel.effects.FlxFlicker;
@@ -41,7 +42,7 @@ class Reznor extends FlxSprite
         spinSprite.x = x - (spinSprite.width / 2);
         spinSprite.y = y - (spinSprite.height / 2);
 
-        parentState.add(spinSprite);
+        parentState.insert(1, spinSprite);
 
         var platformCoords =
         [
@@ -216,7 +217,13 @@ class Reznor extends FlxSprite
 
     public function startAttacking():Void
     {
-        scheduleNextAttack();
+        for (minion in minions)
+        {
+            if (minion != null)
+            {
+                minion.startIndividualAttackLoop();
+            }
+        }
     }
 
     function scheduleNextAttack():Void
@@ -236,11 +243,12 @@ class Reznor extends FlxSprite
             {
                 if (minion.alive && minion.exists)
                 {
-                    if (FlxG.random.bool(20))
+                    if (FlxG.random.bool(50))
                     {
                         var attacks =
                         [
-                            "attackFlames"
+                            "attackFireball",
+                            "attackFireball"
                         ];
 
                         var chosenAttack = FlxG.random.getObject(attacks);
@@ -275,6 +283,19 @@ class Reznor extends FlxSprite
             parentState.player.active = false;
             parentState.player.velocity.y = 0;
             parentState.player.velocity.x = 0;
+
+            if (parentState.dangerObjects != null)
+            {
+            parentState.dangerObjects.forEach(function(obj:flixel.FlxBasic)
+            {
+                if (obj != null)
+                {
+                    obj.destroy();
+                }
+            });
+            
+            
+        }
         } 
         else if (aliveCount <= 2 && status == "phase1") 
         {
@@ -397,6 +418,7 @@ class ReznorMinion extends FlxSprite
 
     var centerAnchor:Reznor;
     var parentState:ChapterState;
+    var minionAttackTimer:FlxTimer; // Track individual timer
 
     public function new(centerAnchor:Reznor, plat:FlxSprite, stateRef:ChapterState)
     {
@@ -430,6 +452,9 @@ class ReznorMinion extends FlxSprite
 
         if (!this.alive && this.y >= 800)
         {
+            // Cancel this specific minion's attack timer when it dies
+            if (minionAttackTimer != null) minionAttackTimer.cancel();
+
             FlxG.camera.shake(0.02, 0.01);
             FlxG.sound.play(AssetPaths.jevil_explosion__ogg, 0.5, false);
 
@@ -459,10 +484,45 @@ class ReznorMinion extends FlxSprite
         }
     }
 
-    
+    public function startIndividualAttackLoop():Void
+    {
+        if (centerAnchor.status == "dead" || centerAnchor.status == "ending" || !alive) return;
+
+        var randomDelay = FlxG.random.float(0.5, 1.25);
+
+        minionAttackTimer = new FlxTimer().start(randomDelay, function(tmr:FlxTimer)
+        {
+            if (centerAnchor.status == "dead" || centerAnchor.status == "ending" || !alive) 
+            {
+                return;
+            }
+
+            if (FlxG.random.bool(20))
+            {
+                var attacks = ["attackFlames", "attackFireball"];
+                var chosenAttack = FlxG.random.getObject(attacks);
+                
+                switch (chosenAttack)
+                {
+                    case "attackFlames": attackFlames();
+                    case "attackFireball": attackFireball();
+
+                    default: attackFlames();
+                }
+            }
+
+            startIndividualAttackLoop();
+        });
+    }
+
     public function attackFlames():Void
     {
         if (!alive) return;
+
+        if (parentState.player != null && parentState.player.alive)
+        {
+            this.flipX = (parentState.player.x > this.x + (this.width / 2));
+        }
 
         animation.play("attacking");
         FlxG.sound.play(AssetPaths.beep__ogg, 0.6, false);
@@ -472,7 +532,8 @@ class ReznorMinion extends FlxSprite
             if (alive) animation.play("idle");
         });
 
-        var mouthX = this.x + (this.width / 2) - 10;
+        var mouthOffsetX = this.flipX ? 58 : 38;
+        var mouthX = this.x + mouthOffsetX;
         var mouthY = this.y + 45; 
 
         var particles = new flixel.effects.particles.FlxEmitter(mouthX, mouthY);
@@ -497,6 +558,49 @@ class ReznorMinion extends FlxSprite
         }
     }
 
+    public function attackFireball():Void
+    {
+        if (!alive) return;
+
+        if (parentState.player != null && parentState.player.alive)
+        {
+            this.flipX = (parentState.player.x > this.x + (this.width / 2));
+        }
+
+        animation.play("attacking");
+        FlxG.sound.play(AssetPaths.reznor_fireball__ogg, 0.65, false);
+
+        new FlxTimer().start(0.5, function(_) 
+        {
+            if (alive) animation.play("idle");
+        });
+
+        var mouthOffsetX = this.flipX ? 58 : 38;
+        var mouthX = this.x + mouthOffsetX;
+        var mouthY = this.y + 45; 
+
+        if (parentState.player != null && parentState.player.alive)
+        {
+            var targetX = parentState.player.x + (parentState.player.width / 2);
+            var targetY = parentState.player.y + (parentState.player.height / 2);
+
+            for (i in 0...3)
+            {
+                new FlxTimer().start(i * 0.15, function(_)
+                {
+                    if (!alive || parentState.player == null || !parentState.player.alive) return;
+                    
+                    var randomOffsetX = FlxG.random.float(-50, 50);
+                    var randomOffsetY = FlxG.random.float(-50, 50);
+
+                    var fireball = new ReznorFireball(mouthX, mouthY, targetX + randomOffsetX, targetY + randomOffsetY, parentState);
+                    parentState.dangerObjects.add(fireball);
+                    
+                    FlxG.sound.play(AssetPaths.beep__ogg, 0.4, false);
+                });
+            }
+        }
+    }
     public function takeDamage(damage:Int)
     {
         if (!alive || !canBeHit) return;
@@ -510,6 +614,8 @@ class ReznorMinion extends FlxSprite
         {
             this.alive = false;
             this.flipY = true;
+
+            if (minionAttackTimer != null) minionAttackTimer.cancel();
 
             this.velocity.y = 650; 
 
@@ -527,6 +633,11 @@ class ReznorMinion extends FlxSprite
 
     override public function destroy():Void
     {
+        if (minionAttackTimer != null)
+        {
+            minionAttackTimer.cancel();
+            minionAttackTimer.destroy();
+        }
         platform = null; 
         super.destroy();
     }

@@ -21,15 +21,29 @@ class CircusBackground extends FlxGroup
     
     public var focalLength:Float = 500;
     public var rotationAngle:Float = 0;
-    public var rotationSpeed:Float = 80;
+    public var rotationSpeed:Float = 0;
+    
     public var floorY:Float = 50;
+    public var ceilingY:Float = -375;
+    
     public var distanceZ:Float = 0;
-    public var squareSize:Float = 500;
+    public var squareSize:Float = 400;
     public var centerHeight:Float = 100;
     public var numSides:Int = 8;
+    
     public var innerSquareSize:Float = 100;
-    public var innerCenterHeight:Float = -200;
+    public var innerCenterHeight:Float = -170; // Floor inner apex height
+    public var ceilingInnerCenterHeight:Float = -400; // Ceiling inner apex height
+    public var meetInMiddle:Bool = false; 
+    
     public var numSidesInner:Int = 8;
+    
+    // --- PERSPECTIVE CONTROLS ---
+    public var floorPitchAngle:Float = 15;    // Pitch for floor cone (tilted down)
+    public var ceilingPitchAngle:Float = 45;  // Pitch for ceiling cone (tilted up)
+    
+    // --- SHIFT CEILING INNER TRIANGLE DOWNWARD ---
+    public var ceilingInnerOffsetY:Float = 55; 
 
     public var palette:Array<Int>;
     public var innerPalette:Array<Int>;
@@ -64,86 +78,125 @@ class CircusBackground extends FlxGroup
         rotationAngle += rotationSpeed * elapsed;
         if (rotationAngle >= 360) rotationAngle -= 360;
 
-        var vertices = [[0.0, centerHeight, 0.0]];
+        // ==========================================
+        // 1. CALCULATE APEX HEIGHTS
+        // ==========================================
+        var t = innerSquareSize / squareSize;
+        var innerBaseHeight = centerHeight * (1 - t);
+        
+        var floorApexY = innerCenterHeight;
+        var ceilingApexY = ceilingInnerCenterHeight;
+
+        if (meetInMiddle)
+        {
+            var midPointY = (floorY + ceilingY) / 2.0;
+            floorApexY = (midPointY - floorY) - innerBaseHeight;
+            ceilingApexY = (ceilingY - midPointY) - innerBaseHeight;
+        }
+
+        // ==========================================
+        // 2. BUILD VERTICES FOR FLOOR & CEILING
+        // ==========================================
+        var verticesFloor = new Array<Array<Float>>();
+        var verticesCeiling = new Array<Array<Float>>();
+
+        var outerApex = verticesFloor.length;
+        verticesFloor.push([0.0, centerHeight, 0.0]);
+        
         for (i in 0...numSides)
         {
             var angle = (i * Math.PI * 2) / numSides;
-            var vx = Math.cos(angle) * squareSize;
-            var vz = Math.sin(angle) * squareSize;
-            vertices.push([vx, 0.0, vz]);
+            verticesFloor.push([Math.cos(angle) * squareSize, 0.0, Math.sin(angle) * squareSize]);
         }
 
-        // The outer floor's own apex is at centerHeight and its rim is at 0,
-        // so the floor is itself a shallow cone - its surface height varies
-        // by radius. Find that local height at the inner ring's radius so
-        // the small shape's base sits flush on it instead of floating.
-        var innerBaseHeight = centerHeight * (1.0 - innerSquareSize / squareSize);
-
-        // Inner fan gets its OWN apex (separate from vertex 0), offset from
-        // that local base height by innerCenterHeight - so it pokes up/down
-        // relative to the surface it's actually sitting on, staying grounded
-        // instead of floating disconnected above/below it.
-        var innerApexIndex = numSides + 1;
-        vertices.push([0.0, innerBaseHeight + innerCenterHeight, 0.0]);
-
-        var innerStartIndex = innerApexIndex + 1;
+        var innerApex = verticesFloor.length;
+        verticesFloor.push([0.0, innerBaseHeight + floorApexY, 0.0]);
+        
         for (i in 0...numSidesInner)
         {
             var angle = (i * Math.PI * 2) / numSidesInner;
-            var vx = Math.cos(angle) * innerSquareSize;
-            var vz = Math.sin(angle) * innerSquareSize;
-            vertices.push([vx, innerBaseHeight, vz]);
+            verticesFloor.push([Math.cos(angle) * innerSquareSize, innerBaseHeight, Math.sin(angle) * innerSquareSize]);
         }
 
-        var projX = new Array<Int>();
-        var projY = new Array<Int>();
-        var worldZ = new Array<Float>();
+        verticesCeiling.push([0.0, -centerHeight, 0.0]);
+        for (i in 0...numSides)
+        {
+            var angle = (i * Math.PI * 2) / numSides;
+            verticesCeiling.push([Math.cos(angle) * squareSize, 0.0, Math.sin(angle) * squareSize]);
+        }
+        verticesCeiling.push([0.0, -(innerBaseHeight + ceilingApexY), 0.0]);
+        for (i in 0...numSidesInner)
+        {
+            var angle = (i * Math.PI * 2) / numSidesInner;
+            verticesCeiling.push([Math.cos(angle) * innerSquareSize, -innerBaseHeight, Math.sin(angle) * innerSquareSize]);
+        }
 
         var rad = rotationAngle * Math.PI / 180;
-        var cos = Math.cos(rad);
-        var sin = Math.sin(rad);
+        var cosY = Math.cos(rad);
+        var sinY = Math.sin(rad);
 
-        for (v in vertices)
+        // ==========================================
+        // 3. PROJECT 3D TO SCREEN SPACE
+        // ==========================================
+        var projX_floor = new Array<Int>();
+        var projY_floor = new Array<Int>();
+        var worldZ_floor = new Array<Float>();
+
+        var floorPitchRad = floorPitchAngle * Math.PI / 180;
+        var cosX_f = Math.cos(floorPitchRad);
+        var sinX_f = Math.sin(floorPitchRad);
+
+        for (v in verticesFloor)
         {
-            var rx = v[0] * cos - v[2] * sin;
-            var rz = v[0] * sin + v[2] * cos;
+            var rx = v[0] * cosY - v[2] * sinY;
+            var rz = v[0] * sinY + v[2] * cosY;
             var ry = v[1];
 
-            var wx = rx;
-            var wy = ry + floorY;
-            var wz = rz + distanceZ;
+            var finalY = ry * cosX_f - rz * sinX_f;
+            var finalZ = ry * sinX_f + rz * cosX_f;
 
-            // Safety clamp: as the ring rotates, wz can get arbitrarily
-            // close to -focalLength (here squareSize == focalLength, so it
-            // actually reaches it). At that point focalLength + wz -> 0 and
-            // "perspective" spikes toward infinity for a frame, throwing
-            // that vertex way off screen - that's the flicker. Clamp the
-            // divisor so it never gets closer than 1 unit to zero.
-            var safeWz = wz;
-            var minWz = -focalLength + 1;
-            if (safeWz < minWz) safeWz = minWz;
-
+            var wz = finalZ + distanceZ;
+            var safeWz = (wz < -focalLength + 1) ? -focalLength + 1 : wz;
             var perspective = focalLength / (focalLength + safeWz);
-            var sx = Std.int(FlxG.width / 2 + wx * perspective);
-            var sy = Std.int(FlxG.height / 2 + wy * perspective);
 
-            projX.push(sx);
-            projY.push(sy);
-            worldZ.push(wz);
+            projX_floor.push(Std.int(FlxG.width / 2 + rx * perspective));
+            projY_floor.push(Std.int(FlxG.height / 2 + (finalY + floorY) * perspective));
+            worldZ_floor.push(wz);
         }
 
-        // 2. DYNAMICALLY GENERATE BLUEPRINT FACES
-        // Outer and inner fans are kept as two SEPARATE queues on purpose.
-        // Both live on the same flat floor plane, so the inner fan's disc
-        // sits inside the same screen-space area the outer fan already
-        // covers near the apex. If we depth-sorted them together, a far
-        // outer triangle could occasionally land in the draw order after
-        // a near inner triangle and poke over it. Instead we fully sort +
-        // draw the outer floor first, then fully sort + draw the smaller
-        // inner shape on top - so it's always cleanly centered above the
-        // floor with zero chance of being covered.
-        var outerQueue = new Array<RenderTriangle>();
-        var innerQueue = new Array<RenderTriangle>();
+        var projX_ceiling = new Array<Int>();
+        var projY_ceiling = new Array<Int>();
+        var worldZ_ceiling = new Array<Float>();
+
+        var ceilingPitchRad = ceilingPitchAngle * Math.PI / 180;
+        var cosX_c = Math.cos(ceilingPitchRad);
+        var sinX_c = Math.sin(ceilingPitchRad);
+
+        for (v in verticesCeiling)
+        {
+            var rx = v[0] * cosY - v[2] * sinY;
+            var rz = v[0] * sinY + v[2] * cosY;
+            var ry = v[1];
+
+            var finalY = ry * cosX_c - rz * sinX_c;
+            var finalZ = ry * sinX_c + rz * cosX_c;
+
+            var wz = finalZ + distanceZ;
+            var safeWz = (wz < -focalLength + 1) ? -focalLength + 1 : wz;
+            var perspective = focalLength / (focalLength + safeWz);
+
+            projX_ceiling.push(Std.int(FlxG.width / 2 + rx * perspective));
+            projY_ceiling.push(Std.int(FlxG.height / 2 + (finalY + ceilingY) * perspective));
+            worldZ_ceiling.push(wz);
+        }
+
+        // ==========================================
+        // 4. FOUR SEPARATE QUEUES FOR CORRECT LAYERING
+        // ==========================================
+        var floorOuterQueue = new Array<RenderTriangle>();
+        var floorInnerQueue = new Array<RenderTriangle>();
+        var ceilingOuterQueue = new Array<RenderTriangle>();
+        var ceilingInnerQueue = new Array<RenderTriangle>();
 
         var sortByDepth = function(a:RenderTriangle, b:RenderTriangle)
         {
@@ -152,53 +205,91 @@ class CircusBackground extends FlxGroup
             return 0;
         };
 
-        // Outer floor fan
+        // Populate Outer Queues
         for (i in 0...numSides)
         {
             var i1 = i + 1;
             var i2 = ((i + 1) % numSides) + 1;
             var i3 = 0;
+            
+            var floorColor = palette[i % palette.length];
+            var ceilingColor = palette[(i + 1) % palette.length]; // Swapped colors for ceiling
 
-            var color = palette[i % palette.length];
-            var avgDepth = (worldZ[i1] + worldZ[i2] + worldZ[i3]) / 3.0;
+            floorOuterQueue.push({
+                x1: projX_floor[i1], y1: projY_floor[i1],
+                x2: projX_floor[i2], y2: projY_floor[i2],
+                x3: projX_floor[i3], y3: projY_floor[i3],
+                color: floorColor,
+                avgZ: (worldZ_floor[i1] + worldZ_floor[i2] + worldZ_floor[i3]) / 3.0
+            });
 
-            outerQueue.push({
-                x1: projX[i1], y1: projY[i1],
-                x2: projX[i2], y2: projY[i2],
-                x3: projX[i3], y3: projY[i3],
-                color: color,
-                avgZ: avgDepth
+            ceilingOuterQueue.push({
+                x1: projX_ceiling[i1], y1: projY_ceiling[i1],
+                x2: projX_ceiling[i2], y2: projY_ceiling[i2],
+                x3: projX_ceiling[i3], y3: projY_ceiling[i3],
+                color: ceilingColor,
+                avgZ: (worldZ_ceiling[i1] + worldZ_ceiling[i2] + worldZ_ceiling[i3]) / 3.0
             });
         }
 
-        // Inner, smaller fan - its own (raised/lowered) apex, but centered
-        // on the same x/z origin as the outer floor's apex.
+        // Populate Inner Queues
+        var innerStartIndex = innerApex + 1;
         for (i in 0...numSidesInner)
         {
             var i1 = innerStartIndex + i;
             var i2 = innerStartIndex + ((i + 1) % numSidesInner);
-            var i3 = innerApexIndex;
+            var i3 = innerApex;
+            
+            var floorInnerColor = innerPalette[i % innerPalette.length];
+            var ceilingInnerColor = innerPalette[(i + 1) % innerPalette.length]; // Swapped colors for inner ceiling
 
-            var color = innerPalette[i % innerPalette.length];
-            var avgDepth = (worldZ[i1] + worldZ[i2] + worldZ[i3]) / 3.0;
+            floorInnerQueue.push({
+                x1: projX_floor[i1], y1: projY_floor[i1],
+                x2: projX_floor[i2], y2: projY_floor[i2],
+                x3: projX_floor[i3], y3: projY_floor[i3],
+                color: floorInnerColor,
+                avgZ: (worldZ_floor[i1] + worldZ_floor[i2] + worldZ_floor[i3]) / 3.0
+            });
 
-            innerQueue.push({
-                x1: projX[i1], y1: projY[i1],
-                x2: projX[i2], y2: projY[i2],
-                x3: projX[i3], y3: projY[i3],
-                color: color,
-                avgZ: avgDepth
+            ceilingInnerQueue.push({
+                x1: projX_ceiling[i1], y1: projY_ceiling[i1] + Std.int(ceilingInnerOffsetY),
+                x2: projX_ceiling[i2], y2: projY_ceiling[i2] + Std.int(ceilingInnerOffsetY),
+                x3: projX_ceiling[i3], y3: projY_ceiling[i3] + Std.int(ceilingInnerOffsetY),
+                color: ceilingInnerColor,
+                avgZ: (worldZ_ceiling[i1] + worldZ_ceiling[i2] + worldZ_ceiling[i3]) / 3.0
             });
         }
 
-        outerQueue.sort(sortByDepth);
-        innerQueue.sort(sortByDepth);
+        // Sort each queue individually by depth
+        floorOuterQueue.sort(sortByDepth);
+        floorInnerQueue.sort(sortByDepth);
+        ceilingOuterQueue.sort(sortByDepth);
+        ceilingInnerQueue.sort(sortByDepth);
 
-        for (t in outerQueue)
+        // ==========================================
+        // 5. RENDER IN THE CORRECT OVERLAP ORDER
+        // ==========================================
+        
+        // 1. Draw Ceiling Inner first (so the platform can cover it)
+        for (t in ceilingInnerQueue)
         {
             drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
         }
-        for (t in innerQueue)
+        
+        // 2. Draw Ceiling Outer platform on top (hides the root of the ceiling inner triangle)
+        for (t in ceilingOuterQueue)
+        {
+            drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
+        }
+        
+        // 3. Draw Floor Outer platform
+        for (t in floorOuterQueue)
+        {
+            drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
+        }
+        
+        // 4. Draw Floor Inner shape on top of the floor platform
+        for (t in floorInnerQueue)
         {
             drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
         }

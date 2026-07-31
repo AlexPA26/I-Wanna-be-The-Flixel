@@ -1,5 +1,6 @@
 package main;
 
+import backgrounds3D.*;
 import flixel.util.FlxTimer;
 import character.KrisDeathState;
 import shaders.*;
@@ -70,7 +71,7 @@ class ChapterState extends FlxState
 	public var isPaused:Bool = false;
 
 	public var bg:FlxSprite;
-
+	public var circusBG:CircusBackground;
 
 	public var rainShader:RainShader;
 	public var sunsetShader:SunsetRayShader;
@@ -140,6 +141,7 @@ class ChapterState extends FlxState
 	public var dangerObjects:FlxGroup;
 	public var slabs:FlxTypedGroup<NormalSlab>;
 	public var solidBlock:FlxTypedGroup<SolidBlock>;
+	public var invisBlock:FlxTypedGroup<InvisibleBlock>;
 
 	public var hud:FlxGroup;
 
@@ -241,6 +243,7 @@ class ChapterState extends FlxState
 		lightsGroup = new FlxTypedGroup<LightTorch>();
 		slabs = new FlxTypedGroup<NormalSlab>();
 		solidBlock = new FlxTypedGroup<SolidBlock>();
+		invisBlock = new FlxTypedGroup<InvisibleBlock>();
 		bullets = new FlxTypedGroup<FlxSprite>();
 
 		hud = new FlxGroup();
@@ -273,7 +276,6 @@ class ChapterState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
-
 		if (isAutoscrolling && cameraTarget != null)
 		{
 			if (autoscrollType == "scrollX")
@@ -362,7 +364,7 @@ class ChapterState extends FlxState
 			sunsetShader.update(elapsed);
 		}
 
-		if (circusShader != null)
+		if (circusShader != null && bg != null)
 		{
 			if (bg != null) bg.shader = circusShader;
 			bg.x = -200;
@@ -387,6 +389,7 @@ class ChapterState extends FlxState
 		FlxG.collide(player, map);
 		FlxG.collide(player, slabs);
 		FlxG.collide(player, solidBlock);
+		FlxG.collide(player, invisBlock);
 
 		FlxG.overlap(player, warpsGroup, (p, w) -> { HandleWarp(cast w); });
 		FlxG.overlap(player, savesGroup, (p, s) -> { SaveLogicSprite(cast s); });
@@ -734,7 +737,7 @@ class ChapterState extends FlxState
 							FlxG.overlap(bullets, minion, function(bullet, m)
 							{
 								var rm:main.bosses.ch1.BossReznor.ReznorMinion = cast m;
-								rm.takeDamage(30);
+								rm.takeDamage(1);
 								bullet.kill();
 							});
 						}
@@ -828,8 +831,14 @@ class ChapterState extends FlxState
 			trace("IDs in memory: " + PlayerData.collectedCoins);
 		}
 
-		if (FlxG.keys.justPressed.F && udpClient != null && player != null && player.alive && teleportCooldownTimer <= 0)
+		if (FlxG.keys.justPressed.F && udpClient != null && player != null && player.alive)
 		{
+			if (teleportCooldownTimer <= 0)
+			{
+				FlxG.sound.play(AssetPaths.error__ogg, 0.65, false);
+				FlxG.camera.shake(0.01, 0.15);
+				return;
+			}
 			var nearestPlayer:main.RemotePlayer = null;
 			var minDistance:Float = 999999;
 			for (rPlayer in remotePlayers)
@@ -853,7 +862,6 @@ class ChapterState extends FlxState
 				player.x = nearestPlayer.x;
 				player.y = nearestPlayer.y;
 
-				// Spawn colorful savepoint-like particles
 				var emitter = new flixel.effects.particles.FlxEmitter(player.x + (player.width / 2), player.y + (player.height / 2), 20);
 				emitter.makeParticles(3, 3, FlxColor.WHITE, 20);
 				emitter.color.set(FlxColor.RED, FlxColor.YELLOW, FlxColor.BLUE, FlxColor.LIME);
