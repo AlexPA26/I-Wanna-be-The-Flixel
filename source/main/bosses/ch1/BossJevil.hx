@@ -33,13 +33,12 @@ class Jevil extends FlxSprite
     public var pirouetteManager:main.bosses.ch1.JevilPirouetteManager;
     public var forceTiredTurn:Bool = false;
     public var isForcingTired:Bool = false;
+    var dialogueBox:main.bosses.ch1.JevilDialogue;
     
     public var blackFade:FlxSprite;
     var whiteFade = new FlxSprite();
     var player:Player;
-    public static var playerSkin:String;
     public var playerHUD:FlxSprite;
-    var originalSkin:String;
     public var craziness:Bool = false;
     var soul:FlxSprite;
     public var flash:FlxSprite;
@@ -73,7 +72,7 @@ class Jevil extends FlxSprite
         this.parentState = stateRef;
         this.ultimateManager = new JevilUltimateState(this);
         this.jailManager = new main.bosses.ch1.JevilJailManager(parentState);
-        this.visible = false;
+        this.visible = true;
 
         frames = FlxAtlasFrames.fromSparrow(AssetPaths.jevil__png, AssetPaths.jevil__xml);
         
@@ -121,34 +120,35 @@ class Jevil extends FlxSprite
         playerHUD.alpha = 0;
         parentState.add(playerHUD);
 
-        playerSkin = PlayerData.currentSkin;
-
-        FlxTween.tween(this, {y: y - 10}, 0.75, {type: PINGPONG, ease: FlxEase.sineInOut});
-
         trailEffect = new main.bosses.ch1.JevilEffect(this, parentState);
         pirouetteManager = new JevilPirouetteManager(this, parentState);
         if (parentState != null) parentState.add(trailEffect);
 
-        // phase01Attacks = [attackScythe];
+        // PlayerData.jevilDialogueRead = false;
+        FlxTween.tween(this, {y: y - 10}, 0.75, {type: PINGPONG, ease: FlxEase.sineInOut});
 
-        phase01Attacks =
-        [
-            attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
-        ];
+        phase01Attacks = [attackBullets];
+        phase02Attacks = [attackBullets];
+        phase03Attacks = [attackBullets];
 
-        phase02Attacks =
-        [
-            attackFan, attackScythe, attackJail, attackBullets, attackCircle, attackHearts, attackScythe,
-            attackBombarding, attackScythe, attackJail, attackBullets, attackCircle
-        ];
+        // phase01Attacks =
+        // [
+        //     attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
+        // ];
+
+        // phase02Attacks =
+        // [
+        //     attackFan, attackScythe, attackJail, attackBullets, attackCircle, attackHearts, attackScythe,
+        //     attackBombarding, attackScythe, attackJail, attackBullets, attackCircle
+        // ];
 
 
-        phase03Attacks =
-        [
-            attackBombarding, attackScythe, attackCube, attackBullets, attackJail, attackHearts,
-            attackBombarding, attackCircle, attackHearts, attackScythe, attackBullets, attackBombarding, attackJail,
-            attackFan, attackCircle, attackBombarding, attackHearts, attackJail
-        ];
+        // phase03Attacks =
+        // [
+        //     attackBombarding, attackScythe, attackCube, attackBullets, attackJail, attackHearts,
+        //     attackBombarding, attackCircle, attackHearts, attackScythe, attackBullets, attackBombarding, attackJail,
+        //     attackFan, attackCircle, attackBombarding, attackHearts, attackJail
+        // ];
 
     }
 
@@ -176,11 +176,23 @@ class Jevil extends FlxSprite
 
         if (state == "startCube" || state == "attackingCube" || state == "returningCube") { parentState.inmortal = true; }
 
+        if (state == "returningCube")
+        {
+            new FlxTimer().start(2, function(_)
+            {
+                parentState.inmortal = false;
+            });
+        }
         if (FlxG.keys.justPressed.U)
         {
             ultimateTriggered = true;
             startUltimateAttack();
             return;
+        }
+
+        if (FlxG.keys.justPressed.Y)
+        {
+            parentState.currentTP += 90;
         }
 
         if (FlxG.keys.justPressed.J)
@@ -197,10 +209,9 @@ class Jevil extends FlxSprite
         if (FlxG.keys.justPressed.R)
         {
             if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
-            PlayerData.currentSkin = playerSkin;
         }
 
-        if (FlxG.keys.justPressed.L) { hp -= 10; }
+        if (FlxG.keys.justPressed.L) { hp -= 35; }
 
         if (FlxG.keys.justPressed.C)
         {
@@ -209,7 +220,7 @@ class Jevil extends FlxSprite
             trace("Current Jevil animation: " + animation.curAnim.name);
             trace("Current Health: " + this.hp);
             trace("Player alive and exists: " + parentState.player.alive + " || " + parentState.player.exists);
-            trace("Current Player Skin: " + PlayerData.currentSkin);
+            trace("Player Y: " + parentState.player.y);
             trace("Player Inmortal?: " + parentState.inmortal);
             trace("Jevil POS: X-" + this.x + " || Y-" + this.y);
             trace("Jevil Direction: " + this.flipX);
@@ -220,6 +231,7 @@ class Jevil extends FlxSprite
         {
             animation.play("danceLowHP");
         }
+
 
         if (shield != null)
         {
@@ -264,7 +276,7 @@ class Jevil extends FlxSprite
 
         if (state == "ultimate_start")
         {            
-            ultimateManager.scytheIntro(parentState);
+            ultimateManager.scytheIntro(parentState, 550, 300);
             state = "ultimate_charging";
             ultimateManager.initBarrage(parentState);
 
@@ -280,7 +292,7 @@ class Jevil extends FlxSprite
 
             new FlxTimer().start(1.5, function(_)
             {
-                FlxTween.tween(parentState.player, {x: 625, y: 605}, 0.5, { });
+                FlxTween.tween(parentState.player, {x: 625, y: 550}, 0.5, { });
                 FlxTween.tween(soul, {alpha: 1}, 0.5);
             });
         }
@@ -337,50 +349,94 @@ class Jevil extends FlxSprite
     public function preCutscene()
     {
         state = "precutscene";
-        
+        parentState.currentBossName = "jevil";
+
         parentState.player.active = false; 
         parentState.player.velocity.set(0, 0);
         parentState.player.acceleration.x = 0;
         parentState.fightingBoss = true;
 
-        this.visible = true;
-        this.animation.play("teleport", true, false);
-        this.scale.set(0.2, 2.5);
+        var cooldown = 0.5;
+        if (PlayerData.jevilDialogueRead) cooldown = 0.15;
 
-        if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
-        FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 1, false);
-
-        var particle = new flixel.effects.particles.FlxEmitter(x + (width / 2), y + (height / 2), 25);
-        particle.makeParticles(4, 4, FlxColor.WHITE, 35);
-        particle.color.set(FlxColor.BLUE, FlxColor.PURPLE, FlxColor.WHITE);
-        particle.launchMode = CIRCLE;
-        particle.speed.set(150, 350);
-        particle.lifespan.set(0.25, 0.5);
-        parentState.add(particle);
-        particle.start(true, 0, 35);
-
-        
-        FlxTween.tween(scale, { x: 2.5, y: 2.5 }, 0.25,
+        new FlxTimer().start(cooldown, function(t:FlxTimer)
         {
-            onComplete: function(_)
+            if (PlayerData.jevilDialogueRead)
             {
-                updateHitbox();
+                FlxTween.cancelTweensOf(this);
+                startCutscene();
             }
-
+            else
+            {
+                initialDialogue();
+            }
         });
-
-        new FlxTimer().start(0.75, function(t:FlxTimer)
-        {
-            startCutscene();
-        });
-        
-    
     }
     
+
+    public function initialDialogue()
+    {
+        new FlxTimer().start(1, function(t:FlxTimer)
+        {
+            FlxG.sound.play(AssetPaths.jevil_laugh01__ogg, 0.85, false);
+
+            dialogueBox = new main.bosses.ch1.JevilDialogue(parentState);
+            parentState.add(dialogueBox);
+
+            var lines:Array<String> =
+            [
+                "* UEE HEE!\n* A NEW VISITOR!\n* NOW I CAN PLAY, PLAY!",
+                "* OH, YOU LOOK WEAK.\n* ARE YOU ALONE?",
+                "* UEE HEE HEE!\n* I WILL NOT HOLD BACK THEN!",
+                "* IT'S GONNA BE FUN!\n* FUN...!!!",
+                "* IF YOU DIE, YOU LOSE!",
+                "* SIMPLE, RIGHT? RIGHT?!\n* UEE HEE!"
+            ];
+
+            dialogueBox.say(lines, function()
+            {
+                if (dialogueBox != null)
+                {
+                    PlayerData.jevilDialogueRead = true;
+                    leveldata.misc.SaveManager.saveGame();
+                    parentState.remove(dialogueBox, true);
+                    dialogueBox.destroy();
+                    dialogueBox = null;
+
+                    var trailEffect = new FlxTrail(this, null, 12, 2, 0.35, 0.03);
+                    var jevilIndex = parentState.members.indexOf(this);
+                    if (jevilIndex != -1) parentState.insert(jevilIndex, trailEffect);
+                    else parentState.add(trailEffect);
+
+                    parentState.add(trailEffect);
+                    
+                    new FlxTimer().start(0.5, function(t:FlxTimer)
+                    {
+                        if (trailEffect != null)
+                        {
+                            parentState.remove(trailEffect, true);
+                            trailEffect.destroy();
+                            trailEffect = null;
+                        }
+                    });
+                    
+                    FlxTween.cancelTweensOf(this);
+                    FlxTween.tween(this, { x: this.x + 50, y: this.y - 120 }, 0.4, { ease: FlxEase.quadOut });
+
+                    new FlxTimer().start(0.5, function(t:FlxTimer)
+                    {
+                        startCutscene();
+                    });
+
+                }
+            });
+        });
+    }
+
     public function startCutscene()
     {
         state = "cutscene";
-        parentState.currentBossName = "jevil";
+        parentState.playerDeathsTrigger = false;
 
         animation.play("laugh");
         FlxG.sound.play(AssetPaths.jevil_laugh01__ogg);
@@ -391,6 +447,7 @@ class Jevil extends FlxSprite
         {
             if (parentState.player != null && parentState.player.exists && parentState.player.alive)
             {
+                if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
                 var scythe = new IntroScythe(parentState.player.x -50, parentState.map.y - 100, parentState, 1200);
                 FlxG.sound.play(AssetPaths.scythe_intro__ogg, 1, false);
                 parentState.dangerObjects.add(scythe);
@@ -415,7 +472,8 @@ class Jevil extends FlxSprite
                     {
                         flash.alpha = 0.35;
                         FlxG.sound.play(AssetPaths.start_fight01__ogg, 0.75, false);
-                        FlxG.sound.playMusic(AssetPaths.jevil_fight__ogg, 0.75, true);
+                        FlxG.sound.playMusic(AssetPaths.jevil_fight__ogg, 0.95, true);
+                        parentState.playerDeathsTrigger = true;
                     }
                 }
                 parentState.initBossHUD(this);
@@ -468,13 +526,15 @@ class Jevil extends FlxSprite
         }
     }   
 
-    public function takeDamage(damageAmount:Int)
+    public function takeDamage(damageAmount:Int, specialDamage:Bool)
     {
-        var dmgTextWidth:Int = 24;
+        var textColor:FlxColor = (damageAmount >= 2) ? FlxColor.YELLOW : FlxColor.WHITE;
+        var dmgTextWidth:Int = 48;
         var dmgTextX:Float = this.x + (this.width + 5 - dmgTextWidth) / 2;
         var dmgTextY:Float = this.y - 22;
-        var dmgText:flixel.text.FlxText = new flixel.text.FlxText(dmgTextX, dmgTextY, dmgTextWidth, "1", 16);
-        dmgText.setFormat("assets/fonts/deltarune.otf", 24, FlxColor.WHITE, "center", flixel.text.FlxText.FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+
+        var dmgText:flixel.text.FlxText = new flixel.text.FlxText(dmgTextX, dmgTextY, dmgTextWidth, Std.string(damageAmount), 16);
+        dmgText.setFormat("assets/fonts/deltarune.otf", 24, textColor, "center", flixel.text.FlxText.FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         if (parentState != null) parentState.add(dmgText);
 
         flixel.tweens.FlxTween.tween(dmgText, { y: dmgTextY - 10 }, 0.18, { ease: flixel.tweens.FlxEase.quadOut, onComplete: function(t)
@@ -492,18 +552,28 @@ class Jevil extends FlxSprite
         });
 
 
+
         if (!isVulnerable || !canBeHit || hp <= 0)
         {
-            return;
+            if (!specialDamage) return;
         }
 
         hp -= damageAmount;
 
-        if (!ultimateTriggered && hp == 50)
+
+
+        if (!ultimateUsed && hp <= 50 && hp > 0)
         {
+            ultimateUsed = true;
             ultimateTriggered = true;
             startUltimateAttack();
             return;
+        }
+
+        if (damageAmount == 2)
+        {
+            flash.alpha = 0.1;
+            FlxG.sound.play(AssetPaths.jevil_confirm__ogg, 0.35, false);
         }
 
         FlxG.sound.play(AssetPaths.jevil_hit__ogg, 1, false);
@@ -522,7 +592,7 @@ class Jevil extends FlxSprite
 
         if (hp <= 0)
         {
-            state = "dead"; 
+           state = "dead"; 
            jevilDeath();
         }
     }
@@ -551,13 +621,14 @@ class Jevil extends FlxSprite
 
         for (i in 0...bulletCount)
         {
+
             new FlxTimer().start(i * interval, function(_)
             {
-                if (!parentState.player.exists && !parentState.player.alive) return;
+                if (parentState.player == null || !parentState.player.exists || !parentState.player.alive) return;
                 FlxG.sound.play(AssetPaths.playershoot__ogg, 1, false);
                 var angle = flixel.math.FlxAngle.angleBetween(this, parentState.player, true);
                 angle += FlxG.random.float(-20, 20);
-                var b = new JevilBullet(x, y, "circle", angle, parentState);
+                var b = new JevilBullet(x, y, "circle", 600, angle, parentState);
                 parentState.dangerObjects.add(b);
             });
         }
@@ -566,15 +637,20 @@ class Jevil extends FlxSprite
 
     function attackFan()
     {
+        if (checkForceTired()) return;
+        if (!parentState.player.exists && !parentState.player.alive) return;
+
         if (fanComboCount == 0)
         {
             targetFanCombos = FlxG.random.int(2, 4);
         }
 
+        if (this.hp <= 60) targetFanCombos = FlxG.random.int(4, 6);
+
         var randomX = FlxG.random.float(250, 1000);
         this.x = randomX;
 
-        if (this.x <= 650)
+        if (this.x <= 590)
         {
             animation.play("teleportReverse", true, false);
         }
@@ -589,7 +665,6 @@ class Jevil extends FlxSprite
             animation.play("dance");
         });
 
-        if (!parentState.player.exists && !parentState.player.alive) return;
         FlxG.sound.play(AssetPaths.jevil_laugh03__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.scythe_explosion__ogg, 0.5, false);
         this.flash.alpha = 0.2;
@@ -635,16 +710,16 @@ class Jevil extends FlxSprite
     
     function attackSpades()
     {
-        var randomY:Float = FlxG.random.float(200, 500);
+        var randomY:Float = FlxG.random.float(200, 400);
         var goLeft:Bool = false;
         
         if (spadeComboCount == 0 && hp >= 90)
         {
-            targetSpadeCombos = FlxG.random.int(3, 6);
+            targetSpadeCombos = FlxG.random.int(4, 6);
         }
         else
         {
-            targetSpadeCombos = FlxG.random.int(4, 8);
+            targetSpadeCombos = FlxG.random.int(6, 12);
         }
         
         if (spadeComboCount == 0)
@@ -670,11 +745,11 @@ class Jevil extends FlxSprite
             lastAttackWasLeft = false;
         }
 
+        if (checkForceTired()) return;
         particlesJevil();
 
         FlxTween.globalManager.cancelTweensOf(this);
         if (!parentState.player.exists && !parentState.player.alive) return;
-        if (checkForceTired()) return;
         FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.beep__ogg, 0.5, false);
         
@@ -691,7 +766,7 @@ class Jevil extends FlxSprite
         {
             var finalAngle = baseAngle + offset + FlxG.random.float(-3, 3);
             
-            var b = new JevilBullet(bulletSpawnX, bulletSpawnY, "spade", finalAngle, parentState);
+            var b = new JevilBullet(bulletSpawnX, bulletSpawnY, "spade", 450, finalAngle, parentState);
             b.scale.set(1, 1);
             b.animation.play("clubIdle");
             b.updateHitbox();
@@ -799,7 +874,7 @@ class Jevil extends FlxSprite
             var spawnInterval:Float = 0.25;
             animation.play("dance");
 
-            new FlxTimer().start(7.0, function(_)
+            new FlxTimer().start(5.5, function(_)
             {
                 animation.play("teleport" , true);
                 FlxG.sound.play(AssetPaths.jevil_random_talk01__ogg, 1, false);
@@ -983,16 +1058,17 @@ class Jevil extends FlxSprite
         animation.play("dance");
         FlxG.sound.play(AssetPaths.jevil_strong_attack03__ogg, 0.75, false);
 
-        var totalBombs:Int = 6;
+        var totalBombs:Int = 8;
         var dropInterval:Float = 0.75;
 
-        if (hp <= 50 && hp >= 25) { totalBombs = 8; dropInterval = 0.6;}
-        else if (hp < 25) { totalBombs = 12; dropInterval = 0.5; }
+        if (hp <= 50 && hp >= 25) { totalBombs = 12; dropInterval = 0.65;}
+        else if (hp < 25) { totalBombs = 14; dropInterval = 0.5; }
 
         var ceilingY:Float = parentState.map.y + 20;
 
         for (i in 0...totalBombs)
         {
+            
             new FlxTimer().start(i * dropInterval, function(t:FlxTimer)
             {
                 if (!parentState.player.alive && !parentState.player.exists) return;
@@ -1136,7 +1212,7 @@ class Jevil extends FlxSprite
                 state = "ultimate_transition";
                 PlayerData.lastMusicTime = FlxG.sound.music.time;
                 FlxTween.cancelTweensOf(this);
-                this.flipX = true;
+                this.flipX = false;
                 main.RoomLoader.loadRoom(parentState, "boss-jevil03");
                 FlxG.sound.music.time = PlayerData.lastMusicTime;
             });
@@ -1165,10 +1241,10 @@ class Jevil extends FlxSprite
             trace("cubeTriggered is true");
         }
         
-        this.flipX = false;
         state = "startCube";
         isVulnerable = false;
         FlxTween.cancelTweensOf(this);
+        this.flipX = false;
 
         parentState.player.active = false;
         parentState.player.velocity.set(0, 0);
@@ -1197,7 +1273,6 @@ class Jevil extends FlxSprite
     
     public function teleport(?_ = null)
     {
-        
         if (ultimateTriggered || state == "ultimate_barrage" || state == "ultimate_cutscene"
             || state == "ultimate_transition" || state == "dead" ) return;
 
@@ -1213,22 +1288,13 @@ class Jevil extends FlxSprite
 
         particlesJevil();
 
-        new FlxTimer().start(0.5, function(_)
+        new FlxTimer().start(0.2, function(_)
         {
-            FlxTween.tween(this.scale, { x: -this.scale.x }, 0.25,
+            flipX = !flipX;
+
+            new FlxTimer().start(0.4, function(_)
             {
-                ease: FlxEase.quadInOut,
-                onComplete: function(_)
-                {
-                    new FlxTimer().start(0.4, function(_)
-                    {
-                        onComplete: function(_)
-                        {
-                            flipX = !flipX;
-                        }
-                    });
-                    
-                }
+                flipX = !flipX;
             });
         });
 
@@ -1237,7 +1303,6 @@ class Jevil extends FlxSprite
             
             if (teleportCount < 4)
             {
-                flipX = !flipX;
                 isVulnerable = false;
                 shield.visible = true;
                 startAttack();
@@ -1245,7 +1310,6 @@ class Jevil extends FlxSprite
             else
             {
                 if (!parentState.player.alive && !parentState.player.exists) return;
-                flipX = !flipX;
                 isVulnerable = true;
                 canBeHit = true;
                 teleportCount = 0;
@@ -1257,18 +1321,24 @@ class Jevil extends FlxSprite
 
                 new FlxTimer().start(0.6, function(_)
                 {
+                    if (state == "dead") return;
+                    if (ultimateTriggered) return;
                     FlxTween.cancelTweensOf(this);
                     FlxTween.tween(this, {y: this.y - 5}, 0.5, {type: PINGPONG, ease: FlxEase.sineInOut});
                 });
 
-                new FlxTimer().start(3.25, function(_)
+                new FlxTimer().start(3, function(_)
                 {
+                    if (state == "dead") return;
+                    if (ultimateTriggered) return;
                     FlxTween.cancelTweensOf(this);
                     FlxTween.tween(this, { x: 590, y: 100 }, 0.5, { ease: FlxEase.quadIn });
                 });
 
-                new FlxTimer().start(4, function(_)
+                new FlxTimer().start(3.5, function(_)
                 {
+                    if (state == "dead") return;
+                    if (ultimateTriggered) return;
                     isVulnerable = false;
                     shield.visible = true;
                     startAttack();
@@ -1302,11 +1372,156 @@ class Jevil extends FlxSprite
         trail.visible = false;
     }
 
+    var deathIdleLoopActive:Bool = false;
+
     function jevilDeath()
     {
+        if (craziness) craziness = false;
         if (parentState.tpBar != null && parentState.tpBar.exists) parentState.tpBar.visible = false;
         if (parentState.tpBarDeco != null && parentState.tpBarDeco.exists) parentState.tpBarDeco.visible = false;
+        if (parentState.bossHpBar != null && parentState.bossHpBar.exists)
+        {
+            parentState.bossHpBar.visible = false;
+            parentState.bossHpBar.destroy();
+        }
 
+        if (parentState.tpText != null && parentState.tpText.visible) parentState.tpText.visible = false;
+        if (parentState.playerDeaths != null && parentState.playerDeaths.visible) parentState.playerDeaths.visible = false;
+
+        if (flash != null) flash.alpha = 0.75;
+
+        parentState.playerDeathsTrigger = true;
+        parentState.player.x = 335;
+        parentState.player.y = 325;
+        parentState.inmortal = true;
+        parentState.player.active = false;
+        parentState.player.velocity.set(0, 0);
+        parentState.player.acceleration.x = 0;
+
+        trailEffect.visible = false;
+
+        if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
+
+        if (parentState.circusBG.rotationSpeed != 0) parentState.circusBG.rotationSpeed = 0;
+        FlxTween.tween(parentState.bg, {alpha: 0}, 0.25, {ease: FlxEase.quadOut});
+        FlxTween.cancelTweensOf(this);
+        this.shield.visible = false;
+        this.shield.destroy();
+        this.alpha = 1;
+        this.visible = true;
+
+        this.animation.play("teleport", true, false);
+        FlxG.sound.play(AssetPaths.jevil_laugh03__ogg, 1, false);
+
+        new FlxTimer().start(3, function(_)
+        {
+            this.animation.play("idle", true, false);
+
+            FlxTween.tween(this, { x: 900, y: 285 }, 1.0,
+            {
+                ease: FlxEase.quadInOut,
+                onComplete: function(_)
+                {
+                    startDeathIdleLoop();
+
+                    new FlxTimer().start(1.5, function(_)
+                    {
+                        startDeathDialogue();
+                    });
+                }
+            });
+        });
+    }
+
+    function startDeathIdleLoop():Void
+    {
+        deathIdleLoopActive = true;
+        FlxTween.tween(this, { y: this.y - 15 }, 0.75, { type: PINGPONG, ease: FlxEase.sineInOut });
+        deathAlphaPulse();
+    }
+
+    function deathAlphaPulse():Void
+    {
+        if (!exists || !deathIdleLoopActive) return;
+
+        FlxTween.tween(this, { alpha: 0 }, 0.65,
+        {
+            onComplete: function(_)
+            {
+                if (!exists || !deathIdleLoopActive) return;
+
+                FlxTween.tween(this, { alpha: 1 }, 0.65,
+                {
+                    onComplete: function(_)
+                    {
+                        new FlxTimer().start(0.75, function(_)
+                        {
+                            deathAlphaPulse();
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    function startDeathDialogue():Void
+    {
+        FlxG.sound.playMusic(AssetPaths.circus__ogg, 1, true);
+        FlxG.sound.music.pitch = 0.8;
+        dialogueBox = new main.bosses.ch1.JevilDialogue(parentState);
+        parentState.add(dialogueBox);
+
+        var lines:Array<String> =
+        [
+            "* HA HA HA.\n* WHAT FUN!!!",
+            "* YOU'RE FAST, STRONG, AGILE,\n* AGILE.",
+            "* BUT THERE ARE YET FASTER, YET\n* STRONGER.",
+            "* YOU REMIND ME OF THEM...\n* ANYWAY.",
+            "* THE POWER OF THE FIRST PIECE\n* IS DRAWING CLOSER.",
+            "* SOON, WITH ITS FULL POWER,\n* AND THANKS TO 'HIM'.",
+            "* THIS WORLD WILL BE COVERED IN\n* TOTAL DARKNESS AND DESPAIR.",
+            "* KID, CAN YOU STOP IT?",
+            "* UEE HEE HEE!",
+            "* EITHER WAY, A SURPRISE\n* WAITS FOR YOU JUST\n* AROUND THE CORNER...!",
+            "* BRAVE KID!\n* CAN YOU ENDURE THIS\n* FINAL CHAOS?!",
+            "* NOTHING CAN SAVE YOU\n* FROM DEATH!!",
+            "* BYE-BYE!!\n* UEE HEE HEE!"
+        ];
+
+        dialogueBox.say(lines, function()
+        {
+            if (dialogueBox != null)
+            {
+                parentState.remove(dialogueBox, true);
+                dialogueBox.destroy();
+                dialogueBox = null;
+            }
+
+            new FlxTimer().start(1, function(_)
+            {
+                if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
+                FlxG.sound.play(AssetPaths.jevil_attack02__ogg, 1.0, false);
+                deathIdleLoopActive = false;
+                FlxTween.cancelTweensOf(this);
+
+                ultimateManager.scytheIntro(parentState, 850, 325);
+
+                FlxTween.tween(this, { alpha: 0 }, 1,
+                {
+                    onComplete: function(_)
+                    {
+                        new FlxTimer().start(2, function(_)
+                        {
+                            startFakeEnding();
+                        });
+                    }
+                });
+            });
+        });
+    }
+
+    function startFakeEnding():Void
+    {
         var jevilEnding = new FlxSprite();
         jevilEnding.frames = FlxAtlasFrames.fromSparrow(AssetPaths.jevil__png, AssetPaths.jevil__xml);
         jevilEnding.animation.addByPrefix("laugh", "jevil_laugh", 12, true);
@@ -1318,155 +1533,119 @@ class Jevil extends FlxSprite
         jevilEnding.visible = false;
         parentState.add(jevilEnding);
 
+        if (parentState.circusBG.rotationSpeed != 100) parentState.circusBG.rotationSpeed = 100;
+        FlxTween.tween(parentState.bg, {alpha: 1}, 0.25, {ease: FlxEase.quadOut});
+
         whiteFade.makeGraphic(FlxG.width + 50, FlxG.height + 50, FlxColor.WHITE, false);
         whiteFade.screenCenter();
         whiteFade.alpha = 0;
         parentState.add(whiteFade);
 
+        this.visible = false;
+        this.alpha = 0;
 
-        parentState.bossHpBar.visible = false;
-        parentState.bossHpBar.destroy();
-        parentState.inmortal = true;
-        parentState.player.active = false; 
-        parentState.player.velocity.set(0, 0);
-        parentState.player.acceleration.x = 0;
-
+        jevilEnding.x = 250;
+        jevilEnding.y = 300;
+        jevilEnding.angle = -5;
+        jevilEnding.visible = true;
+        FlxTween.tween(jevilEnding, {y: jevilEnding.y - 20}, 0.8, {type: PINGPONG, ease: FlxEase.sineInOut});
         if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
+        FlxG.sound.play(AssetPaths.start_fight02__ogg, 1, false);
+        FlxG.sound.play(AssetPaths.jevil_strong_attack01__ogg, 1, false);
+        FlxG.sound.play(AssetPaths.jevil_final_strike__ogg, 1, false);
+        FlxG.sound.play(AssetPaths.jevil_cutscene__ogg, 1, false);
+        FlxG.camera.shake(0.01, 6);
 
-        FlxTween.cancelTweensOf(this);
-        this.shield.visible = false;
-        this.shield.destroy();
-        this.alpha = 1;
-        this.visible = true;
+        var particle = new flixel.effects.particles.FlxEmitter(jevilEnding.x + (width / 2), jevilEnding.y + (height / 2), 25);
+        particle.makeParticles(10, 10, FlxColor.WHITE, 150);
+        particle.color.set(FlxColor.RED, FlxColor.GREEN, FlxColor.YELLOW, FlxColor.BLUE);
+        particle.launchMode = CIRCLE;
+        particle.speed.set(150, 350);
+        particle.lifespan.set(2, 3);
+        parentState.add(particle);
+        particle.start(true, 0, 150);
 
-        this.x = 590;
-        this.y = 150;
+        flash.alpha = 0.75;
+        whiteFade.alpha = 0.25;
 
-        this.animation.play("teleport", true, false);
-        FlxG.sound.play(AssetPaths.jevil_laugh03__ogg, 1, false);
-
-        new FlxTimer().start(2, function(_)
+        var scytheTimer = new FlxTimer().start(0.08, function(timer:FlxTimer)
         {
-            FlxG.sound.play(AssetPaths.jevil_laugh04__ogg, 1, false);
-            this.animation.play("teleportReverse", true, false);
+            if (parentState == null || !jevilEnding.visible)
+            {
+                timer.cancel();
+                return;
+            }
+
+            var fakeScythe = new FlxSprite(FlxG.random.float(-50, FlxG.width), -200);
+            fakeScythe.loadGraphic(AssetPaths.jevil_scythe__png, false);
+            
+            var randomScale = FlxG.random.float(1.5, 5.0);
+            fakeScythe.scale.set(randomScale, randomScale);
+            fakeScythe.updateHitbox();
+            
+            fakeScythe.velocity.y = FlxG.random.float(600, 1400);
+            fakeScythe.angularVelocity = FlxG.random.float(400, 1000);
+
+            var fadeIdx = parentState.members.indexOf(whiteFade);
+            if (fadeIdx != -1) parentState.insert(fadeIdx, fakeScythe);
+            else parentState.add(fakeScythe);
+
+            new FlxTimer().start(2.0, function(_)
+            {
+                fakeScythe.destroy();
+            });
+        }, 75);
+        
+        FlxTween.tween(whiteFade, {alpha: 1}, 6,
+        {
+            onComplete: function(_)
+            {
+                jevilEnding.visible = false;
+                new FlxTimer().start(2.5, function(_)
+                {
+
+                    parentState.player.active = true;
+                    RoomLoader.loadRoom(parentState, "boss-jevil05");
+                    FlxG.camera.stopShake;
+                    jevilEnding.destroy();
+                    parentState.fightingBoss = false;
+                    this.destroy();
+
+                    var currentSeconds = PlayerData.totalSeconds;
+                    PlayerData.spawnX = parentState.player.x;
+                    PlayerData.spawnY = parentState.player.y + 60;
+                    PlayerData.currentRoom = "boss-jevil05";
+                    leveldata.misc.SaveManager.saveGame();
+                    leveldata.misc.SaveManager.loadGame();
+                    PlayerData.totalSeconds = currentSeconds;
+                    whiteFade.destroy();
+                    FlxG.resetState();
+                    
+                    
+                });
+            }
         });
 
-        new FlxTimer().start(4, function(_)
-        {
-            this.animation.play("tired", true, false);
-            FlxG.camera.shake(0.01, 0.15);
-            FlxG.sound.play(AssetPaths.jevil_hit__ogg, 0.5, false);
 
-            FlxTween.tween(this, {alpha: 0}, 1.5);
-        });
+        var explosionAudioTimer = new FlxTimer().start(0.25, function(tmr:FlxTimer)
+        {
+            if (parentState == null || !exists)
+            {
+                tmr.cancel();
+                return;
+            }
+
+            FlxG.sound.play(AssetPaths.scythe_explosion__ogg, 1, false);
+            flash.alpha = 0.15;
+        }, 0);
 
         new FlxTimer().start(6, function(_)
         {
-            this.visible = false;
-            this.alpha = 0;
-            
-            jevilEnding.x = 250;
-            jevilEnding.y = 300;
-            jevilEnding.angle = -5;
-            jevilEnding.visible = true;
-            FlxTween.tween(jevilEnding, {y: jevilEnding.y - 20}, 0.8, {type: PINGPONG, ease: FlxEase.sineInOut});
-            FlxG.sound.play(AssetPaths.start_fight02__ogg, 1, false);
-            FlxG.sound.play(AssetPaths.jevil_strong_attack01__ogg, 1, false);
-            FlxG.sound.play(AssetPaths.jevil_final_strike__ogg, 1, false);
-            FlxG.sound.play(AssetPaths.jevil_cutscene__ogg, 1, false);
-            FlxG.camera.shake(0.01, 6);
-
-            var particle = new flixel.effects.particles.FlxEmitter(jevilEnding.x + (width / 2), jevilEnding.y + (height / 2), 25);
-            particle.makeParticles(10, 10, FlxColor.WHITE, 150);
-            particle.color.set(FlxColor.RED, FlxColor.GREEN, FlxColor.YELLOW, FlxColor.BLUE);
-            particle.launchMode = CIRCLE;
-            particle.speed.set(150, 350);
-            particle.lifespan.set(2, 3);
-            parentState.add(particle);
-            particle.start(true, 0, 150);
-
-            flash.alpha = 0.75;
-            whiteFade.alpha = 0.25;
-
-            var scytheTimer = new FlxTimer().start(0.08, function(timer:FlxTimer)
-            {
-                if (parentState == null || !jevilEnding.visible)
-                {
-                    timer.cancel();
-                    return;
-                }
-
-                var fakeScythe = new FlxSprite(FlxG.random.float(-50, FlxG.width), -200);
-                fakeScythe.loadGraphic(AssetPaths.jevil_scythe__png, false);
-                
-                var randomScale = FlxG.random.float(1.5, 5.0);
-                fakeScythe.scale.set(randomScale, randomScale);
-                fakeScythe.updateHitbox();
-                
-                fakeScythe.velocity.y = FlxG.random.float(600, 1400);
-                fakeScythe.angularVelocity = FlxG.random.float(400, 1000);
-
-                var fadeIdx = parentState.members.indexOf(whiteFade);
-                if (fadeIdx != -1) parentState.insert(fadeIdx, fakeScythe);
-                else parentState.add(fakeScythe);
-
-                new FlxTimer().start(2.0, function(_)
-                {
-                    fakeScythe.destroy();
-                });
-            }, 75);
-            
-            FlxTween.tween(whiteFade, {alpha: 1}, 6,
-            {
-                onComplete: function(_)
-                {
-                    jevilEnding.visible = false;
-                    new FlxTimer().start(2.5, function(_)
-                    {
-
-                        parentState.player.active = true;
-                        RoomLoader.loadRoom(parentState, "boss-jevil05");
-                        FlxG.camera.stopShake;
-                        jevilEnding.destroy();
-                        parentState.fightingBoss = false;
-                        this.destroy();
-
-                        var currentSeconds = PlayerData.totalSeconds;
-                        PlayerData.spawnX = parentState.player.x;
-			            PlayerData.spawnY = parentState.player.y + 60;
-                        PlayerData.currentRoom = "boss-jevil05";
-                        leveldata.misc.SaveManager.saveGame();
-                        leveldata.misc.SaveManager.loadGame();
-                        PlayerData.totalSeconds = currentSeconds;
-                        whiteFade.destroy();
-                        FlxG.resetState();
-                        
-                        
-                    });
-                }
-            });
-
-            var explosionAudioTimer = new FlxTimer().start(0.25, function(tmr:FlxTimer)
-            {
-                if (parentState == null || !exists)
-                {
-                    tmr.cancel();
-                    return;
-                }
-
-                FlxG.sound.play(AssetPaths.scythe_explosion__ogg, 1, false);
-                flash.alpha = 0.15;
-            }, 0);
-
-            new FlxTimer().start(6, function(_)
-            {
-                explosionAudioTimer.cancel();
-
-            });
+            explosionAudioTimer.cancel();
 
         });
 
-        new FlxTimer().start(8, function(_)
+        new FlxTimer().start(2, function(_)
         {
             jevilEnding.flipX = true;
             jevilEnding.animation.play("laugh", true, false);
@@ -1478,8 +1657,6 @@ class Jevil extends FlxSprite
             });
 
         });
-
-
     }
 
     public function particlesJevil()

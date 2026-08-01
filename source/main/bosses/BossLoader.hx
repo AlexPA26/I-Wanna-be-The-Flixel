@@ -26,7 +26,14 @@ class BossLoader
                 trace("BossLoader: Reznor Spawned");
                 
             case "jevil":
-                var jevil = new Jevil(900, 235, state);
+
+                var coordsX = 900;
+                var coordsY = 325;
+
+                if (PlayerData.jevilDialogueRead) coordsX = 950;
+                if (PlayerData.jevilDialogueRead) coordsY = 285;
+
+                var jevil = new Jevil(coordsX, coordsY, state);
                 state.currentBoss = jevil;
                 state.add(jevil);
                 state.add(jevil.shield);

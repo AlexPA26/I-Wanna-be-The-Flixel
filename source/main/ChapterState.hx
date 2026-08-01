@@ -153,6 +153,7 @@ class ChapterState extends FlxState
 	var inmortal:Bool = false;
 	var timeElapsed:FlxText;
 	var currentChapter:FlxText;
+	public var playerDeathsTrigger:Bool = false;
 	var playerDeaths:FlxText;
 	var lastSave:FlxText;
 	var bossHpBar:FlxBar;
@@ -640,7 +641,7 @@ class ChapterState extends FlxState
 			FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
 		}
 
-		if (FlxG.keys.justPressed.R && player.exists && player.alive)
+		if (FlxG.keys.justPressed.R && player.exists && player.alive && player.active)
 		{
 			var currentSeconds = PlayerData.totalSeconds;
 			if (PlayerData.tutorialCompleted == true) PlayerData.totalDeaths++;
@@ -705,13 +706,13 @@ class ChapterState extends FlxState
 			blackFade.alpha = 1;
 		}
 
-		if (PlayerData.currentChapter >= 1 && player.exists && player.alive)
+		if (PlayerData.currentChapter >= 1 && player.exists && player.alive && !playerDeathsTrigger)
 		{
 			playerDeaths.visible = true;
 			playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
 		}
 
-		else if (playerDeaths != null)
+		else if (playerDeaths != null || playerDeathsTrigger)
 		{
 			playerDeaths.visible = false;
 		}
@@ -822,9 +823,11 @@ class ChapterState extends FlxState
                             var dy = bCenterY - jCenterY;
                             var distance = Math.sqrt((dx * dx) + (dy * dy));
                             
-                            if (distance < 75)
+                            if (distance < 50)
                             {
-                                jevilBoss.takeDamage(1);
+								var isCrit = FlxG.random.int(1, 14) == 1;
+								var damage = isCrit ? 2 : 1;
+                                jevilBoss.takeDamage(damage, false);
                                 bullet.kill();
                             }
 						}

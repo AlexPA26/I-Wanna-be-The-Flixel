@@ -36,7 +36,7 @@ class JevilUltimateState
         return t;
     }
 
-    public function scytheIntro(state:ChapterState):Void
+    public function scytheIntro(state:ChapterState, offsetX:Int, offsetY:Int):Void
     {
         parentState = state;
         mkTimer(0, function(t:FlxTimer)
@@ -45,8 +45,8 @@ class JevilUltimateState
             var cutsceneScythe = new FlxSprite();
             cutsceneScythe.loadGraphic(AssetPaths.jevil_scythe__png, false);
             cutsceneScythe.screenCenter();
-            cutsceneScythe.x -= 75;
-            cutsceneScythe.y -= 35;
+            cutsceneScythe.x = offsetX;
+            cutsceneScythe.y = offsetY;
             cutsceneScythe.scale.set(4.5, 0.2);
             cutsceneScythe.updateHitbox();
             parentState.add(cutsceneScythe);
@@ -158,7 +158,7 @@ class JevilUltimateState
             fakeoutScythe.scale.set(25, 25);
             fakeoutScythe.updateHitbox();
             fakeoutScythe.angle = 195;
-            fakeoutScythe.velocity.y = 100;
+            fakeoutScythe.velocity.y = 80;
             fakeoutScythe.x -= 100;
             fakeoutScythe.y -= 1000;
             fakeoutScythe.angularVelocity = 0;
@@ -290,7 +290,6 @@ class JevilUltimateState
             boss.state = "ultimate_return_transition";
             boss.hp -= 1;
             parentState.player.y = 500;
-            PlayerData.currentSkin = Jevil.playerSkin;
             main.RoomLoader.loadRoom(cast FlxG.state, "boss-jevil04");
             if (parentState.bossHpBar.exists) FlxTween.tween(parentState.bossHpBar, {alpha: 1}, 1, { ease: FlxEase.backIn });
             boss.ultimateTriggered = false; 

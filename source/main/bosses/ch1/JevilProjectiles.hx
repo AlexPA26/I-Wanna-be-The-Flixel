@@ -54,7 +54,7 @@ class JevilBullet extends FlxSprite
     public var trail:FlxTrail;
     var stateRef:main.ChapterState;
     
-    public function new(x:Float, y:Float, type:String, ?angleOverride:Float, state:ChapterState)
+    public function new(x:Float, y:Float, type:String, speed:Int, ?angleOverride:Float, state:ChapterState)
     {
         stateRef = state;
 
@@ -75,7 +75,7 @@ class JevilBullet extends FlxSprite
         if (type == "spade") animation.frameIndex = 1;
         else animation.frameIndex = 0;
 
-        var speed:Float = (type == "spade") ? 350 : 400;
+        var bulletSpeed = speed;
 
         if (angleOverride != null)
         {

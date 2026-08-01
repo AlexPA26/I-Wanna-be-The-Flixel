@@ -119,7 +119,7 @@ class JevilPirouetteManager
             }
         }
 
-        if (toggleMenuPressed && actButton.active && state.currentTP >= 0)
+        if (toggleMenuPressed && actButton.active && state.currentTP >= 0 && state.player.alive && state.player.active)
         {
             if (isSpecialState)
             {
@@ -194,7 +194,7 @@ class JevilPirouetteManager
             {
                 if (numberSelection == 1)
                 {
-                    if (state.currentTP >= 20 && !isPirouetting && state.player.alive && state.player.isGrounded && !isSpecialState)
+                    if (state.currentTP >= 20 && !isPirouetting && state.player.alive && state.player.isGrounded && !isSpecialState && state.player.active)
                     {
                         state.currentTP -= 20;
                         if (state.currentTP < 0) state.currentTP = 0;
@@ -623,7 +623,7 @@ class JevilPirouetteManager
 
     function applyDamageAndCheckTired(damage:Int, teleportReduction:Int)
     {
-        jevil.hp -= damage;
+        jevil.takeDamage(damage, true);
 
         if (teleportReduction == 999) 
         {

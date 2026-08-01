@@ -24,6 +24,7 @@ class SaveManager
         save.data.tutorialComplete = PlayerData.tutorialCompleted;
         save.data.vSync = PlayerData.vSync;
         save.data.showFPS = PlayerData.showFPS;
+        save.data.jevilDialogueRead = PlayerData.jevilDialogueRead;
 
         /* Character Unlocks */
         save.data.reachedSewers = PlayerData.reachedSewers;
@@ -49,6 +50,7 @@ class SaveManager
         save.data.antialiasing = PlayerData.antialiasing;
         save.data.vSync = PlayerData.vSync;
         save.data.showFPS = PlayerData.showFPS;
+        save.data.jevilDialogueRead = PlayerData.jevilDialogueRead;
         save.flush();
     }
     public static function loadGame():Bool
@@ -78,6 +80,11 @@ class SaveManager
             if (save.data.antialiasing != null) PlayerData.antialiasing = save.data.antialiasing;
             if (save.data.vSync != null) PlayerData.vSync = save.data.vSync;
             if (save.data.showFPS != null) PlayerData.showFPS = save.data.showFPS;
+
+            /* Boss Specifics */
+
+            if (save.data.jevilDialogueRead != null) PlayerData.jevilDialogueRead = save.data.jevilDialogueRead;
+
 
             /* Character Unlock */
             if (save.data.reachedSewers != null) PlayerData.reachedSewers = save.data.reachedSewers;
@@ -135,6 +142,10 @@ class SaveManager
         PlayerData.collectedCoins = [];
         PlayerData.totalSeconds = 0;
         PlayerData.currentSkin = "thekid";
+        
+        /* Boss Specfic */
+
+        PlayerData.jevilDialogueRead = false;
 
         PlayerData.reachedSewers = false;
         saveGame(); 

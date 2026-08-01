@@ -14,8 +14,8 @@ class PlayerData
     public static var vSync:Bool = false;
     public static var showFPS:Bool = true;
 
-    public static var spawnX:Float = 250; // Default X position
-    public static var spawnY:Float = 450; // Default Y position
+    public static var spawnX:Float = 250;
+    public static var spawnY:Float = 450;
     public static var deathX:Float;
     public static var deathY:Float;
     public static var lastVelX:Float = 0;
@@ -32,6 +32,10 @@ class PlayerData
 
     /* Character Unlocks */
     public static var reachedSewers:Bool = false;
+
+    /* Boss Specifics */
+
+    public static var jevilDialogueRead:Bool = false;
 
 
     public static function isCoinCollected(id:String):Bool

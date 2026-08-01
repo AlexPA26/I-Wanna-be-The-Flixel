@@ -392,7 +392,6 @@ class JevilDirectionalAttack extends FlxBasic
                 ease: FlxEase.quadInOut,
                 onComplete: function(_)
                 {
-                    PlayerData.currentSkin = Jevil.playerSkin;
                     soul.destroy();
                     jevil.playerHUD.visible = false;
                     jevil.playerHUD.destroy();

@@ -60,16 +60,10 @@ class Main extends Sprite
 			addChild(new FPS(10, 10, 0xffffff));
 		#end
 
-		Application.current.window.onClose.add(onWindowClose);
-		
+
 		flixel.FlxG.autoPause = false;
 		
 	}
 
-	function onWindowClose():Bool
-	{
-		FlxG.fullscreen = !FlxG.fullscreen;
 
-		return false;
-	}
 }

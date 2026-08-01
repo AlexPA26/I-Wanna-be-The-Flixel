@@ -97,7 +97,6 @@ class DeathState extends FlxSubState
 
             case "thekris":
                 openSubState(new KrisDeathState());
-                PlayerData.currentSkin = Jevil.playerSkin;
 
             default:
                 ModLoader.playModMusic("music/death/death_bgm.ogg", 0.7, false);
