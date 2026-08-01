@@ -759,3 +759,97 @@ class JevilHeartBomb extends flixel.FlxSprite
         y = centerY + Math.sin(rad) * orbitRadius - height / 2;
     }
 }
+
+// class JevilCarouselHorse extends flixel.FlxSprite
+// {
+//     var parentState:main.ChapterState;
+//     var currentAngle:Float;
+//     var speed:Float;
+//     var radiusX:Float; // How wide the cylinder is
+//     var radiusY:Float; // How deep the cylinder is (Perspective)
+//     var centerX:Float;
+//     var baseCenterY:Float;
+//     var bobOffset:Float; // For the up-and-down horse bouncing!
+
+//     public function new(cX:Float, cY:Float, rX:Float, rY:Float, startAngle:Float, spd:Float, state:main.ChapterState)
+//     {
+//         super(cX, cY);
+//         this.parentState = state;
+//         this.centerX = cX;
+//         this.baseCenterY = cY;
+//         this.radiusX = rX;
+//         this.radiusY = rY;
+//         this.currentAngle = startAngle;
+//         this.speed = spd;
+//         this.bobOffset = startAngle; 
+
+//         // Load your 36x29 graphic!
+//         loadGraphic(AssetPaths.jevil_carousel01__png, false, 36, 29);
+//         scale.set(2.5, 2.5); // Same scale as Jevil!
+//         updateHitbox();
+
+//         // Fade in when spawned
+//         alpha = 0;
+//         flixel.tweens.FlxTween.tween(this, {alpha: 1}, 0.5);
+
+//         // Self-destruct timer so they don't spin forever after the attack ends
+//         new flixel.util.FlxTimer().start(7.0, function(_) {
+//             flixel.tweens.FlxTween.tween(this, {alpha: 0}, 0.5, {
+//                 onComplete: function(_) {
+//                     this.kill();
+//                     this.destroy();
+//                 }
+//             });
+//         });
+//     }
+
+//     override public function update(elapsed:Float)
+//     {
+//         super.update(elapsed);
+
+//         // 1. Advance the cylinder rotation
+//         currentAngle += speed * elapsed;
+
+//         var sinAngle = Math.sin(currentAngle);
+//         var cosAngle = Math.cos(currentAngle);
+
+//         // 2. Pseudo-3D depth scale — bigger when swinging toward the camera
+//         // (sinAngle near +1), smaller swinging away (sinAngle near -1). This is
+//         // the piece that actually sells "spinning cylinder" rather than "flat
+//         // shapes sliding around an oval." Computed and applied via
+//         // updateHitbox() BEFORE position, so this frame's x/y use this frame's
+//         // (not last frame's) width/height.
+//         var depthScale = 2.5 + sinAngle * 0.9; // ranges ~1.6 .. 3.4
+//         if (depthScale < 1.2) depthScale = 1.2; // safety floor, never inverts/vanishes
+//         scale.set(depthScale, depthScale);
+//         updateHitbox();
+
+//         // 3. X Orbit (Left and Right)
+//         x = centerX + (cosAngle * radiusX) - (width / 2);
+
+//         // 4. Y Orbit (Perspective Depth) + Bobbing up and down
+//         var bobbing = Math.sin((flixel.FlxG.game.ticks / 100) + bobOffset) * 15;
+//         y = baseCenterY + (sinAngle * radiusY) + bobbing - (height / 2);
+
+//         // 5. Pseudo-3D logic & Flipping
+//         var movingRight = (cosAngle * speed) > 0;
+//         flipX = !movingRight; // The horse faces left when moving left, right when moving right!
+
+//         if (sinAngle > 0)
+//         {
+//             // -- FOREGROUND: swinging toward the camera. Darkened/backlit —
+//             // it's passing in front of the cylinder, so it's just visual noise
+//             // and can't hurt the player.
+//             color = 0xFF454545;
+//             offset.set(9999, 9999); // Throw the hitbox entirely off-screen to disable collisions cleanly!
+//         }
+//         else
+//         {
+//             // -- BACKGROUND: the real threat, normally lit and can hurt the
+//             // player. updateHitbox() above already recalculated the correct
+//             // centered offset for this frame's depth-scaled size, so nothing
+//             // else needs to happen here.
+//             color = flixel.util.FlxColor.WHITE;
+//         }
+//     }
+// }

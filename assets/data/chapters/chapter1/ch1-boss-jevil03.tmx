@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="14" nextobjectid="8">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="15" nextobjectid="30">
  <tileset firstgid="1" source="ch1-tiles.tsx"/>
- <tileset firstgid="81" source="../../textures/save.tsx"/>
- <tileset firstgid="82" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="89" source="../../textures/save.tsx"/>
+ <tileset firstgid="90" source="../../textures/transition-tiles.tsx"/>
  <layer id="13" name="tiles-deco" width="28" height="18" opacity="0.59">
   <data encoding="csv">
 52,52,0,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,0,52,52,
@@ -18,8 +18,8 @@
 52,52,0,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,0,52,52,
 52,52,0,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,0,52,52,
 52,52,0,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,0,52,52,
-52,52,0,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,0,52,52,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,
 52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,
 52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,
 52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52
@@ -40,8 +40,8 @@
 0,0,52,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,0,0,
 0,0,52,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,0,0,
 0,0,52,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,0,0,
-0,0,52,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,52,0,0,
 52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -51,6 +51,30 @@
   <properties>
    <property name="songName" value="jevil_fight"/>
   </properties>
+ </objectgroup>
+ <objectgroup id="14" name="invisBlock">
+  <object id="8" name="invisBlock" gid="23" x="200" y="695" width="50" height="50"/>
+  <object id="9" name="invisBlock" gid="23" x="250" y="695" width="50" height="50"/>
+  <object id="10" name="invisBlock" gid="23" x="300" y="695" width="50" height="50"/>
+  <object id="11" name="invisBlock" gid="23" x="350" y="695" width="50" height="50"/>
+  <object id="12" name="invisBlock" gid="23" x="400" y="695" width="50" height="50"/>
+  <object id="13" name="invisBlock" gid="23" x="450" y="695" width="50" height="50"/>
+  <object id="14" name="invisBlock" gid="23" x="500" y="695" width="50" height="50"/>
+  <object id="15" name="invisBlock" gid="23" x="550" y="695" width="50" height="50"/>
+  <object id="16" name="invisBlock" gid="23" x="600" y="695" width="50" height="50"/>
+  <object id="17" name="invisBlock" gid="23" x="650" y="695" width="50" height="50"/>
+  <object id="18" name="invisBlock" gid="23" x="700" y="695" width="50" height="50"/>
+  <object id="19" name="invisBlock" gid="23" x="750" y="695" width="50" height="50"/>
+  <object id="20" name="invisBlock" gid="23" x="800" y="695" width="50" height="50"/>
+  <object id="21" name="invisBlock" gid="23" x="850" y="695" width="50" height="50"/>
+  <object id="22" name="invisBlock" gid="23" x="900" y="695" width="50" height="50"/>
+  <object id="23" name="invisBlock" gid="23" x="950" y="695" width="50" height="50"/>
+  <object id="24" name="invisBlock" gid="23" x="1000" y="695" width="50" height="50"/>
+  <object id="25" name="invisBlock" gid="23" x="1050" y="695" width="50" height="50"/>
+  <object id="26" name="invisBlock" gid="23" x="1100" y="695" width="50" height="50"/>
+  <object id="27" name="invisBlock" gid="23" x="1150" y="695" width="50" height="50"/>
+  <object id="28" name="invisBlock" gid="23" x="150" y="695" width="50" height="50"/>
+  <object id="29" name="invisBlock" gid="23" x="1200" y="695" width="50" height="50"/>
  </objectgroup>
  <objectgroup id="3" name="bg"/>
  <objectgroup id="6" name="doubleEffect">
