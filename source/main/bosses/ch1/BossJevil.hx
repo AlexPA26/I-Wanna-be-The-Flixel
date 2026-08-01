@@ -358,6 +358,8 @@ class Jevil extends FlxSprite
         parentState.player.velocity.set(0, 0);
         parentState.player.acceleration.x = 0;
         parentState.fightingBoss = true;
+        parentState.playerDeathsTrigger = true;
+
 
         var cooldown = 0.5;
         if (PlayerData.jevilDialogueRead) cooldown = 0.15;
@@ -438,7 +440,6 @@ class Jevil extends FlxSprite
     public function startCutscene()
     {
         state = "cutscene";
-        parentState.playerDeathsTrigger = false;
 
         animation.play("laugh");
         FlxG.sound.play(AssetPaths.jevil_laugh01__ogg);
@@ -475,7 +476,7 @@ class Jevil extends FlxSprite
                         flash.alpha = 0.35;
                         FlxG.sound.play(AssetPaths.start_fight01__ogg, 0.75, false);
                         FlxG.sound.playMusic(AssetPaths.jevil_fight__ogg, 0.95, true);
-                        parentState.playerDeathsTrigger = true;
+                        parentState.playerDeathsTrigger = false;
                     }
                 }
                 parentState.initBossHUD(this);
