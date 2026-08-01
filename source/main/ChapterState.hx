@@ -571,7 +571,7 @@ class ChapterState extends FlxState
                     {
                         grazedObjects.push(hazard);
                         
-                        currentTP += 22;
+                        currentTP += 1;
                         if (currentTP > maxTP) currentTP = maxTP;
 
                         grazeHitbox.alpha = 0.4;
@@ -803,8 +803,21 @@ class ChapterState extends FlxState
 						
 						if (jevilBoss.isVulnerable)
 						{
-							jevilBoss.takeDamage(1);
-							bullet.kill();
+							var jCenterX = jevilBoss.x + (jevilBoss.width / 2);
+                            var jCenterY = jevilBoss.y + (jevilBoss.height / 2);
+                            
+                            var bCenterX = bullet.x + (bullet.width / 2);
+                            var bCenterY = bullet.y + (bullet.height / 2);
+                            
+                            var dx = bCenterX - jCenterX;
+                            var dy = bCenterY - jCenterY;
+                            var distance = Math.sqrt((dx * dx) + (dy * dy));
+                            
+                            if (distance < 75)
+                            {
+                                jevilBoss.takeDamage(1);
+                                bullet.kill();
+                            }
 						}
 					}
 					else 

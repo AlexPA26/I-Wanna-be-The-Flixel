@@ -112,7 +112,11 @@ class JevilPirouetteManager
             }
 
             if (!menuOpen) openMenu();
-            else closeMenu();
+            else
+            {
+                FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.75, false);
+                closeMenu();
+            }
         }
 
 
@@ -445,7 +449,7 @@ class JevilPirouetteManager
         state.player.alpha = 1;
         if (jevil.flash != null) jevil.flash.alpha = 0.35;
 
-        var randomEffect = FlxG.random.int(9, 9);
+        var randomEffect = FlxG.random.int(1, 9);
         executeEffect(randomEffect);
     }
 

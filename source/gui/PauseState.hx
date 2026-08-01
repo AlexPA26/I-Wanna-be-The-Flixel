@@ -54,19 +54,10 @@ class PauseState extends FlxSubState
         {
             originalFilters = FlxG.camera.filters.copy();
         }
-        // Deliberately NOT copying originalFilters onto uiCamera — it renders the
-        // pause menu itself (buttons, text, stats), which should always look crisp
-        // and untinted regardless of whatever gameplay shader is active underneath.
 
-        // Force the shader/filter chain to do its (apparently expensive) recompile
-        // NOW, while the pause menu is already up and a brief hitch is unnoticeable —
-        // rather than at resume time, where the same hitch felt like a jarring freeze.
         FlxG.camera.filters = [];
         FlxG.camera.filters = originalFilters;
 
-        #if debug
-        traceFilterChain("create() — captured originalFilters");
-        #end
 
         var pauseFilters = originalFilters.copy();
         pauseFilters.push(new BlurFilter(2, 2, 2));
