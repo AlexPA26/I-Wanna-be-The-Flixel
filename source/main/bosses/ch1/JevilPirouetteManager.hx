@@ -11,6 +11,7 @@ import flixel.addons.effects.FlxTrail;
 import flixel.effects.particles.FlxEmitter;
 import main.ChapterState;
 import main.bosses.ch1.BossJevil.Jevil;
+import openfl.filters.BlurFilter;
 
 class JevilPirouetteManager
 {
@@ -671,6 +672,28 @@ class JevilPirouetteManager
         applyDamageAndCheckTired(15, 999);
         jevil.flash.alpha = 0.35;
 
+        var blur:BlurFilter = new BlurFilter(8, 8, 2);
+        if (FlxG.camera.filters == null) FlxG.camera.filters = [];
+
+        FlxG.camera.filters.push(blur);
+        FlxTween.num(16, 0, 0.5, { ease: FlxEase.quadOut, onComplete: function(_)
+        {
+            if (FlxG.camera.filters != null)
+            {
+                FlxG.camera.filters.remove(blur);
+                if (FlxG.camera.filters.length == 0)
+                    FlxG.camera.filters = null;
+            }
+        }},
+        function(v:Float)
+        {
+            if (blur != null)
+            {
+                blur.blurX = v;
+                blur.blurY = v;
+            }
+        });
+
         var jevilCenterX:Float = jevil.x + (jevil.width / 2);
         var jevilCenterY:Float = jevil.y + (jevil.height / 2);
 
@@ -709,11 +732,15 @@ class JevilPirouetteManager
             },
             function(v:Float)
             {
-                if (ring != null && ring.exists)
+                if (ring != null && ring.exists && jevil != null && jevil.exists)
                 {
+                    var currentCenterX:Float = jevil.x + (jevil.width / 2);
+                    var currentCenterY:Float = jevil.y + (jevil.height / 2);
+
                     var rad:Float = (startAngle + v) * Math.PI / 180;
-                    ring.x = jevilCenterX + (Math.cos(rad) * orbitRadius) - (ring.width / 2);
-                    ring.y = jevilCenterY + (Math.sin(rad) * orbitRadius) - (ring.height / 2);
+                    
+                    ring.x = currentCenterX + (Math.cos(rad) * orbitRadius) - (ring.width / 2);
+                    ring.y = currentCenterY + (Math.sin(rad) * orbitRadius) - (ring.height / 2);
                     ring.angle = v;
                 }
             });

@@ -221,12 +221,13 @@ class JevilDiamondScythe extends FlxSprite
     var playerRef:flixel.FlxSprite;
     var stateRef:main.ChapterState;
     var trail:FlxTrail;
+    var jevil:Jevil;
     var scaleScythe:Float;
 
     public function new(x:Float, y:Float, state:main.ChapterState)
     {
-
-        scaleScythe = 1.5;
+        var size = 1.75;
+        scaleScythe = size;
         super(x, y);
         this.playerRef = state.player;
         this.stateRef = state;
