@@ -129,7 +129,7 @@ class Jevil extends FlxSprite
         pirouetteManager = new JevilPirouetteManager(this, parentState);
         if (parentState != null) parentState.add(trailEffect);
 
-        phase01Attacks = [attackSpades];
+        // phase01Attacks = [attackScythe];
 
         phase01Attacks =
         [
@@ -176,11 +176,6 @@ class Jevil extends FlxSprite
 
         if (state == "startCube" || state == "attackingCube" || state == "returningCube") { parentState.inmortal = true; }
 
-        else if (pirouetteManager == null || (!pirouetteManager.isPirouetting && pirouetteManager.invenciblePlayerTimer <= 0))
-        { 
-            parentState.inmortal = false; 
-        }
-
         if (FlxG.keys.justPressed.U)
         {
             ultimateTriggered = true;
@@ -213,9 +208,9 @@ class Jevil extends FlxSprite
             trace("Current Phase: " + state);
             trace("Current Jevil animation: " + animation.curAnim.name);
             trace("Current Health: " + this.hp);
+            trace("Player alive and exists: " + parentState.player.alive + " || " + parentState.player.exists);
             trace("Current Player Skin: " + PlayerData.currentSkin);
             trace("Player Inmortal?: " + parentState.inmortal);
-            trace("Craziness? " + craziness);
             trace("Jevil POS: X-" + this.x + " || Y-" + this.y);
             trace("Jevil Direction: " + this.flipX);
             trace("------------------------------");
@@ -512,7 +507,7 @@ class Jevil extends FlxSprite
         }
 
         FlxG.sound.play(AssetPaths.jevil_hit__ogg, 1, false);
-        trace("[ HP Remaioning: " + hp + " ]");
+        trace("[ HP Remaining: " + hp + " ]");
 
         canBeHit = false;
         new FlxTimer().start(0.1, function(_)
@@ -576,16 +571,12 @@ class Jevil extends FlxSprite
             targetFanCombos = FlxG.random.int(2, 4);
         }
 
-        if (parentState != null && parentState.player != null && parentState.player.exists)
+        var randomX = FlxG.random.float(250, 1000);
+        this.x = randomX;
+
+        if (this.x <= 650)
         {
-            if (parentState.player.x > FlxG.width / 2)
-            {
-                animation.play("teleportReverse", true, false);
-            }
-            else
-            {
-                animation.play("teleport", true, false);
-            }
+            animation.play("teleportReverse", true, false);
         }
         else
         {
@@ -600,11 +591,11 @@ class Jevil extends FlxSprite
 
         if (!parentState.player.exists && !parentState.player.alive) return;
         FlxG.sound.play(AssetPaths.jevil_laugh03__ogg, 0.75, false);
-        FlxG.sound.play(AssetPaths.scythe_explosion__ogg, 0.65, false);
+        FlxG.sound.play(AssetPaths.scythe_explosion__ogg, 0.5, false);
         this.flash.alpha = 0.2;
 
         var interval:Float;
-        if (hp >= 50) { interval = 1.5; }
+        if (hp >= 75) { interval = 1.5; }
         else { interval = 1.25; }
 
         var offsets:Array<Float> = [-250, -125, 0, 125, 250];
@@ -627,7 +618,10 @@ class Jevil extends FlxSprite
             fanComboCount = 0;
             targetFanCombos = 0;
 
-            new FlxTimer().start(1, teleport);
+            new FlxTimer().start(1, function(tmr)
+            {
+                teleport(tmr);
+            });
         }
         else
         {
@@ -1047,7 +1041,7 @@ class Jevil extends FlxSprite
 
                 var spawnLeft:Bool = FlxG.random.bool(50);
                 var diamondCenterX:Float = spawnLeft ? 200 : 1100;
-                var diamondCenterY:Float = FlxG.random.float(200, 550);
+                var diamondCenterY:Float = FlxG.random.float(350, 600);
                 var direction:Int = spawnLeft ? 1 : -1;
 
                 FlxTween.cancelTweensOf(this);
@@ -1250,6 +1244,7 @@ class Jevil extends FlxSprite
             }
             else
             {
+                if (!parentState.player.alive && !parentState.player.exists) return;
                 flipX = !flipX;
                 isVulnerable = true;
                 canBeHit = true;

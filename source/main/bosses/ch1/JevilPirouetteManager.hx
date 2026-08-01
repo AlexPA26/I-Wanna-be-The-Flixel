@@ -32,6 +32,7 @@ class JevilPirouetteManager
     var soulSelection:FlxSprite;
     var numberSelection:Int = 1;
     var hintOpenMenu:FlxText;
+    var tipNavegateMenu:FlxText;
 
     var uselessBird:FlxSprite;
     public var invenciblePlayerTimer:Float = 0;
@@ -66,10 +67,15 @@ class JevilPirouetteManager
         
         var isSpecialState = (jevil.state == "waiting" || jevil.state == "ultimate_barrage" || jevil.state == "ultimate_cutscene"
             || jevil.state == "ultimate_transition" || jevil.state == "startCube" || jevil.state == "ultimate_start"
-            || jevil.state == "ultimate_return_transition" || jevil.state == "returningCube" || jevil.state == "precutscene"
-            || jevil.state == "cutscene" || jevil.state == "dead");
+            || jevil.state == "ultimate_return_transition" || jevil.state == "ultimate_charging" || jevil.state == "returningCube"
+            || jevil.state == "precutscene" || jevil.state == "cutscene" || jevil.state == "attackingCube" || jevil.state == "dead");
 
         if (jevil == null || state == null || state.player == null) return;
+
+        if (isSpecialState && menuOpen)
+        {
+            closeMenu();
+        }
 
         if (uselessBird != null && uselessBird.exists)
         {
@@ -80,10 +86,10 @@ class JevilPirouetteManager
             }
         }
 
-        actButton.visible = !(jevil.state == "waiting" || jevil.state == "precutscene" || jevil.state == "cutscene" || jevil.state == "dead");
+        actButton.visible = !isSpecialState;
         actButton.active = !isSpecialState;
 
-        hintOpenMenu.visible = !(jevil.state == "waiting" || jevil.state == "precutscene" || jevil.state == "cutscene" || jevil.state == "dead");
+        hintOpenMenu.visible = !isSpecialState;
         hintOpenMenu.active = !isSpecialState;
 
         if (actButton.active && state.currentTP >= 20)
@@ -103,7 +109,17 @@ class JevilPirouetteManager
             actButton.alpha = 0.65;
         }
 
-        if (FlxG.keys.justPressed.TAB && actButton.active && state.currentTP >= 0)
+        var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
+        var toggleMenuPressed = FlxG.keys.justPressed.TAB;
+        if (gamepad != null)
+        {
+            if (gamepad.justPressed.LEFT_SHOULDER || gamepad.justPressed.RIGHT_SHOULDER)
+            {
+                toggleMenuPressed = true;
+            }
+        }
+
+        if (toggleMenuPressed && actButton.active && state.currentTP >= 0)
         {
             if (isSpecialState)
             {
@@ -111,11 +127,23 @@ class JevilPirouetteManager
                 return;
             }
 
-            if (!menuOpen) openMenu();
+            if (!menuOpen) 
+            {
+                openMenu();
+            }
             else
             {
-                FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.75, false);
-                closeMenu();
+                if (numberSelection == 1)
+                {
+                    numberSelection = 2;
+                    FlxG.sound.play(AssetPaths.jevil_select__ogg, 0.25, false);
+                    updateSoulPosition();
+                }
+                else if (numberSelection == 2)
+                {
+                    FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.75, false);
+                    closeMenu();
+                }
             }
         }
 
@@ -127,30 +155,42 @@ class JevilPirouetteManager
 
             if (hypnosisText != null)
                 hypnosisText.color = (state.currentTP >= 50) ? FlxColor.WHITE : FlxColor.GRAY;
-            // Move UP (1 or Up Arrow or W)
-            if ((FlxG.keys.justPressed.ONE) && numberSelection != 1)
+
+            var selectUp = FlxG.keys.justPressed.ONE || (gamepad != null && (gamepad.justPressed.LEFT_STICK_DIGITAL_UP));
+            var selectDown = FlxG.keys.justPressed.TWO || (gamepad != null && (gamepad.justPressed.LEFT_STICK_DIGITAL_DOWN));
+
+            if ((selectUp) && numberSelection != 1)
             {
                 numberSelection = 1;
                 FlxG.sound.play(AssetPaths.jevil_select__ogg, 0.25, false);
                 updateSoulPosition();
             }
 
-            // Move DOWN (2 or Down Arrow or S)
-            if ((FlxG.keys.justPressed.TWO) && numberSelection != 2)
+            if ((selectDown) && numberSelection != 2)
             {
                 numberSelection = 2;
                 FlxG.sound.play(AssetPaths.jevil_select__ogg, 0.25, false);
                 updateSoulPosition();
             }
 
-            // CANCEL (X Key)
-            if (FlxG.keys.justPressed.X)
+            var cancelPressed = FlxG.keys.justPressed.X || (gamepad != null && gamepad.justPressed.X);
+
+            if (cancelPressed)
             {
                 FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.75, false);
                 closeMenu();
             }
 
-            if (FlxG.keys.justPressed.Z || FlxG.keys.justPressed.ENTER)
+            var confirmPressed = FlxG.keys.justPressed.Z || FlxG.keys.justPressed.ENTER;
+            if (gamepad != null)
+            {
+                if (gamepad.justPressed.X || gamepad.justPressed.Y) 
+                {
+                    confirmPressed = true;
+                }
+            }
+
+            if (confirmPressed)
             {
                 if (numberSelection == 1)
                 {
@@ -184,35 +224,6 @@ class JevilPirouetteManager
             }
         }
 
-        // ==========================================
-        // 3. DIRECT SHORTCUT KEYS (OPTIONAL OVERWORLD SHORTCUTS)
-        // ==========================================
-        if (!menuOpen)
-        {
-            if (FlxG.keys.justPressed.S && state.currentTP >= 20 && !isPirouetting && state.player.alive)
-            {
-                if (state.player.isGrounded && !isSpecialState && jevil.state != "attacking_jail")
-                {
-                    state.currentTP -= 20;
-                    if (state.currentTP <= 0) state.currentTP = 0;
-                    startPirouette();
-                }
-            }
-
-            if (FlxG.keys.justPressed.H && state.currentTP >= 50 && !isPirouetting && state.player.alive)
-            {
-                if (state.player.isGrounded && !isSpecialState && jevil.state != "attacking_jail")
-                {
-                    state.currentTP -= 50;
-                    if (state.currentTP <= 0) state.currentTP = 0;
-                    startHypnosis();
-                }
-            }
-        }
-
-        // ==========================================
-        // 4. SPECIAL STATE TIMERS
-        // ==========================================
         if (isSpecialState)
         {
             if (invenciblePlayerTimer > 0)
@@ -284,6 +295,13 @@ class JevilPirouetteManager
             if (state != null) state.add(hypnosisText);
         }
 
+        if (tipNavegateMenu == null)
+        {
+            tipNavegateMenu = new FlxText(blackBox.x + 60, hypnosisText.y + 50, blackBox.width, "[Use TAB to SELECT]");
+            tipNavegateMenu.setFormat("assets/fonts/deltarune.otf", 14, FlxColor.GRAY, "left", flixel.text.FlxText.FlxTextBorderStyle.OUTLINE, FlxColor.TRANSPARENT);
+            if (state != null) state.add(tipNavegateMenu);
+        }
+
         pirouetteText.color = (state.currentTP >= 20) ? FlxColor.WHITE : FlxColor.GRAY;
         hypnosisText.color = (state.currentTP >= 50) ? FlxColor.WHITE : FlxColor.GRAY;
 
@@ -346,6 +364,13 @@ class JevilPirouetteManager
             state.remove(hypnosisText, true);
             hypnosisText.destroy();
             hypnosisText = null;
+        }
+
+        if (tipNavegateMenu != null)
+        {
+            state.remove(tipNavegateMenu, true);
+            tipNavegateMenu.destroy();
+            tipNavegateMenu = null;
         }
 
         if (soulSelection != null)
@@ -643,7 +668,7 @@ class JevilPirouetteManager
     function startHypnosis()
     {
         FlxG.sound.play(AssetPaths.jevil_hypnosis__ogg, 1, false);
-        applyDamageAndCheckTired(20, 999);
+        applyDamageAndCheckTired(15, 999);
         jevil.flash.alpha = 0.35;
 
         var jevilCenterX:Float = jevil.x + (jevil.width / 2);

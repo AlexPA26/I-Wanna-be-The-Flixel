@@ -248,15 +248,17 @@ public function flipGravity():Void
         inputRight = FlxG.keys.anyPressed([RIGHT, D]);
         inputJump = FlxG.keys.anyJustPressed([SPACE, UP, W]) || FlxG.mouse.justPressed;
         inputJumpReleased = FlxG.keys.anyJustReleased([SPACE, UP, W]) || FlxG.mouse.justReleased;
-        #else
+        #end
 
         if (gamepad != null)
         {
-            inputLeft = gamepad.pressed.DPAD_LEFT || gamepad.analog.value.LEFT_STICK_X < -0.25;
-            inputRight = gamepad.pressed.DPAD_RIGHT || gamepad.analog.value.LEFT_STICK_X > 0.25;
+            if (gamepad.pressed.DPAD_LEFT || gamepad.analog.value.LEFT_STICK_X < -0.25) inputLeft = true;
 
-            inputJump = gamepad.justPressed.A;
-            inputJumpReleased = gamepad.justReleased.A;
+            if (gamepad.pressed.DPAD_RIGHT || gamepad.analog.value.LEFT_STICK_X > 0.25) inputRight = true;
+
+            if (gamepad.justPressed.A || gamepad.justPressed.B) inputJump = true;
+
+            if (gamepad.justReleased.A || gamepad.justReleased.B) inputJumpReleased = true;
 
         }
         #if mobile
@@ -265,7 +267,6 @@ public function flipGravity():Void
             inputLeft = pad.buttonLeft.pressed;
             inputRight = pad.buttonRight.pressed;
         }
-        #end
 
         for (touch in FlxG.touches.list)
         {

@@ -254,12 +254,19 @@ class KrisDeathState extends FlxSubState
     {
         super.update(elapsed);
 
+        var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
+        var resetPressed = FlxG.keys.justPressed.R;
+
         #if !mobile
-        if (canReset && FlxG.keys.justPressed.R)
+
+        if (gamepad != null)
+		{
+			if (gamepad.justPressed.LEFT_SHOULDER || gamepad.justPressed.RIGHT_SHOULDER) resetPressed = true;
+		}
+        if (resetPressed)
         {
             quickReset();
         }
-        
 
         if (isChoosing)
         {
@@ -277,11 +284,8 @@ class KrisDeathState extends FlxSubState
             if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.Z || FlxG.keys.justPressed.SPACE)
             {
                 isChoosing = false;
-                canReset = false; // Disable quick reset during final transition
-                
-                // Fade out the choice UI (mainText is about to be reused for the
-                // ending text a moment later — no need to fade it here, and doing
-                // so was racing against that reveal).
+                canReset = false;
+
                 FlxTween.tween(yesText, {alpha: 0}, 0.5);
                 FlxTween.tween(noText, {alpha: 0}, 0.5);
                 FlxTween.tween(choiceSoul, {alpha: 0}, 0.5, {
@@ -295,21 +299,17 @@ class KrisDeathState extends FlxSubState
         #end
     }
 
-    // ------------------------------------------------------------------------
-    // ENDING PATHS
-    // ------------------------------------------------------------------------
     function executeYes():Void
     {
         mkTimer(0.5, function(_)
         {
+            FlxG.sound.play(AssetPaths.restart_kris_death__ogg, 1, false);
             mainText.alpha = 1;
             mainText.text = "THEN THE FUTURE IS IN YOUR HANDS";
             
-            // Screen turns white simultaneously
             FlxTween.tween(whiteFade, {alpha: 1}, 2.5, {
                 onComplete: function(_)
                 {
-                    // Wait 0.5s after fully white, then reset
                     mkTimer(0.5, function(_)
                     {
                         quickReset();

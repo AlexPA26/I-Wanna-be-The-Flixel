@@ -161,10 +161,16 @@ class DeathState extends FlxSubState
         if (timerTip > 0) { timerTip -= 0.0075; }
         if (timerTip <= 0) { subtext.visible = true; }
 
-
+        var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
+        var resetPressed = FlxG.keys.justPressed.R;
 
         #if !mobile
-        if (FlxG.keys.justPressed.R)
+
+        if (gamepad != null)
+		{
+			if (gamepad.justPressed.LEFT_SHOULDER || gamepad.justPressed.RIGHT_SHOULDER) resetPressed = true;
+		}
+        if (resetPressed)
         {
             restartLevel();
         }

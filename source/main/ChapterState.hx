@@ -182,15 +182,15 @@ class ChapterState extends FlxState
 	{
 		Multiplayer.usingTCP = false;
 		#if !debug
-		#if !mobile
-		FlxG.mouse.visible = false;
-		#end
+			#if !mobile
+				FlxG.mouse.visible = false;
+			#end
 		#end
 
 		#if debug
-		#if !mobile
-		FlxG.mouse.visible = true;
-		#end
+			#if !mobile
+				FlxG.mouse.visible = true;
+			#end
 		#end
 
 		var clientAddr = UdpClient.getClientAddress();
@@ -595,7 +595,7 @@ class ChapterState extends FlxState
 			}
         }
 
-		if (currentBoss != null && currentBoss.exists && currentBoss.alive && currentBoss.visible && currentBoss.alpha > 0 && !inmortal)
+		if (currentBoss != null && currentBoss.exists && currentBoss.alive && currentBoss.visible && currentBoss.alpha > 0 && !inmortal && spawnTimer <= 0)
 		{
 			if (Std.isOfType(currentBoss, main.bosses.ch1.BossJevil.Jevil))
 			{
@@ -657,7 +657,18 @@ class ChapterState extends FlxState
 		}
 
 
-		if (FlxG.keys.justPressed.Z && player.exists) playerShoot();
+		var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
+		
+		var shootPressed = FlxG.keys.justPressed.Z;
+		var pausePressed = FlxG.keys.justPressed.ESCAPE;
+
+		if (gamepad != null)
+		{
+			if (gamepad.justPressed.RIGHT_TRIGGER || gamepad.justPressed.LEFT_TRIGGER) shootPressed = true;
+			if (gamepad.justPressed.START) pausePressed = true;
+		}
+
+		if (shootPressed && player.exists) playerShoot();
 		{
 			FlxG.collide(bullets, map, (bullet, wall) ->
 			{
@@ -665,9 +676,7 @@ class ChapterState extends FlxState
 			});
 		}
 
-		
-
-		if (FlxG.keys.justPressed.ESCAPE && player.exists)
+		if (pausePressed && player.exists)
 		{
 			if (fightingBoss)
 			{

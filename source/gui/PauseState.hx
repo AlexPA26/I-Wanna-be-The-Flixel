@@ -164,9 +164,17 @@ class PauseState extends FlxSubState
         add(btn);
     }
 
+    var inputCooldown:Float = 0.15;
+
     override public function update(elapsed:Float)
     {
         super.update(elapsed);
+
+        if (inputCooldown > 0)
+        {
+            inputCooldown -= elapsed;
+            return;
+        }
 
         if (alphaText < 1)
         {
@@ -179,7 +187,15 @@ class PauseState extends FlxSubState
         if (!isClosing && bg.alpha < 0.4) bg.alpha += bgFadeTimer;
 
 
-        if (FlxG.keys.justPressed.ESCAPE && !isClosing)
+        var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
+        var closePressed = FlxG.keys.justPressed.ESCAPE;
+
+        if (gamepad != null)
+		{
+			if (gamepad.justPressed.START) closePressed = true;
+		}
+
+        if (closePressed && !isClosing)
         {
             isClosing = true;
             setUIEnabled(false);

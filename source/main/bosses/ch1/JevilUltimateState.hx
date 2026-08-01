@@ -41,6 +41,7 @@ class JevilUltimateState
         parentState = state;
         mkTimer(0, function(t:FlxTimer)
         {
+            if (!parentState.player.alive && !parentState.player.exists) return;
             var cutsceneScythe = new FlxSprite();
             cutsceneScythe.loadGraphic(AssetPaths.jevil_scythe__png, false);
             cutsceneScythe.screenCenter();
@@ -74,11 +75,12 @@ class JevilUltimateState
                                 {
                                     if (cutsceneScythe.y < -300)
                                     {
+                                        if (!parentState.player.alive && !parentState.player.exists) return;
                                         cutsceneScythe.kill();
                                         cutsceneScythe.destroy();
                                         parentState.remove(cutsceneScythe, true);
                                         timer.destroy(); 
-                                        trace("Cutscene scythe has successfully launched offscreen and self-destructed safely!");
+                                        
                                     }
                                 }, 0); 
                             });

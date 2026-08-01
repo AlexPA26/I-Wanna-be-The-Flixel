@@ -213,7 +213,6 @@ class JevilDirectionalAttack extends FlxBasic
         var spawnX:Float = goLeft ? 300 : 850;
         var spawnY:Float = FlxG.random.float(100, 300);
 
-        if (jevil.flipX == true )jevil.flipX = false;
         jevil.visible = true;
         jevil.setPosition(spawnX, spawnY);
         jevil.updateHitbox();
