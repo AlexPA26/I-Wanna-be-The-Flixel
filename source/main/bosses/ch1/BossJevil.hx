@@ -36,6 +36,7 @@ class Jevil extends FlxSprite
     public var forceTiredTurn:Bool = false;
     public var isForcingTired:Bool = false;
     var dialogueBox:main.bosses.ch1.JevilDialogue;
+    public var jevilWasHit:Bool = false;
     
     public var blackFade:FlxSprite;
     var whiteFade = new FlxSprite();
@@ -209,12 +210,7 @@ class Jevil extends FlxSprite
             parentState.spawnTimer = 9999;
         }
 
-        if (FlxG.keys.justPressed.R)
-        {
-            if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
-        }
-
-        if (FlxG.keys.justPressed.L) { hp -= 35; }
+        if (FlxG.keys.justPressed.L) { hp -= 115; }
 
         if (FlxG.keys.justPressed.C)
         {
@@ -391,7 +387,7 @@ class Jevil extends FlxSprite
             [
                 "* UEE HEE!\n* A NEW VISITOR!\n* NOW I CAN PLAY, PLAY!",
                 "* OH, YOU LOOK WEAK.\n* ARE YOU ALONE?",
-                "* UEE HEE HEE!\n* I WILL NOT HOLD BACK THEN!",
+                "* UEE HEE HEE!\n* I WILL NOT HOLD BACK\n* BACK!!",
                 "* IT'S GONNA BE FUN!\n* FUN...!!!",
                 "* IF YOU DIE, YOU LOSE!",
                 "* SIMPLE, RIGHT? RIGHT?!\n* UEE HEE!"
@@ -401,7 +397,7 @@ class Jevil extends FlxSprite
             {
                 if (dialogueBox != null)
                 {
-                    PlayerData.jevilDialogueRead = true;
+
                     leveldata.misc.SaveManager.saveGame();
                     parentState.remove(dialogueBox, true);
                     dialogueBox.destroy();
@@ -412,7 +408,6 @@ class Jevil extends FlxSprite
                     if (jevilIndex != -1) parentState.insert(jevilIndex, trailEffect);
                     else parentState.add(trailEffect);
 
-                    parentState.add(trailEffect);
                     
                     new FlxTimer().start(0.5, function(t:FlxTimer)
                     {
@@ -425,16 +420,37 @@ class Jevil extends FlxSprite
                     });
                     
                     FlxTween.cancelTweensOf(this);
-                    FlxTween.tween(this, { x: this.x + 50, y: this.y - 120 }, 0.4, { ease: FlxEase.quadOut });
+                    FlxTween.tween(this, { x: this.x + 50, y: this.y - 120 }, 0.5, { ease: FlxEase.quadOut });
 
-                    new FlxTimer().start(0.5, function(t:FlxTimer)
+                    new FlxTimer().start(1, function(t:FlxTimer)
                     {
-                        startCutscene();
-                    });
+                        dialogueBox = new main.bosses.ch1.JevilDialogue(parentState);
+                        parentState.add(dialogueBox);
 
-                }
+                        var lines:Array<String> =
+                        [
+                            "* NOW, NOW!!\n* LET THE GAMES BEGIN!!"
+                        ];
+
+                            dialogueBox.say(lines, function()
+                            {
+                                if (dialogueBox != null)
+                                {
+                                    PlayerData.jevilDialogueRead = true;
+                                    parentState.remove(dialogueBox, true);
+                                    dialogueBox.destroy();
+                                    dialogueBox = null;
+
+                                    new FlxTimer().start(0.5, function(t:FlxTimer)
+                                    {
+                                        startCutscene();
+                                    });
+                                }
+                            });
+                        });
+                    };
+                });
             });
-        });
     }
 
     public function startCutscene()
@@ -475,7 +491,7 @@ class Jevil extends FlxSprite
                     {
                         flash.alpha = 0.35;
                         FlxG.sound.play(AssetPaths.start_fight01__ogg, 0.75, false);
-                        FlxG.sound.playMusic(AssetPaths.jevil_fight__ogg, 0.95, true);
+                        FlxG.sound.playMusic(AssetPaths.jevil_fight__ogg, 0.85, true);
                         parentState.playerDeathsTrigger = false;
                     }
                 }
@@ -965,7 +981,7 @@ class Jevil extends FlxSprite
         animation.play("laugh");
         this.flash.alpha = 0.25;
         FlxG.sound.play(AssetPaths.scythe_intro__ogg, 0.5, false);
-        FlxG.sound.play(AssetPaths.jevil_laugh01__ogg);
+        FlxG.sound.play(AssetPaths.jevil_strong_attack03__ogg, 0.85, false);
         jailManager.createJail(0);
 
         var midX:Float = FlxG.width / 2;
@@ -1504,6 +1520,23 @@ class Jevil extends FlxSprite
 
     function jevilDeath()
     {
+        if (parentState.player.alive && parentState.player.exists)
+        {
+            if (parentState.dangerObjects != null)
+            {
+                parentState.dangerObjects.forEach(function(obj:flixel.FlxBasic)
+                {
+                    if (obj != null)
+                    {
+                        obj.destroy();
+                    }
+                });
+                
+                parentState.dangerObjects.clear();
+            }
+
+        }
+
         if (craziness) craziness = false;
         if (parentState.tpBar != null && parentState.tpBar.exists) parentState.tpBar.visible = false;
         if (parentState.tpBarDeco != null && parentState.tpBarDeco.exists) parentState.tpBarDeco.visible = false;
@@ -1519,12 +1552,22 @@ class Jevil extends FlxSprite
         if (flash != null) flash.alpha = 0.75;
 
         parentState.playerDeathsTrigger = true;
-        parentState.player.x = 335;
-        parentState.player.y = 325;
+        parentState.player.x = 350;
+        parentState.player.y = 350;
         parentState.inmortal = true;
         parentState.player.active = false;
         parentState.player.velocity.set(0, 0);
         parentState.player.acceleration.x = 0;
+
+        var jail:FlxSprite;
+        jail = new FlxSprite(parentState.player.x, parentState.player.y);
+        jail.loadGraphic(AssetPaths.mini_jail__png, false);
+        jail.alpha = 0;
+        jail.x -= 55;
+        jail.y -= 55;
+        parentState.add(jail);
+        FlxTween.tween(jail, {alpha: 1}, 0.35, {ease: FlxEase.quadOut});
+        FlxTween.tween(jail, { y: jail.y + 5 }, 2, { type: PINGPONG, ease: FlxEase.sineInOut });
 
         trailEffect.visible = false;
 
@@ -1564,7 +1607,7 @@ class Jevil extends FlxSprite
     function startDeathIdleLoop():Void
     {
         deathIdleLoopActive = true;
-        FlxTween.tween(this, { y: this.y - 15 }, 0.75, { type: PINGPONG, ease: FlxEase.sineInOut });
+        FlxTween.tween(this, { y: this.y - 15 }, 2, { type: PINGPONG, ease: FlxEase.sineInOut });
         deathAlphaPulse();
     }
 
@@ -1572,17 +1615,17 @@ class Jevil extends FlxSprite
     {
         if (!exists || !deathIdleLoopActive) return;
 
-        FlxTween.tween(this, { alpha: 0 }, 0.65,
+        FlxTween.tween(this, { alpha: 0 }, 0.75,
         {
             onComplete: function(_)
             {
                 if (!exists || !deathIdleLoopActive) return;
 
-                FlxTween.tween(this, { alpha: 1 }, 0.65,
+                FlxTween.tween(this, { alpha: 1 }, 0.75,
                 {
                     onComplete: function(_)
                     {
-                        new FlxTimer().start(0.75, function(_)
+                        new FlxTimer().start(0.6, function(_)
                         {
                             deathAlphaPulse();
                         });
@@ -1599,22 +1642,49 @@ class Jevil extends FlxSprite
         dialogueBox = new main.bosses.ch1.JevilDialogue(parentState);
         parentState.add(dialogueBox);
 
-        var lines:Array<String> =
-        [
-            "* HA HA HA.\n* WHAT FUN!!!",
-            "* YOU'RE FAST, STRONG, AGILE,\n* AGILE.",
-            "* BUT THERE ARE YET FASTER, YET\n* STRONGER.",
-            "* YOU REMIND ME OF THEM...\n* ANYWAY.",
-            "* THE POWER OF THE FIRST PIECE\n* IS DRAWING CLOSER.",
-            "* SOON, WITH ITS FULL POWER,\n* AND THANKS TO 'HIM'.",
-            "* THIS WORLD WILL BE COVERED IN\n* TOTAL DARKNESS AND DESPAIR.",
-            "* KID, CAN YOU STOP IT?",
-            "* UEE HEE HEE!",
-            "* EITHER WAY, A SURPRISE\n* WAITS FOR YOU JUST\n* AROUND THE CORNER...!",
-            "* BRAVE KID!\n* CAN YOU ENDURE THIS\n* FINAL CHAOS?!",
-            "* NOTHING CAN SAVE YOU\n* FROM DEATH!!",
-            "* BYE-BYE!!\n* UEE HEE HEE!"
-        ];
+        var lines:Array<String> = ["* UEE UEE HEE!\n* PLACEHOLDER TEXT!!"];
+
+        if (jevilWasHit)
+        {
+            lines =
+            [
+                "* HA HA HA.\n* WHAT FUN!!!",
+                "* YOU'RE FAST, STRONG, AGILE,\n* AGILE.",
+                "* BUT THERE ARE YET FASTER, YET\n* STRONGER.",
+                "* YOU REMIND ME OF THEM...\n* ANYWAY.",
+                "* THE POWER OF THE FIRST PIECE\n* IS DRAWING CLOSER.",
+                "* SOON, WITH ITS FULL POWER,\n* AND THANKS TO 'HIM'.",
+                "* THIS WORLD WILL BE COVERED IN\n* TOTAL DARKNESS AND DESPAIR.",
+                "* KID, CAN YOU STOP IT?",
+                "* UEE HEE HEE!",
+                "* EITHER WAY, A SURPRISE\n* WAITS FOR YOU JUST\n* AROUND THE CORNER...!",
+                "* BRAVE KID!\n* CAN YOU ENDURE THIS\n* FINAL CHAOS?!",
+                "* NOTHING CAN SAVE YOU\n* FROM DEATH!!",
+                "* BYE-BYE!!\n* UEE HEE HEE!"
+            ];
+        }
+
+        else if (!jevilWasHit)
+        {
+            lines =
+            [
+                "* WHAT FUN!!!\n* I'M EXHAUSTED!!!",
+                "* YOU KNOW HOW TO TIRE ME\n* OUT!!",
+                "* NOW I WILL CONTINUE MY SLEEP\n* FOR MY REMAINING 100 YEARS.",
+                "* SADLY FOR YOU, YOU CAN'T DREAM\n* LIKE I WILL SOON.",
+                "* INSTEAD, A NIGHTMARE WILL FALL\n* UPON YOU.",
+                "* THE FIRST PIECE OF YOUR GOAL\n* IS WAITING.",
+                "* YOU CAN'T SAVE THIS WORLD\n* FROM DISASTER... YET.",
+                "* 5 PIECES IN TOTAL!!\n* AND YOU'LL ONLY HAVE ONE!!\n* ONE!!",
+                "* BUT... ARE YOU WORTHY,\n* KID?!",
+                "* UEE HEE HEE!",
+                "* I MAY HAVE EXTRA STRENGTH FOR\n* A LITTLE SURPRISE!!",
+                "* IF YOU SURVIVE, MY TREASURE\n* WILL BE YOURS,\n* YOURS...!!",
+                "* TAKE IT AND DO YOUR\n* STRONGEST---!",
+                "* ARE YOU READY!? UEE HEE HEE\n* MY FINAL CHAOS!!",
+                "* BYE-BYE!!"
+            ];
+        }
 
         dialogueBox.say(lines, function()
         {
@@ -1650,6 +1720,8 @@ class Jevil extends FlxSprite
 
     function startFakeEnding():Void
     {
+        parentState.player.active = true;
+        parentState.specialState = true;
         var jevilEnding = new FlxSprite();
         jevilEnding.frames = FlxAtlasFrames.fromSparrow(AssetPaths.jevil__png, AssetPaths.jevil__xml);
         jevilEnding.animation.addByPrefix("laugh", "jevil_laugh", 12, true);

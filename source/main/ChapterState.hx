@@ -69,6 +69,7 @@ class ChapterState extends FlxState
 	public var krisDeathAlt:Bool;
 	public var cameraType:String = "normal";
 	public var isPaused:Bool = false;
+	public var specialState:Bool = false;
 
 	public var bg:FlxSprite;
 	public var circusBG:CircusBackground;
@@ -641,7 +642,7 @@ class ChapterState extends FlxState
 			FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
 		}
 
-		if (FlxG.keys.justPressed.R && player.exists && player.alive && player.active)
+		if (FlxG.keys.justPressed.R && player.exists && player.alive && player.active && !specialState)
 		{
 			var currentSeconds = PlayerData.totalSeconds;
 			if (PlayerData.tutorialCompleted == true) PlayerData.totalDeaths++;
@@ -651,7 +652,7 @@ class ChapterState extends FlxState
 			FlxG.resetState();
 		}
 
-		if (FlxG.keys.justPressed.K && player.exists)
+		if (FlxG.keys.justPressed.K && player.exists && player.alive && player.active && !specialState)
 		{
 			if (PlayerData.currentChapter == 0) return;
 			killPlayer();
@@ -828,6 +829,7 @@ class ChapterState extends FlxState
 								var isCrit = FlxG.random.int(1, 14) == 1;
 								var damage = isCrit ? 2 : 1;
                                 jevilBoss.takeDamage(damage, false);
+								jevilBoss.jevilWasHit = true;
                                 bullet.kill();
                             }
 						}

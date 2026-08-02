@@ -489,7 +489,7 @@ class JevilPirouetteManager
 
             case 1:
                 FlxG.sound.play(AssetPaths.jevil_hypnosis__ogg, 1, false);
-                applyDamageAndCheckTired(10, 1);
+                applyDamageAndCheckTired(15, 1);
 
             case 2:
                 FlxG.sound.play(AssetPaths.jevil_perfect__ogg, 1, false);
@@ -498,7 +498,7 @@ class JevilPirouetteManager
                 invenciblePlayerTimer = 10;
                 FlxTween.tween(state.player, {alpha: 0.5}, 0.25);
                 spawnSaveParticles();
-                applyDamageAndCheckTired(20, 999);
+                applyDamageAndCheckTired(15, 999);
                 showPopup("A PERFECT 10!", FlxColor.WHITE);
 
             case 3:
