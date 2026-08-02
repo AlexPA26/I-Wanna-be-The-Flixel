@@ -128,17 +128,17 @@ class Jevil extends FlxSprite
         pirouetteManager = new JevilPirouetteManager(this, parentState);
         if (parentState != null) parentState.add(trailEffect);
 
-        // PlayerData.jevilDialogueRead = false;
+        PlayerData.jevilDialogueRead = false;
         FlxTween.tween(this, {y: y - 10}, 0.75, {type: PINGPONG, ease: FlxEase.sineInOut});
 
-        // phase01Attacks = [attackJail];
+        phase01Attacks = [attackJail];
         // phase02Attacks = [attackSpades];
         // phase03Attacks = [attackSpades];
 
-        phase01Attacks =
-        [
-            attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
-        ];
+        // phase01Attacks =
+        // [
+        //     attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
+        // ];
 
         phase02Attacks =
         [
@@ -386,8 +386,8 @@ class Jevil extends FlxSprite
             var lines:Array<String> =
             [
                 "* UEE HEE!\n* A NEW VISITOR!\n* NOW I CAN PLAY, PLAY!",
-                "* OH, YOU LOOK WEAK.\n* ARE YOU ALONE?",
-                "* UEE HEE HEE!\n* I WILL NOT HOLD BACK\n* BACK!!",
+                "* OH, YOU LOOK WEAK.\n* YOU ARE ALONE?",
+                "* UEE HEE HEE!\n* I WILL NOT HOLD BACK,\n* BACK!!",
                 "* IT'S GONNA BE FUN!\n* FUN...!!!",
                 "* IF YOU DIE, YOU LOSE!",
                 "* SIMPLE, RIGHT? RIGHT?!\n* UEE HEE!"
@@ -397,8 +397,6 @@ class Jevil extends FlxSprite
             {
                 if (dialogueBox != null)
                 {
-
-                    leveldata.misc.SaveManager.saveGame();
                     parentState.remove(dialogueBox, true);
                     dialogueBox.destroy();
                     dialogueBox = null;
@@ -437,6 +435,7 @@ class Jevil extends FlxSprite
                                 if (dialogueBox != null)
                                 {
                                     PlayerData.jevilDialogueRead = true;
+                                    leveldata.misc.SaveManager.saveGame();
                                     parentState.remove(dialogueBox, true);
                                     dialogueBox.destroy();
                                     dialogueBox = null;
@@ -993,8 +992,8 @@ class Jevil extends FlxSprite
         createAttackTimer(1.0, function(_)
         {
             if (attackInterrupted()) return;
-            var totalJewels:Int = 30;
-            var spawnInterval:Float = 0.25;
+            var totalJewels:Int = 32;
+            var spawnInterval:Float = 0.225;
             animation.play("dance");
 
             createAttackTimer(5.5, function(_)
@@ -1004,8 +1003,14 @@ class Jevil extends FlxSprite
                 FlxG.sound.play(AssetPaths.jevil_random_talk01__ogg, 1, false);
             });
 
-            if (hp <= 50 && hp >= 35) { totalJewels = 40; spawnInterval = 0.2;}
-            else if (hp < 25) { totalJewels = 50; spawnInterval = 0.185;}
+            if (hp <= 50 && hp >= 35)
+            { 
+                totalJewels = 40; spawnInterval = 0.2;
+            }
+            else if (hp < 25)
+            {
+                totalJewels = 50; spawnInterval = 0.185;
+            }
 
             for (i in 0...totalJewels)
             {
@@ -1293,6 +1298,7 @@ class Jevil extends FlxSprite
             jailManager.destroyJail();
         }
 
+        FlxTween.cancelTweensOf(parentState.player);
         parentState.player.active = false;
         parentState.player.velocity.set(0, 0);
         parentState.player.acceleration.set(0, 0);

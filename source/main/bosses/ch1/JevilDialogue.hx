@@ -42,7 +42,7 @@ class JevilDialogue extends FlxGroup
 
         textField = new FlxText(box.x + TEXT_PADDING, box.y + TEXT_PADDING, BOX_WIDTH - (TEXT_PADDING * 2), "");
         textField.setFormat("assets/fonts/deltarune.otf", FONT_SIZE, FlxColor.WHITE, LEFT, FlxTextBorderStyle.NONE);
-        // textField.lineSpacing = 8;
+        Reflect.setProperty(textField, "lineSpacing", -16);
         textField.scrollFactor.set(0, 0);
         textField.x += 25;
         add(textField);

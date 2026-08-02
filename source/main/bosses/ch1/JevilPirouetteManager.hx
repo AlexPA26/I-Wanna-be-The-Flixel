@@ -66,10 +66,22 @@ class JevilPirouetteManager
     public function update(elapsed:Float)
     {
         
-        var isSpecialState = (jevil.state == "waiting" || jevil.state == "ultimate_barrage" || jevil.state == "ultimate_cutscene"
-            || jevil.state == "ultimate_transition" || jevil.state == "startCube" || jevil.state == "ultimate_start"
-            || jevil.state == "ultimate_return_transition" || jevil.state == "ultimate_charging" || jevil.state == "returningCube"
-            || jevil.state == "precutscene" || jevil.state == "cutscene" || jevil.state == "attackingCube" || jevil.state == "dead");
+        var isSpecialState =
+            (
+                jevil.state == "waiting" ||
+                jevil.state == "ultimate_barrage" ||
+                jevil.state == "ultimate_cutscene" ||
+                jevil.state == "ultimate_transition" ||
+                jevil.state == "startCube" ||
+                jevil.state == "attackingCube" ||
+                jevil.state == "returningCube" ||
+                jevil.state == "ultimate_start" ||
+                jevil.state == "ultimate_return_transition" ||
+                jevil.state == "ultimate_charging" ||
+                jevil.state == "precutscene" ||
+                jevil.state == "cutscene" ||
+                jevil.state == "dead"
+            );
 
         if (jevil == null || state == null || state.player == null) return;
 
