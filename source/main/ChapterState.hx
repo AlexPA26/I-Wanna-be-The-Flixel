@@ -132,6 +132,7 @@ class ChapterState extends FlxState
 	public var doubleJumpGroup:FlxTypedGroup<DoubleJumpObj>;
 	public var flipGroup:FlxTypedGroup<FlipSwitch>;
 	public var portalGroup:FlxTypedGroup<PortalWarp>;
+	public var invisPortalGroup:FlxTypedGroup<InvisWarp>;
 	public var roomAcid:AcidFluid = null;
 	public var waterDeco:WaterDeco = null;
 	public var trampolines:FlxTypedGroup<NormalTrampoline>;
@@ -242,6 +243,7 @@ class ChapterState extends FlxState
 		eventEffectGroup = new FlxTypedGroup();
 		flipGroup = new FlxTypedGroup<FlipSwitch>();
 		portalGroup = new FlxTypedGroup<PortalWarp>();
+		invisPortalGroup = new FlxTypedGroup<InvisWarp>();
 		trampolines = new FlxTypedGroup<NormalTrampoline>();
 		trampolinesMini = new FlxTypedGroup<NormalTrampolineMini>();
 		platforms = new FlxTypedGroup<MovingBlock>();
@@ -402,6 +404,7 @@ class ChapterState extends FlxState
 		FlxG.overlap(player, redCoinsGroup, (p, c) -> { RedCoinLogic(cast c); });
 		FlxG.overlap(player, doubleJumpGroup, (p, d) -> { DoubleJumpLogic(cast d); });
 		FlxG.overlap(player, portalGroup, (p, pw) -> { PortalWarpLogic(cast pw); });
+		FlxG.overlap(player, invisPortalGroup, (p, ipw) -> { InvisWarpLogic(cast ipw); });
 		FlxG.overlap(player, flipGroup, (p, sw) -> { FlipSwitchObjLogic(cast sw); });
 
 		FlxG.collide(player, trampolines, (p, t) ->
@@ -533,7 +536,7 @@ class ChapterState extends FlxState
 			spawnTimer -= elapsed;
 		}
 		
-		if (spawnTimer <= 0 && !inmortal)
+		if (spawnTimer <= 0 && !inmortal && player.active)
 		{
 			FlxG.overlap(player, dangerObjects, function(p:flixel.FlxObject, hazard:flixel.FlxObject)
 			{
@@ -860,13 +863,13 @@ class ChapterState extends FlxState
 		if (FlxG.keys.justPressed.THREE && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
-			RoomLoader.loadRoom(this, "map09");
+			RoomLoader.loadRoom(this, "map47");
 		}
 
 		if (FlxG.keys.justPressed.FOUR && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
-			RoomLoader.loadRoom(this, "map37");
+			RoomLoader.loadRoom(this, "map43");
 		}
 
 		if (FlxG.keys.justPressed.SEVEN && !fightingBoss)
@@ -1381,6 +1384,41 @@ class ChapterState extends FlxState
 
 	}
 
+	function InvisWarpLogic(portalLogic:InvisWarp):Void
+	{
+
+		if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
+		FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);
+		FlxG.sound.play(AssetPaths.jevil_hypnosis__ogg, 0.5, false);
+		FlxG.camera.shake(0.01, 0.25);
+		whiteFade.alpha = 1;
+
+		PlayerData.currentChapter = 1;
+		RoomLoader.loadRoom(this, "boss-jevil01");
+
+		var blur:openfl.filters.BlurFilter = new openfl.filters.BlurFilter(8, 8, 2);
+        if (FlxG.camera.filters == null) FlxG.camera.filters = [];
+
+        FlxG.camera.filters.push(blur);
+        FlxTween.num(16, 0, 0.5, { ease: FlxEase.quadOut, onComplete: function(_)
+        {
+            if (FlxG.camera.filters != null)
+            {
+                FlxG.camera.filters.remove(blur);
+                if (FlxG.camera.filters.length == 0)
+                    FlxG.camera.filters = null;
+            }
+        }},
+        function(v:Float)
+        {
+            if (blur != null)
+            {
+                blur.blurX = v;
+                blur.blurY = v;
+            }
+        });
+
+	}
 	function killPlayer():Void
 	{
 		if (PlayerData.currentChapter == 0)

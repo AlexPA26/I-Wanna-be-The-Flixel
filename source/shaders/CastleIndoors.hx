@@ -40,7 +40,7 @@ void main()
     // 5. Heavy Castle Wall Vignette
     float dist = length(uv - vec2(0.5));
     float vignette = smoothstep(0.82, 0.28, dist);
-    color *= vignette;
+    color *= mix(1.0, vignette, 0.35);
 
     gl_FragColor = vec4(color, col.a);
 }

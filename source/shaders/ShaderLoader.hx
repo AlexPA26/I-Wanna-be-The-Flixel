@@ -48,6 +48,9 @@ class ShaderLoader
             case "castle":
                 state.screenShader = new CastleInside();
 
+            case "castleRays":
+                state.screenShader = new CastleIndoors();
+
             case "rainbow":
                 state.screenShader = new RainbowCrazy();
 

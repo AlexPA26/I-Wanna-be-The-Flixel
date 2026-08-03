@@ -153,11 +153,17 @@ class BackgroundManager
             if (effect != state.currentBackDecoEffectName || boost != state.lastDecoScrollBoost)
 
             if (effect == "none" || effect == "")
-            { 
-                if (state.backDecoEffectObj != null && state.members.indexOf(state.backDecoEffectObj) != -1)
-                {   
+            {
+                if (state.backDecoEffectObj != null)
+                {
                     state.remove(state.backDecoEffectObj);
+                    state.backDecoEffectObj.destroy();
+                    state.backDecoEffectObj = null;
                 }
+
+                state.currentBackDecoEffectName = effect;
+                state.lastDecoScrollBoost = boost;
+
                 return;
             }
 
@@ -172,7 +178,7 @@ class BackgroundManager
                         state.backDecoEffectObj.velocity.set(-5, -3);
                     case "clouds":
                         state.backDecoEffectObj = new FlxBackdrop(AssetPaths.cloudsBack__png, XY);
-                        state.backDecoEffectObj.velocity.set(-60, 0);
+                        state.backDecoEffectObj.velocity.set(-30, 0);
                         state.backDecoEffectObj.alpha = 0.65;
 
                 }
@@ -245,11 +251,6 @@ class BackgroundManager
                     state.currentBackEffectName = effect;
                     state.lastBackScrollBoost = boost;
 
-                case "none":
-                    state.circusBG.destroy();
-
-                case null:
-                    state.circusBG.destroy();
 
             }
 
@@ -303,6 +304,7 @@ class BackgroundManager
                         state.doubleEffectObj = new FlxBackdrop(AssetPaths.redMist__png, X);
                         state.doubleEffectObj.velocity.set(-10, 0);
                         state.doubleEffectObj.alpha = 0.15;
+
                 }
 
                 if (state.doubleEffectObj != null)
@@ -324,7 +326,6 @@ class BackgroundManager
         if (layer != null && layer.properties.contains("foregroundEffectType"))
         {
             var effect = layer.properties.get("foregroundEffectType");
-            
             if (effect != state.currentFrontEffectName || boost != state.lastFrontScrollBoost)
             { 
                 if (effect == "none" || effect == "" || layer == null)
@@ -339,16 +340,15 @@ class BackgroundManager
                     state.lastFrontScrollBoost = boost;
                     return;
                 }
-
                 if (state.frontEffectObj != null) 
                 { 
                     state.remove(state.frontEffectObj); 
                     state.frontEffectObj.destroy(); 
                     state.frontEffectObj = null;
                 }
-
                 switch (effect)
                 {
+                    
                     case "rain":
                         state.frontEffectObj = new FlxBackdrop(AssetPaths.rain__png, XY);
                         state.frontEffectObj.velocity.set(-250, 1200);
@@ -362,6 +362,7 @@ class BackgroundManager
                     case "sandstorm":
                         state.frontEffectObj = new FlxBackdrop(AssetPaths.sandstorm__png, X);
                         state.frontEffectObj.velocity.set(boost - 3000, 0);
+
                 }
 
                 if (state.frontEffectObj != null)

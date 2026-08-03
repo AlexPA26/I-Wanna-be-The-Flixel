@@ -100,6 +100,7 @@ class RoomLoader
 		state.doubleJumpGroup.clear();
 		state.flipGroup.clear();
 		state.portalGroup.clear();
+		state.invisPortalGroup.clear();
 		state.warpsGroup.clear();
 		state.platforms.clear();
 		state.trampolines.clear();
@@ -228,6 +229,7 @@ class RoomLoader
 		state.add(state.fallingBlock);
 		state.add(state.flipGroup);
 		state.add(state.portalGroup);
+		state.add(state.invisPortalGroup);
 		state.add(state.trampolines);
 		state.add(state.trampolinesMini);
 		state.add(state.playerGlow);

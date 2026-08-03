@@ -128,28 +128,28 @@ class Jevil extends FlxSprite
         pirouetteManager = new JevilPirouetteManager(this, parentState);
         if (parentState != null) parentState.add(trailEffect);
 
-        PlayerData.jevilDialogueRead = false;
+        // PlayerData.jevilDialogueRead = false;
         FlxTween.tween(this, {y: y - 10}, 0.75, {type: PINGPONG, ease: FlxEase.sineInOut});
 
-        phase01Attacks = [attackJail];
+        // phase01Attacks = [attackJail];
         // phase02Attacks = [attackSpades];
         // phase03Attacks = [attackSpades];
 
-        // phase01Attacks =
-        // [
-        //     attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
-        // ];
+        phase01Attacks =
+        [
+            attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
+        ];
 
         phase02Attacks =
         [
-            attackFan, attackScythe, attackJail, attackBullets, attackCircle, attackHearts, attackScythe,
+            attackScythe, attackBombarding, attackJail, attackBullets, attackCircle, attackHearts, attackFan, attackScythe,
             attackBombarding, attackScythe, attackJail, attackBullets, attackCircle
         ];
 
 
         phase03Attacks =
         [
-            attackBombarding, attackScythe, attackCube, attackBullets, attackJail, attackHearts,
+            attackBombarding, attackScythe, attackCube, attackBullets, attackBombarding, attackJail, attackHearts,
             attackBombarding, attackCircle, attackHearts, attackScythe, attackBullets, attackBombarding, attackJail,
             attackFan, attackCircle, attackBombarding, attackHearts, attackJail
         ];
@@ -178,15 +178,7 @@ class Jevil extends FlxSprite
             flash.alpha -= elapsed;
         }
 
-        if (state == "startCube" || state == "attackingCube" || state == "returningCube") { parentState.inmortal = true; }
 
-        if (state == "returningCube")
-        {
-            new FlxTimer().start(2, function(_)
-            {
-                parentState.inmortal = false;
-            });
-        }
         if (FlxG.keys.justPressed.U)
         {
             ultimateTriggered = true;
@@ -619,13 +611,17 @@ class Jevil extends FlxSprite
         var randomY:Float = FlxG.random.float(200, 400);
         var goLeft:Bool = false;
         
-        if (spadeComboCount == 0 && hp >= 90)
+        if (spadeComboCount == 0 && hp >= 105)
         {
             targetSpadeCombos = FlxG.random.int(4, 6);
         }
+        else if (spadeComboCount == 0 && hp >= 80 && hp < 105)
+        {
+            targetSpadeCombos = FlxG.random.int(6, 8);
+        }
         else
         {
-            targetSpadeCombos = FlxG.random.int(6, 12);
+            targetSpadeCombos = FlxG.random.int(8, 12);
         }
         
         if (spadeComboCount == 0)
@@ -660,8 +656,8 @@ class Jevil extends FlxSprite
         FlxG.sound.play(AssetPaths.beep__ogg, 0.5, false);
         
         var cooldownAttack:Float = 0.85;
-        if (hp <= 90) { cooldownAttack = 0.65; }
-
+        if (hp >= 80 && hp < 105) { cooldownAttack = 0.7; }
+        else if (hp > 0 && hp < 80) { cooldownAttack = 0.6; }
         var bulletSpawnX:Float = x + (width / 2) - 25;
         var bulletSpawnY:Float = y + (height / 2) - 50;
 
@@ -707,7 +703,6 @@ class Jevil extends FlxSprite
 
     function attackBullets()
     {
-        trace(this);
         if (shield.alpha != 0 || shield.visible == false)
         {
             shield.visible = true;
@@ -1221,17 +1216,17 @@ class Jevil extends FlxSprite
         animation.play("dance");
         FlxG.sound.play(AssetPaths.jevil_strong_attack03__ogg, 0.75);
 
-        var totalBombs:Int = 8;
+        var totalBombs:Int = 16;
         var dropInterval:Float = 0.75;
 
         if (hp <= 50 && hp >= 25)
         {
-            totalBombs = 12;
+            totalBombs = 18;
             dropInterval = 0.65;
         }
         else if (hp < 25)
         {
-            totalBombs = 14;
+            totalBombs = 26;
             dropInterval = 0.5;
         }
 
@@ -1341,8 +1336,7 @@ class Jevil extends FlxSprite
         if (cubeTriggered == true)
         {
             this.teleport();
-            trace("attackCube early return");
-            trace(cubeTriggered);
+            trace("attackCube Early Return");
             return;
         }
 
@@ -1490,7 +1484,6 @@ class Jevil extends FlxSprite
 
             if (state == "attacking_jail")
             {
-                trace("Hello?");
                 explodeJail();
             }
 
@@ -1910,16 +1903,13 @@ class Jevil extends FlxSprite
 
     function createAttackTimer(time:Float, callback:FlxTimer->Void):FlxTimer
     {
-        trace("Timer created on " + this);
         var timer = new FlxTimer();
 
         attackTimers.push(timer);
-        trace("Added timer. Count = " + attackTimers.length);
 
         timer.start(time, function(t)
         {
             attackTimers.remove(timer);
-            trace("Finished timer. Remaining = " + attackTimers.length);
             callback(t);
         });
 
@@ -1928,7 +1918,6 @@ class Jevil extends FlxSprite
 
     function cancelAttackTimers():Void
     {
-        trace("Cancelling on " + this);
         var timers = attackTimers.copy();
 
         attackTimers.resize(0);

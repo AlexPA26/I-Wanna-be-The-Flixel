@@ -136,6 +136,21 @@ class ObjectLoader
                             var portal = new PortalWarp(spawnX, spawnY);
                             state.portalGroup.add(portal);
 
+                        case "invisPortal":
+                            var w:Int = 128;
+                            var h:Int = 128;
+
+                            if (obj.properties.contains("width"))
+                                w = Std.parseInt(obj.properties.get("width"));
+
+                            if (obj.properties.contains("height"))
+                                h = Std.parseInt(obj.properties.get("height"));
+
+                            var invisPortal = new InvisWarp(w, h);
+                            invisPortal.setPosition(spawnX, spawnY);
+
+                            state.invisPortalGroup.add(invisPortal);
+
                         case "laser":
                             var dir:String = "hor";
                             if (obj.properties.contains("direction")) { dir = obj.properties.get("direction"); }
@@ -243,7 +258,7 @@ class ObjectLoader
                                 {
                                     scale = Std.parseFloat(obj.properties.get("scale"));
                                     imgSprite.scale.set(scale, scale);
-                                    imgSprite.updateHitbox();
+                                    imgSprite.centerOffsets();
                                 }
 
                                 if (obj.properties.contains("tweenDuration"))
