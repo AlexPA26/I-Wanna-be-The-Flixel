@@ -647,6 +647,10 @@ class ChapterState extends FlxState
 
 		if (FlxG.keys.justPressed.R && player.exists && player.alive && player.active && !specialState)
 		{
+			if (fightingBoss)
+			{
+				if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
+			}
 			var currentSeconds = PlayerData.totalSeconds;
 			if (PlayerData.tutorialCompleted == true) PlayerData.totalDeaths++;
 			leveldata.misc.SaveManager.saveGameRestart();
@@ -1387,10 +1391,12 @@ class ChapterState extends FlxState
 	function InvisWarpLogic(portalLogic:InvisWarp):Void
 	{
 
+		invisPortalGroup.active = false;
 		if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
 		FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);
 		FlxG.sound.play(AssetPaths.jevil_hypnosis__ogg, 0.5, false);
 		FlxG.camera.shake(0.01, 0.25);
+		PlayerData.jevilDialogueRead = false;
 		whiteFade.alpha = 1;
 
 		PlayerData.currentChapter = 1;

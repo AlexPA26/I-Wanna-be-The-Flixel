@@ -255,9 +255,8 @@ class KrisDeathState extends FlxSubState
         super.update(elapsed);
 
         var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
-        var resetPressed = FlxG.keys.justPressed.R;
-
         #if !mobile
+        var resetPressed = FlxG.keys.justPressed.R;
 
         if (gamepad != null)
 		{

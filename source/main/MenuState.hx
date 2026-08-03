@@ -427,6 +427,7 @@ class MenuState extends FlxState
         if (SaveManager.loadGame())
         {
             if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
+            if (PlayerData.jevilDialogueRead) PlayerData.jevilDialogueRead = false;
             FlxG.switchState(ChapterState.new);
         }
             

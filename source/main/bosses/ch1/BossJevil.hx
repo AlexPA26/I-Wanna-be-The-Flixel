@@ -165,6 +165,7 @@ class Jevil extends FlxSprite
             pirouetteManager.update(elapsed);
         }
 
+
         if (this.shield != null && this.shield.exists && this.alpha == 1 && this.visible == true && this.active == true)
         {
             this.shield.alpha = 1 - Math.random() * 0.25;
@@ -450,7 +451,6 @@ class Jevil extends FlxSprite
 
         animation.play("laugh");
         FlxG.sound.play(AssetPaths.jevil_laugh01__ogg);
-        this.shield.visible = true;
         FlxTween.tween(shield, {alpha: 1}, 0.5, {ease: FlxEase.quadOut});
 
         new FlxTimer().start(1.0, function(_)
@@ -481,6 +481,7 @@ class Jevil extends FlxSprite
                     if (parentState.player != null && parentState.player.exists && parentState.player.alive)
                     {
                         flash.alpha = 0.35;
+                        if (!this.shield.visible) this.shield.visible = true;
                         FlxG.sound.play(AssetPaths.start_fight01__ogg, 0.75, false);
                         FlxG.sound.playMusic(AssetPaths.jevil_fight__ogg, 0.85, true);
                         parentState.playerDeathsTrigger = false;
@@ -611,17 +612,24 @@ class Jevil extends FlxSprite
         var randomY:Float = FlxG.random.float(200, 400);
         var goLeft:Bool = false;
         
-        if (spadeComboCount == 0 && hp >= 105)
+        if (spadeComboCount == 0)
         {
-            targetSpadeCombos = FlxG.random.int(4, 6);
-        }
-        else if (spadeComboCount == 0 && hp >= 80 && hp < 105)
-        {
-            targetSpadeCombos = FlxG.random.int(6, 8);
-        }
-        else
-        {
-            targetSpadeCombos = FlxG.random.int(8, 12);
+            if (hp >= 105)
+            {
+                targetSpadeCombos = FlxG.random.int(5, 6);
+            }
+                
+            else if (hp >= 80)
+            {
+                targetSpadeCombos = FlxG.random.int(6, 9);
+            }
+                
+            else
+            {
+                targetSpadeCombos = FlxG.random.int(9, 12);
+            }
+
+            trace("Target spades combo: " + targetSpadeCombos);
         }
         
         if (spadeComboCount == 0)
@@ -655,9 +663,9 @@ class Jevil extends FlxSprite
         FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.beep__ogg, 0.5, false);
         
-        var cooldownAttack:Float = 0.85;
-        if (hp >= 80 && hp < 105) { cooldownAttack = 0.7; }
-        else if (hp > 0 && hp < 80) { cooldownAttack = 0.6; }
+        var cooldownAttack:Float = 0.75;
+        if (hp >= 80 && hp < 105) { cooldownAttack = 0.65; }
+        else if (hp > 0 && hp < 80) { cooldownAttack = 0.5; }
         var bulletSpawnX:Float = x + (width / 2) - 25;
         var bulletSpawnY:Float = y + (height / 2) - 50;
 
@@ -832,8 +840,8 @@ class Jevil extends FlxSprite
         state = "attacking_hearts";
         isVulnerable = false;
 
-        var totalBombs = hp <= 50 ? 40 : 28;
-        var travelSpeed = hp <= 50 ? 400 : 325;
+        var totalBombs = hp <= 50 ? 48 : 36;
+        var travelSpeed = hp <= 50 ? 450 : 400;
 
         var totalWaves = Std.int(totalBombs / 4);
         var waveInterval = 0.75;
