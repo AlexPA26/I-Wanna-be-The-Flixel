@@ -243,6 +243,8 @@ class SkinSelectorSubState extends FlxSubState
     {
         super.update(elapsed);
 
+        #if !mobile
+
         if (FlxG.keys.justPressed.LEFT || FlxG.keys.justPressed.A)
         {
             curSelected--;
@@ -268,10 +270,13 @@ class SkinSelectorSubState extends FlxSubState
             closeBoton.animation.play("normal");
         }
 
+
         if (FlxG.keys.justPressed.ESCAPE)
         {
             openfl.ui.Mouse.cursor = openfl.ui.MouseCursor.ARROW;
             close();
         }
+
+        #end
     }
 }

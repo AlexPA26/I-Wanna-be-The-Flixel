@@ -90,8 +90,9 @@ public function flipGravity():Void
     isFlipping = true;
     flippingTimer = 0.35;
 
+    #if !mobile
     FlxG.keys.enabled = false;
-
+    #end
     velocity.y = 0;
 
     setFacingFlip(LEFT, true, isFlipped);
@@ -129,7 +130,9 @@ public function flipGravity():Void
             if (flippingTimer <= 0)
             {
                 isFlipping = false;
+                #if !mobile
                 FlxG.keys.enabled = true;
+                #end
             }
         }
         

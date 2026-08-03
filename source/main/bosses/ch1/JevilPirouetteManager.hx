@@ -123,7 +123,15 @@ class JevilPirouetteManager
         }
 
         var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
+
+        #if !mobile
         var toggleMenuPressed = FlxG.keys.justPressed.TAB;
+        #end
+
+        #if mobile
+        var toggleMenuPressed = false;
+        #end
+
         if (gamepad != null)
         {
             if (gamepad.justPressed.LEFT_SHOULDER || gamepad.justPressed.RIGHT_SHOULDER)
@@ -169,9 +177,9 @@ class JevilPirouetteManager
             if (hypnosisText != null)
                 hypnosisText.color = (state.currentTP >= 50) ? FlxColor.WHITE : FlxColor.GRAY;
 
+            #if !mobile
             var selectUp = FlxG.keys.justPressed.ONE || (gamepad != null && (gamepad.justPressed.LEFT_STICK_DIGITAL_UP));
             var selectDown = FlxG.keys.justPressed.TWO || (gamepad != null && (gamepad.justPressed.LEFT_STICK_DIGITAL_DOWN));
-
             if ((selectUp) && numberSelection != 1)
             {
                 numberSelection = 1;
@@ -187,7 +195,6 @@ class JevilPirouetteManager
             }
 
             var cancelPressed = FlxG.keys.justPressed.X || (gamepad != null && gamepad.justPressed.X);
-
             if (cancelPressed)
             {
                 FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.75, false);
@@ -235,6 +242,7 @@ class JevilPirouetteManager
                     }
                 }
             }
+            #end
         }
 
         if (isSpecialState)

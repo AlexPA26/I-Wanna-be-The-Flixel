@@ -68,17 +68,15 @@ class MenuState extends FlxState
 
     override public function create():Void
     {
-        openfl.ui.Mouse.cursor = openfl.ui.MouseCursor.ARROW;
         FlxG.scaleMode = new RatioScaleMode();
-        FlxG.mouse.visible = true;
-        FlxG.mouse.useSystemCursor = true;
         SaveManager.loadGame();
-        Multiplayer.activeMode = None;
-
         FlxG.camera.filters = [];
 
         #if !mobile
+        openfl.ui.Mouse.cursor = openfl.ui.MouseCursor.ARROW;
         FlxG.mouse.visible = true;
+        FlxG.mouse.useSystemCursor = true;
+        Multiplayer.activeMode = None;
         FlxG.mouse.useSystemCursor = true;
         #end
 
@@ -173,11 +171,12 @@ class MenuState extends FlxState
         customizeButton(btnSkins);
         add(btnSkins);
 
+        #if (!mobile && !html5)
+
         btnStages = new FlxButton(850, 550, "Stages", clickStages);
         customizeButton(btnStages);
         add(btnStages);
 
-        #if sys
 
         btnCoop = new FlxButton(850, 350, "Coop", clickCoop);
         customizeButton(btnCoop);

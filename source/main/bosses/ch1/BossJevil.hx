@@ -179,7 +179,7 @@ class Jevil extends FlxSprite
             flash.alpha -= elapsed;
         }
 
-
+        #if !mobile
         if (FlxG.keys.justPressed.U)
         {
             ultimateTriggered = true;
@@ -218,6 +218,8 @@ class Jevil extends FlxSprite
             trace("Jevil Direction: " + this.flipX);
             trace("------------------------------");
         }
+
+        #end
 
         if (craziness && animation.curAnim != null && animation.curAnim.name == "dance")
         {

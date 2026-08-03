@@ -161,9 +161,9 @@ class DeathState extends FlxSubState
         if (timerTip <= 0) { subtext.visible = true; }
 
         var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
+        #if !mobile
         var resetPressed = FlxG.keys.justPressed.R;
 
-        #if !mobile
 
         if (gamepad != null)
 		{

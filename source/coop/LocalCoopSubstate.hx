@@ -54,6 +54,7 @@ class LocalCoopSubState extends FlxSubState
         return v;
     }
 
+    #if !mobile
     override public function create() 
     {
         openfl.ui.Mouse.cursor = openfl.ui.MouseCursor.ARROW;
@@ -132,6 +133,7 @@ class LocalCoopSubState extends FlxSubState
 
         add(assetsGroup);
     }
+
 
     function setupFancyButton(btn:FlxButton):Void
     {
@@ -254,4 +256,6 @@ class LocalCoopSubState extends FlxSubState
 
         super.destroy();
     }
+
+    #end
 }

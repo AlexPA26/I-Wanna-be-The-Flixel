@@ -15,7 +15,7 @@ class ModLoader
     {
 
         overrides.clear();
-        #if sys
+        #if !html5
         var modsPath = Path.normalize(Sys.getCwd() + "../../../mods");
         trace("Default folder: " + Sys.getCwd());
         trace("Mods folder exists?: " + FileSystem.exists(modsPath));

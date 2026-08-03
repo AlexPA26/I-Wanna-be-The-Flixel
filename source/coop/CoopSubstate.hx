@@ -14,6 +14,7 @@ import flixel.tweens.FlxEase;
 
 class CoopSubState extends FlxSubState
 {
+    #if !mobile
     var assetsGroup:FlxGroup;
     var bgOption:FlxSprite;
     var title:FlxText;
@@ -161,4 +162,5 @@ class CoopSubState extends FlxSubState
             close();
         }
     }
+    #end
 }

@@ -259,11 +259,12 @@ class JevilDirectionalAttack extends FlxBasic
         var vx:Float = 0;
         var vy:Float = 0;
 
+        #if !mobile
         if (FlxG.keys.anyPressed(["LEFT", "A"])) vx -= SOUL_SPEED;
         if (FlxG.keys.anyPressed(["RIGHT", "D"])) vx += SOUL_SPEED;
         if (FlxG.keys.anyPressed(["UP", "W"])) vy -= SOUL_SPEED;
         if (FlxG.keys.anyPressed(["DOWN", "S"])) vy += SOUL_SPEED;
-
+        #end
         soul.x += vx * elapsed;
         soul.y += vy * elapsed;
 

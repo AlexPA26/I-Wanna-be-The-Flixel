@@ -97,6 +97,8 @@ override public function update(elapsed:Float)
             bg.alpha += bgFadeTimer;
         }
 
+        #if !mobile
+
         if (FlxG.mouse.overlaps(closeBoton))
         {
             closeBoton.animation.play("active");
@@ -125,6 +127,7 @@ override public function update(elapsed:Float)
         {
             openfl.ui.Mouse.cursor = openfl.ui.MouseCursor.ARROW;
         }
+        #end
     }
 
     function fullScreenButton():Void
@@ -132,6 +135,7 @@ override public function update(elapsed:Float)
         if (FlxG.fullscreen) buttonFullScreen.animation.play("active");
         else buttonFullScreen.animation.play("normal");
 
+        #if !mobile
         if (FlxG.mouse.overlaps(buttonFullScreen) && (FlxG.mouse.justPressed))
         {   
             if (FlxG.fullscreen == false)
@@ -145,6 +149,7 @@ override public function update(elapsed:Float)
                 buttonFullScreen.animation.play("normal");
             }
         }
+        #end
     }
 
 

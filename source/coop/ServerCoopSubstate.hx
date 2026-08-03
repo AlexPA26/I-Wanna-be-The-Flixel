@@ -19,6 +19,7 @@ import main.Multiplayer.CoopMode;
 
 class ServerCoopSubState extends FlxSubState 
 {
+    #if !mobile
     var assetsGroup:FlxGroup;
     var bgOption:FlxSprite;
     var title:FlxText;
@@ -254,4 +255,6 @@ class ServerCoopSubState extends FlxSubState
 
         super.destroy();
     }
+
+    #end
 }

@@ -15,6 +15,7 @@ import main.PlayerData;
 
 class StageSelectSubState extends FlxSubState
 {
+    #if sys
     var title:FlxText;
     var bgOption:FlxSprite;
     var closeBoton = new FlxSprite();
@@ -325,6 +326,7 @@ class StageSelectSubState extends FlxSubState
         }
     }
 
+    #if !mobile
     function closeBotonMenu():Void
     {
         if (FlxG.mouse.overlaps(closeBoton))
@@ -345,22 +347,23 @@ class StageSelectSubState extends FlxSubState
             FlxG.camera.filters = [];
             close();
         }
+        
             
 
     }
-
+    #end
     override public function update(elapsed:Float):Void
     {
         super.update(elapsed);
 
+        #if !mobile
         if (FlxG.keys.justPressed.ESCAPE)
         {
             openfl.ui.Mouse.cursor = openfl.ui.MouseCursor.ARROW;
             close();
         }
-
         closeBotonMenu();
-
+        #end
 
         
     }
@@ -385,4 +388,5 @@ class StageSelectSubState extends FlxSubState
         }
         return result;
     }
+    #end
 }

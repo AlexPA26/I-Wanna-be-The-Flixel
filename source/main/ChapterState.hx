@@ -183,6 +183,7 @@ class ChapterState extends FlxState
 
 	override public function create():Void
 	{
+		#if (!html5 && !mobile)
 		Multiplayer.usingTCP = false;
 		#if !debug
 			#if !mobile
@@ -226,6 +227,8 @@ class ChapterState extends FlxState
 			udpClient = null;
 			trace("Multiplayer client inactive");
 		}
+
+		#end
 
 		hudGroup = new FlxGroup();
 		virtualPad = new FlxVirtualPad(LEFT_RIGHT, A);
@@ -762,23 +765,7 @@ class ChapterState extends FlxState
 		{
 			killPlayer();
 		}
-
-		if (FlxG.keys.justPressed.T)
-		{
-			trace("PLAYER X: " + player.x + " ||| PLAYER Y: " + player.y);
-		}
-
-		if (FlxG.keys.justPressed.Y)
-		{
-			trace("MAP WIDTH: " + map.width);
-			trace("MAP HEIGHT: " + map.height);
-		}
-
-		if (FlxG.keys.justPressed.B)
-		{
-			trace("CURRENT ROOM: " + currentRoomName);
-		}
-
+ 
 
 		if (currentBoss != null && Std.isOfType(currentBoss, main.bosses.ch1.BossJevil.Jevil))
 		{
@@ -905,14 +892,13 @@ class ChapterState extends FlxState
 			inmortal = !inmortal;
 		}
 
-		#end
-
 		if (FlxG.keys.justPressed.P)
 		{
 			trace("--- COIN STATUS ---");
 			trace("Total Coins: " + PlayerData.getCoinCount());
 			trace("IDs in memory: " + PlayerData.collectedCoins);
 		}
+
 
 		if (FlxG.keys.justPressed.F && udpClient != null && player != null && player.alive)
 		{
@@ -959,6 +945,8 @@ class ChapterState extends FlxState
 			}
 		}
 
+		#end
+
 		if (cameraType != "normal" && !isAutoscrolling)
 		{
 			if (cameraSnapTimer >= 0)
@@ -974,6 +962,8 @@ class ChapterState extends FlxState
 				}
 			}
 		}
+
+		#if (!mobile && !html5)
 		if (udpClient != null)
 		{
 			if (testingUDP)
@@ -1131,6 +1121,7 @@ class ChapterState extends FlxState
 				}
 			}
 		}
+		#end
 	}
 
 	override public function destroy():Void

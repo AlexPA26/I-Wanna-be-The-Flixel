@@ -19,6 +19,7 @@ import sys.io.File;
 
 class ModsSubState extends FlxSubState
 {
+    #if !mobile
     var assetsGroup:FlxGroup;
     var bgOption:FlxSprite;
     var title:FlxText;
@@ -231,4 +232,5 @@ class ModsSubState extends FlxSubState
             close();
         }
     }
+    #end
 }

@@ -109,11 +109,12 @@ class JevilDialogue extends FlxGroup
 
         if (!dialogueActive) return;
 
+        #if !mobile
         if (FlxG.keys.justPressed.Z || FlxG.keys.justPressed.ENTER)
+        #end
         {
             if (typing)
             {
-                // Instantly reveal the rest of the current line.
                 if (typeTimer != null) typeTimer.cancel();
 
                 var currentLine = lines[lineIndex];
