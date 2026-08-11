@@ -26,6 +26,15 @@ enum Action
     UP;
     DOWN;
     JUMP;
+
+    // Jevil Boss Inputs
+
+    JEVIL_SKIP_DIALOGUE;
+    JEVIL_MENU_TOGGLE;
+    JEVIL_MENU_CONFIRM;
+    JEVIL_MENU_CANCEL;
+    JEVIL_MENU_UP;
+    JEVIL_MENU_DOWN;
 }
 
 class InputManager
@@ -42,7 +51,7 @@ class InputManager
                 #if mobile
                 return false;
                 #else
-                var padPress = (gamepad != null && (gamepad.justPressed.Y || gamepad.justPressed.LEFT_SHOULDER || gamepad.justPressed.RIGHT_SHOULDER));
+                var padPress = (gamepad != null && (gamepad.justPressed.BACK));
                 return FlxG.keys.justPressed.R || padPress;
                 #end
 
@@ -74,6 +83,50 @@ class InputManager
                 #else
                 return false;
                 #end
+
+            /* JEVIL CONTROLS */
+
+            case JEVIL_SKIP_DIALOGUE:
+                #if mobile
+                var touchPress = FlxG.touches.justStarted().length > 0;
+                var padPress = (virtualPad != null && virtualPad.buttonA.justPressed);
+                return touchPress || padPress;
+                #else
+                var padPress = (gamepad != null && (gamepad.justPressed.A || gamepad.justPressed.B));
+                return FlxG.keys.justPressed.Z || FlxG.keys.justPressed.ENTER || padPress;
+                #end
+
+            case JEVIL_MENU_TOGGLE:
+                #if mobile return false; #else
+                var padPress = (gamepad != null && gamepad.justPressed.LEFT_SHOULDER);
+                return FlxG.keys.justPressed.TAB || padPress;
+                #end
+
+            case JEVIL_MENU_CONFIRM:
+                #if mobile return false; #else
+                var padPress = (gamepad != null && gamepad.justPressed.RIGHT_SHOULDER);
+                return FlxG.keys.justPressed.Z || FlxG.keys.justPressed.ENTER || padPress;
+                #end
+                
+            case JEVIL_MENU_CANCEL:
+                #if mobile return false; #else
+                var padPress = (gamepad != null && gamepad.justPressed.X);
+                return FlxG.keys.justPressed.X || padPress;
+                #end
+                
+            case JEVIL_MENU_UP:
+                #if mobile return false; #else
+                var padPress = (gamepad != null && (gamepad.justPressed.DPAD_UP || gamepad.justPressed.LEFT_STICK_DIGITAL_UP));
+                return FlxG.keys.justPressed.ONE || padPress;
+                #end
+
+            case JEVIL_MENU_DOWN:
+                #if mobile return false; #else
+                var padPress = (gamepad != null && (gamepad.justPressed.DPAD_DOWN || gamepad.justPressed.LEFT_STICK_DIGITAL_DOWN));
+                return FlxG.keys.justPressed.TWO || padPress;
+                #end
+
+            /* Debug and MISC lol */
 
             case DEBUG_TOGGLE:
                 #if mobile return false; #else return FlxG.keys.justPressed.TAB; #end

@@ -1,5 +1,6 @@
 package main.bosses.ch1;
 
+import main.InputManager.Action;
 import flixel.text.FlxText;
 import flixel.FlxSprite;
 import flixel.FlxG;
@@ -65,7 +66,6 @@ class JevilPirouetteManager
 
     public function update(elapsed:Float)
     {
-        
         var isSpecialState =
             (
                 jevil.state == "waiting" ||
@@ -122,23 +122,8 @@ class JevilPirouetteManager
             actButton.alpha = 0.65;
         }
 
-        var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
-
-        #if !mobile
-        var toggleMenuPressed = FlxG.keys.justPressed.TAB;
-        #end
-
-        #if mobile
-        var toggleMenuPressed = false;
-        #end
-
-        if (gamepad != null)
-        {
-            if (gamepad.justPressed.LEFT_SHOULDER || gamepad.justPressed.RIGHT_SHOULDER)
-            {
-                toggleMenuPressed = true;
-            }
-        }
+        // --- 1. TOGGLE / CYCLE MENU (TAB or LEFT SHOULDER) ---
+        var toggleMenuPressed = main.InputManager.justPressed(Action.JEVIL_MENU_TOGGLE);
 
         if (toggleMenuPressed && actButton.active && state.currentTP >= 0 && state.player.alive && state.player.active)
         {
@@ -163,7 +148,7 @@ class JevilPirouetteManager
                 else if (numberSelection == 2)
                 {
                     FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.75, false);
-                    closeMenu();
+                    closeMenu(); // Closes natively if tapped on the last option!
                 }
             }
         }
@@ -177,9 +162,12 @@ class JevilPirouetteManager
             if (hypnosisText != null)
                 hypnosisText.color = (state.currentTP >= 50) ? FlxColor.WHITE : FlxColor.GRAY;
 
-            #if !mobile
-            var selectUp = FlxG.keys.justPressed.ONE || (gamepad != null && (gamepad.justPressed.LEFT_STICK_DIGITAL_UP));
-            var selectDown = FlxG.keys.justPressed.TWO || (gamepad != null && (gamepad.justPressed.LEFT_STICK_DIGITAL_DOWN));
+            // --- 2. MENU NAVIGATION AND CONFIRMATION ---
+            var selectUp = main.InputManager.justPressed(Action.JEVIL_MENU_UP);
+            var selectDown = main.InputManager.justPressed(Action.JEVIL_MENU_DOWN);
+            var cancelPressed = main.InputManager.justPressed(Action.JEVIL_MENU_CANCEL);
+            var confirmPressed = main.InputManager.justPressed(Action.JEVIL_MENU_CONFIRM);
+
             if ((selectUp) && numberSelection != 1)
             {
                 numberSelection = 1;
@@ -194,20 +182,10 @@ class JevilPirouetteManager
                 updateSoulPosition();
             }
 
-            var cancelPressed = FlxG.keys.justPressed.X || (gamepad != null && gamepad.justPressed.X);
             if (cancelPressed)
             {
                 FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.75, false);
                 closeMenu();
-            }
-
-            var confirmPressed = FlxG.keys.justPressed.Z || FlxG.keys.justPressed.ENTER;
-            if (gamepad != null)
-            {
-                if (gamepad.justPressed.X || gamepad.justPressed.Y) 
-                {
-                    confirmPressed = true;
-                }
             }
 
             if (confirmPressed)
@@ -221,7 +199,6 @@ class JevilPirouetteManager
                         closeMenu();
                         startPirouette();
                     }
-
                     else
                     {
                         FlxG.sound.play(AssetPaths.error__ogg, 0.65, false);
@@ -242,7 +219,6 @@ class JevilPirouetteManager
                     }
                 }
             }
-            #end
         }
 
         if (isSpecialState)

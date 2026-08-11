@@ -109,9 +109,7 @@ class JevilDialogue extends FlxGroup
 
         if (!dialogueActive) return;
 
-        #if !mobile
-        if (FlxG.keys.justPressed.Z || FlxG.keys.justPressed.ENTER)
-        #end
+        if (InputManager.justPressed(JEVIL_SKIP_DIALOGUE))
         {
             if (typing)
             {
