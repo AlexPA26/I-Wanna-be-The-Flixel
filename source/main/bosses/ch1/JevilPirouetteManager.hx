@@ -532,7 +532,7 @@ class JevilPirouetteManager
                 FlxG.sound.play(AssetPaths.jevil_weird_effect__ogg, 1, false);
                 FlxG.sound.play(AssetPaths.flip__ogg, 0.5, false);
                 FlxTween.tween(FlxG.camera, {angle: 180}, 0.5);
-                flippedCameraTimer = 6.0;
+                flippedCameraTimer = 5.0;
                 showPopup("CHAOS! CHAOS!", FlxColor.WHITE);
 
             case 5:

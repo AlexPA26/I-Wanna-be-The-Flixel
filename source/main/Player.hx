@@ -16,6 +16,7 @@ import openfl.display.BitmapData;
 
 class Player extends FlxSprite
 {
+    public var canJump:Bool = true;
     public var canDoubleJump:Bool = true;
     public var doubleJumpEffect:FlxEmitter;
     public var isRidingPlatform:Bool = false;
@@ -173,13 +174,13 @@ public function flipGravity():Void
         if (left) { acceleration.x = -4000; facing = LEFT; }
         else if (right) { acceleration.x = 4000; facing = RIGHT; }
 
-        if (jumpPressed)
+        if (jumpPressed && canJump)
         {
             if (safeJump > 0) 
             {
                 velocity.y = -650 * gravMult; 
                 safeJump = 0;
-                FlxG.sound.play(AssetPaths.jump__ogg, 1);
+                FlxG.sound.play(AssetPaths.jump__ogg, 0.75);
                 animationJumpUp = true;
                 animationJumpDown = false;
                     
@@ -192,7 +193,7 @@ public function flipGravity():Void
                     doubleJumpEffect.start(true, 0, 10);
                     canDoubleJump = false;
                     velocity.y = -600 * gravMult;
-                    FlxG.sound.play(AssetPaths.doublejump__ogg, 1);
+                    FlxG.sound.play(AssetPaths.doublejump__ogg, 0.75);
                     animationJumpUp = true;
 					animationJumpDown = false;
             }

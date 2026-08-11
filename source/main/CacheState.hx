@@ -176,6 +176,7 @@ class CacheState extends FlxState
 
                 if (PlayerData.tutorialCompleted == false)
                 {
+                    trace("Starting tutorial..");
                     FlxG.switchState(ChapterState.new);
                 }
 

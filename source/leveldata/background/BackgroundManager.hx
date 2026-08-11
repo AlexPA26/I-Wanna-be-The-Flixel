@@ -78,7 +78,8 @@ class BackgroundManager
             else state.bg.scrollFactor.set(0, 0);
             state.bg.active = false;
 
-            if (state.currentRoomName != null && StringTools.startsWith(state.currentRoomName, "boss-jevil"))
+            if (state.currentRoomName != null && StringTools.startsWith(state.currentRoomName, "boss-jevil")
+                && state.currentRoomName != null && !StringTools.startsWith(state.currentRoomName, "boss-jevil05"))
             {
                 state.bg.alpha = 0;
             }

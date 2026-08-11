@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="62" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="29" nextobjectid="919">
+ <properties>
+  <property name="songName" value="castle1"/>
+ </properties>
+ <tileset firstgid="1" source="ch1-tiles.tsx"/>
+ <tileset firstgid="89" source="../../textures/trampoline.tsx"/>
+ <tileset firstgid="92" source="../../textures/save.tsx"/>
+ <tileset firstgid="93" source="../../textures/spike.tsx"/>
+ <tileset firstgid="101" source="../../textures/laser.tsx"/>
+ <tileset firstgid="119" source="../../textures/light.tsx"/>
+ <tileset firstgid="121" source="../../textures/transition-tiles.tsx"/>
+ <tileset firstgid="126" source="../../textures/small-spike.tsx"/>
+ <layer id="1" name="tiles-main" width="62" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,
+0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,
+0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0
+</data>
+ </layer>
+ <layer id="5" name="tiles-deco" width="62" height="18">
+  <data encoding="csv">
+9,9,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,12,0,0,12,0,0,12,0,12,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,12,0,0,0,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,12,0,0,12,0,0,12,0,12,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,12,0,0,0,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,12,0,0,12,0,0,12,0,12,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,12,0,0,0,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,12,0,0,12,0,0,0,0,12,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,12,0,0,0,0,0,0,
+9,9,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,12,0,0,12,0,0,0,0,12,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,12,0,0,0,0,0,0,
+9,9,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,12,0,0,0,0,0,0,
+9,9,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,9,9,0,0,0,0,0,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,12,0,0,0,0,0,0,
+9,9,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,9,9,0,0,0,0,0,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,
+9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,9,9,0,0,0,0,0,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,9,9,9,
+9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,9,9,0,0,0,0,0,9,9,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,
+9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,0,9,9,0,0,0,0,0,9,9,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,85,78,78,0,9,9,9,
+9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,0,9,9,0,0,0,0,0,9,9,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,85,78,78,78,0,9,9,9,
+9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,87,78,78,78,78,0,9,9,9,
+9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,87,78,78,78,78,0,9,9,9,
+9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,12,0,0,0,0,0,0,0,0,0,80,78,78,78,0,9,9,9,
+9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,12,0,0,0,0,0,0,0,0,0,0,80,79,0,0,9,9,9,
+9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,
+9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9
+</data>
+ </layer>
+ <layer id="18" name="tiles-deco2" width="62" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,0,0,
+0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,0,0,
+0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="16" name="falling">
+  <properties>
+   <property name="direction" value="down"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="13" name="platform"/>
+ <objectgroup id="22" name="images">
+  <object id="836" name="image" gid="8" x="1150" y="474" width="50" height="50">
+   <properties>
+    <property name="imageName" value="castle_window"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="21" name="camera">
+  <properties>
+   <property name="cameraType" value="unlockX"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="14" name="light">
+  <object id="800" name="light" gid="119" x="2872" y="223" width="200" height="200"/>
+  <object id="802" name="light" gid="119" x="2872" y="523" width="200" height="200"/>
+  <object id="803" name="light" gid="119" x="2872" y="873" width="200" height="200"/>
+  <object id="837" name="light" gid="119" x="923.34" y="372.667" width="200" height="200"/>
+  <object id="838" name="light" gid="119" x="1222.34" y="374.667" width="200" height="200"/>
+  <object id="839" name="light" gid="119" x="922.34" y="718.667" width="200" height="200"/>
+  <object id="840" name="light" gid="119" x="1221.34" y="720.667" width="200" height="200"/>
+  <object id="874" name="light" gid="119" x="423.34" y="272.667" width="200" height="200"/>
+  <object id="876" name="light" gid="119" x="423.34" y="472.667" width="200" height="200"/>
+  <object id="878" name="light" gid="119" x="323.34" y="572.667" width="200" height="200"/>
+  <object id="879" name="light" gid="119" x="223.34" y="672.667" width="200" height="200"/>
+  <object id="881" name="light" gid="119" x="123.34" y="822.667" width="200" height="200"/>
+ </objectgroup>
+ <objectgroup id="27" name="invisPortal"/>
+ <objectgroup id="7" name="trampoline"/>
+ <objectgroup id="9" name="spike-normal">
+  <object id="905" name="spike" gid="93" x="2550" y="250" width="50" height="50">
+   <properties>
+    <property name="id" value="0"/>
+   </properties>
+  </object>
+  <object id="910" name="spike" gid="95" x="1650" y="321" width="50" height="50">
+   <properties>
+    <property name="id" value="2"/>
+   </properties>
+  </object>
+  <object id="911" name="spike" gid="95" x="1800" y="221" width="50" height="50">
+   <properties>
+    <property name="id" value="2"/>
+   </properties>
+  </object>
+  <object id="912" name="spike" gid="99" x="1900" y="321" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="913" name="spike" gid="99" x="1500" y="371" width="50" height="50">
+   <properties>
+    <property name="id" value="6"/>
+   </properties>
+  </object>
+  <object id="914" name="spike" gid="95" x="2000" y="521" width="50" height="50">
+   <properties>
+    <property name="id" value="2"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="28" name="small-spike"/>
+ <objectgroup id="23" name="slab">
+  <object id="883" name="slab" gid="23" x="1800" y="650" width="50" height="50"/>
+  <object id="884" name="slab" gid="23" x="2000" y="500" width="50" height="50"/>
+  <object id="886" name="slab" gid="23" x="2200" y="750" width="50" height="50"/>
+  <object id="902" name="slab" gid="23" x="2350" y="400" width="50" height="50"/>
+  <object id="903" name="slab" gid="23" x="2550" y="300" width="50" height="50"/>
+  <object id="904" name="slab" gid="23" x="2750" y="500" width="50" height="50"/>
+  <object id="906" name="slab" gid="23" x="1650" y="300" width="50" height="50"/>
+  <object id="907" name="slab" gid="23" x="1500" y="350" width="50" height="50"/>
+  <object id="908" name="slab" gid="23" x="1800" y="200" width="50" height="50"/>
+  <object id="909" name="slab" gid="23" x="1900" y="300" width="50" height="50"/>
+ </objectgroup>
+ <objectgroup id="8" name="save"/>
+ <objectgroup id="10" name="laser"/>
+ <objectgroup id="24" name="mapDecoEffect">
+  <properties>
+   <property name="backDecoEffectType" value="clouds"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="11" name="bg">
+  <properties>
+   <property name="bgName" value="bgMountainsDay"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="12" name="mapEffect">
+  <properties>
+   <property name="effectType" value="none"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="20" name="shaders">
+  <properties>
+   <property name="shaderName" value="castleRays"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="19" name="warps">
+  <object id="841" name="warp" gid="123" x="1450" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="842" name="warp" gid="123" x="1500" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="843" name="warp" gid="123" x="1550" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="844" name="warp" gid="123" x="1600" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="848" name="warp" gid="123" x="1650" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="849" name="warp" gid="123" x="1700" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="850" name="warp" gid="123" x="1750" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="851" name="warp" gid="123" x="1800" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="852" name="warp" gid="123" x="1850" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="853" name="warp" gid="123" x="1900" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="854" name="warp" gid="123" x="1950" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="855" name="warp" gid="123" x="2000" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="856" name="warp" gid="123" x="2050" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="857" name="warp" gid="123" x="2100" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="858" name="warp" gid="123" x="2150" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="859" name="warp" gid="123" x="2200" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="860" name="warp" gid="123" x="2250" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="861" name="warp" gid="123" x="2300" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="862" name="warp" gid="123" x="2350" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="863" name="warp" gid="123" x="2400" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="864" name="warp" gid="123" x="2450" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="865" name="warp" gid="123" x="2500" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="866" name="warp" gid="123" x="2550" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="867" name="warp" gid="123" x="2600" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="868" name="warp" gid="123" x="2650" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="869" name="warp" gid="123" x="2700" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="870" name="warp" gid="123" x="2750" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="871" name="warp" gid="123" x="2800" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="872" name="warp" gid="123" x="2850" y="900" width="50" height="50">
+   <properties>
+    <property name="direction" value="down"/>
+    <property name="target" value="map47"/>
+   </properties>
+  </object>
+  <object id="915" name="warp" gid="122" x="3050" y="250" width="50" height="50">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="target" value="map48"/>
+   </properties>
+  </object>
+  <object id="916" name="warp" gid="122" x="3050" y="300" width="50" height="50">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="target" value="map48"/>
+   </properties>
+  </object>
+  <object id="917" name="warp" gid="122" x="3050" y="350" width="50" height="50">
+   <properties>
+    <property name="direction" value="right"/>
+    <property name="target" value="map48"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="15" name="music">
+  <properties>
+   <property name="songName" value="castle_morning"/>
+  </properties>
+ </objectgroup>
+</map>

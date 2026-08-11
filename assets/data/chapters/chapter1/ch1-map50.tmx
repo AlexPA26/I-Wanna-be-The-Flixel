@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="28" nextobjectid="749">
+ <properties>
+  <property name="songName" value="castle1"/>
+ </properties>
+ <tileset firstgid="1" source="ch1-tiles.tsx"/>
+ <tileset firstgid="89" source="../../textures/trampoline.tsx"/>
+ <tileset firstgid="92" source="../../textures/save.tsx"/>
+ <tileset firstgid="93" source="../../textures/spike.tsx"/>
+ <tileset firstgid="101" source="../../textures/laser.tsx"/>
+ <tileset firstgid="119" source="../../textures/light.tsx"/>
+ <tileset firstgid="121" source="../../textures/transition-tiles.tsx"/>
+ <layer id="1" name="tiles-main" width="28" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,
+0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,
+1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+1,0,0,0,0,0,0,0,0,0,7,5,5,5,5,5,5,7,0,0,0,0,0,0,0,0,0,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+0,0,0,0,0,0,0,0,0,0,33,0,0,0,0,0,0,33,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="5" name="tiles-deco" width="28" height="18">
+  <data encoding="csv">
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,0,0,0,78,78,78,78,78,78,78,78,0,0,0,9,9,9,9,9,9,9,
+9,9,9,9,9,0,0,0,78,78,78,78,78,78,78,78,78,78,78,78,0,0,0,9,9,9,9,9,
+0,0,0,0,0,0,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,0,0,0,0,0,0,
+0,0,0,0,0,80,78,78,78,78,78,78,78,78,78,78,78,78,78,78,78,79,0,0,0,0,0,0,
+0,0,0,0,0,0,80,78,78,78,78,78,78,78,78,78,78,78,78,78,78,86,0,0,0,0,0,0,
+0,0,0,0,0,0,87,78,78,78,78,78,78,78,78,78,78,78,78,78,79,0,0,0,0,0,0,0,
+0,0,0,0,0,0,87,78,78,78,22,22,22,22,22,22,22,22,78,79,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
+9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9
+</data>
+ </layer>
+ <layer id="18" name="tiles-deco2" width="28" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,0,0,31,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="16" name="falling">
+  <properties>
+   <property name="direction" value="down"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="13" name="platform"/>
+ <objectgroup id="22" name="images" visible="0">
+  <object id="739" name="image" gid="8" x="675" y="400" width="50" height="50">
+   <properties>
+    <property name="alpha" value="0.85"/>
+    <property name="imageName" value="flixel_r"/>
+    <property name="scale" value="0.35"/>
+    <property name="tween" value="3"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="21" name="camera">
+  <properties>
+   <property name="cameraType" value="unlockX"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="14" name="light">
+  <object id="741" name="light" gid="119" x="122.667" y="377.333" width="200" height="200"/>
+  <object id="743" name="light" gid="119" x="322.667" y="277.333" width="200" height="200"/>
+  <object id="744" name="light" gid="119" x="872.667" y="277.333" width="200" height="200"/>
+  <object id="745" name="light" gid="119" x="1072.67" y="377.333" width="200" height="200"/>
+  <object id="747" name="light" gid="119" x="872.667" y="727.333" width="200" height="200"/>
+  <object id="748" name="light" gid="119" x="322.667" y="727.333" width="200" height="200"/>
+ </objectgroup>
+ <objectgroup id="27" name="invisPortal">
+  <object id="740" name="invisPortal" gid="31" x="626.333" y="399" width="50" height="50">
+   <properties>
+    <property name="height" value="500"/>
+    <property name="width" value="200"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="7" name="trampoline"/>
+ <objectgroup id="9" name="spike-normal"/>
+ <objectgroup id="23" name="slab"/>
+ <objectgroup id="8" name="save"/>
+ <objectgroup id="10" name="laser"/>
+ <objectgroup id="24" name="mapDecoEffect">
+  <properties>
+   <property name="backDecoEffectType" value="clouds"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="11" name="bg">
+  <properties>
+   <property name="bgName" value="bgMountainsDay"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="12" name="mapEffect">
+  <properties>
+   <property name="effectType" value="none"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="20" name="shaders">
+  <properties>
+   <property name="shaderName" value="castleRays"/>
+  </properties>
+ </objectgroup>
+ <objectgroup id="19" name="warps"/>
+ <objectgroup id="15" name="music">
+  <properties>
+   <property name="songName" value="none"/>
+  </properties>
+ </objectgroup>
+</map>

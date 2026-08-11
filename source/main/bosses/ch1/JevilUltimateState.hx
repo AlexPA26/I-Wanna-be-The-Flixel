@@ -283,14 +283,13 @@ class JevilUltimateState
 
         if (!boss.exists) return;
         
-        trace("Barrage completed! Transitioning back to normal room template layout...");
-
         if (parentState.player.exists)
         {
             boss.state = "ultimate_return_transition";
             boss.hp -= 1;
             parentState.player.y = 500;
             main.RoomLoader.loadRoom(cast FlxG.state, "boss-jevil04");
+            parentState.player.canJump = true;
             if (parentState.bossHpBar.exists) FlxTween.tween(parentState.bossHpBar, {alpha: 1}, 1, { ease: FlxEase.backIn });
             boss.ultimateTriggered = false; 
         }

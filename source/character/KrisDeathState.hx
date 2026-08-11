@@ -42,6 +42,8 @@ class KrisDeathState extends FlxSubState
         bg.scrollFactor.set(0, 0);
         insert(0, bg);
 
+        if (FlxG.camera.angle != 0) FlxG.camera.angle = 0;
+
         // Calculate exact death position relative to camera
         var chapterState:ChapterState = Std.downcast(FlxG.state, ChapterState);
         if (chapterState != null && Reflect.field(chapterState, "player") != null)

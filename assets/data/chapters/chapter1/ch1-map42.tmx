@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="220" tilewidth="50" tileheight="50" infinite="0" nextlayerid="38" nextobjectid="3040">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="220" tilewidth="50" tileheight="50" infinite="0" nextlayerid="38" nextobjectid="3041">
  <properties>
   <property name="songName" value="rain"/>
  </properties>
@@ -2507,6 +2507,7 @@
   </object>
   <object id="2914" name="slab" gid="77" x="650" y="400" width="50" height="50"/>
   <object id="2915" name="trampoline" gid="89" x="650" y="350" width="50" height="50"/>
+  <object id="3040" name="trampoline" gid="89" x="650" y="350" width="50" height="50"/>
   <object id="2916" name="slab" gid="77" x="800" y="400" width="50" height="50"/>
   <object id="2917" name="trampoline" gid="89" x="800" y="350" width="50" height="50"/>
   <object id="2918" name="laser" gid="101" x="650" y="450" width="50" height="50">

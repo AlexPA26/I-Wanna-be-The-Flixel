@@ -1,5 +1,6 @@
 package main;
 
+import main.InputManager.Action;
 import backgrounds3D.*;
 import flixel.util.FlxTimer;
 import character.KrisDeathState;
@@ -332,15 +333,10 @@ class ChapterState extends FlxState
 			#end
 		}
 
-		#if !mobile
-		if (FlxG.keys.justPressed.F11 || FlxG.keys.pressed.ALT && FlxG.keys.justPressed.ENTER)
+		if (InputManager.justPressed(Action.FULLSCREEN))
 		{
-			if (FlxG.fullscreen == false)
-				FlxG.fullscreen = true;
-			else
-				FlxG.fullscreen = false;
+			FlxG.fullscreen = !FlxG.fullscreen;
 		}
-		#end
 
 		if (subState == null)
 		{
@@ -642,18 +638,15 @@ class ChapterState extends FlxState
 			timeElapsed.text = "Time: " + PlayerData.formatTime();
 		}
 
-		#if !mobile
+		#if !debug
 		if (FlxG.keys.justPressed.TAB)
 		{
 			FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
 		}
-
-		if (FlxG.keys.justPressed.R && player.exists && player.alive && player.active && !specialState)
+		#end
+		if (InputManager.justPressed(Action.RESTART) && player.exists && player.alive && player.active && !specialState)
 		{
-			if (fightingBoss)
-			{
-				if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
-			}
+			if (fightingBoss && FlxG.sound.music != null) FlxG.sound.music.stop();
 			var currentSeconds = PlayerData.totalSeconds;
 			if (PlayerData.tutorialCompleted == true) PlayerData.totalDeaths++;
 			leveldata.misc.SaveManager.saveGameRestart();
@@ -701,7 +694,6 @@ class ChapterState extends FlxState
 			this.persistentUpdate = false;
 			openSubState(new gui.PauseState());
 		}
-		#end
 
 		if (whiteFade.alpha > 0) { whiteFade.alpha -= 0.01; }
 		if (PlayerData.whiteFadeTrigger == true)
@@ -1452,8 +1444,7 @@ class ChapterState extends FlxState
 				playerTrail.kill();
 			}
 
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.stop();
+			if (FlxG.sound.music != null) FlxG.sound.music.stop();
 			this.persistentUpdate = true;
 			PlayerData.totalDeaths -= 1;
 
@@ -1508,15 +1499,18 @@ class ChapterState extends FlxState
 
 	function updateMusic():Void
 	{
-		if (player != null && !player.alive)
-			return;
-		if (subState != null)
-			return;
+		if (player != null && !player.alive) return;
+		if (subState != null) return;
 
 		var musicLayer = tiledData.getLayer("music");
-		if (musicLayer == null)
-			return;
+		if (musicLayer == null) return;
 		var songName:String = musicLayer.properties.get("songName");
+		var musicPitch:Float = 1.0;
+		if (musicLayer.properties.contains("pitch"))
+		{
+			musicPitch = Std.parseFloat(musicLayer.properties.get("pitch"));
+		}
+		
 
 		var relativePath = "music/chapters/chapter" + PlayerData.currentChapter + "bgm/" + songName + ".ogg";
 		var songPath = ModLoader.getAsset(relativePath);
@@ -1553,19 +1547,21 @@ class ChapterState extends FlxState
 			var customSound = openfl.media.Sound.fromFile(songPath);
 			if (customSound != null)
 			{
-				FlxG.sound.playMusic(customSound, 0.75, true);
+				FlxG.sound.playMusic(customSound, 1, true);
 			}
 			else
 			{
-				FlxG.sound.playMusic("assets/" + relativePath, 0.75, true); // Fallback
+				FlxG.sound.playMusic("assets/" + relativePath, 1, true);
 			}
 		}
 		else
 		{
-			FlxG.sound.playMusic(songPath, 0.75, true);
+			FlxG.sound.playMusic(songPath, 1, true);
+			FlxG.sound.music.pitch = musicPitch;
+
 		}
 		#else
-		FlxG.sound.playMusic(songPath, 0.75, true);
+		FlxG.sound.playMusic(songPath, 1, true);
 		#end
 
 		if (FlxG.sound.music != null)

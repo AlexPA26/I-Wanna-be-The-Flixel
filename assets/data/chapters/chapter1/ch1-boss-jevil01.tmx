@@ -74,6 +74,7 @@
  </layer>
  <objectgroup id="2" name="music">
   <properties>
+   <property name="pitch" value="0.95"/>
    <property name="songName" value="circus"/>
   </properties>
  </objectgroup>

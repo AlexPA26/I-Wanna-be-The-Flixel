@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="60" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="24" nextobjectid="599">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="60" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="24" nextobjectid="603">
  <properties>
   <property name="songName" value="castle1"/>
  </properties>
@@ -126,7 +126,12 @@
   </properties>
  </objectgroup>
  <objectgroup id="14" name="light"/>
- <objectgroup id="7" name="trampoline"/>
+ <objectgroup id="7" name="trampoline">
+  <object id="599" name="trampoline" gid="89" x="650" y="900" width="50" height="50"/>
+  <object id="600" name="trampoline" gid="89" x="700" y="900" width="50" height="50"/>
+  <object id="601" name="trampoline" gid="89" x="750" y="900" width="50" height="50"/>
+  <object id="602" name="trampoline" gid="89" x="800" y="900" width="50" height="50"/>
+ </objectgroup>
  <objectgroup id="9" name="spike-normal"/>
  <objectgroup id="23" name="slab">
   <object id="578" name="slab" gid="23" x="650" y="750" width="50" height="50"/>
