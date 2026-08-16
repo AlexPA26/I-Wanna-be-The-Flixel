@@ -16,6 +16,7 @@ class KrisDeathState extends FlxSubState
 {
     var breakingSoul:FlxSprite;
     var choiceSoul:FlxSprite;
+    var gameOverImage:FlxSprite;
     var deathX:Float = 0;
     var deathY:Float = 0;
     
@@ -44,7 +45,6 @@ class KrisDeathState extends FlxSubState
 
         if (FlxG.camera.angle != 0) FlxG.camera.angle = 0;
 
-        // Calculate exact death position relative to camera
         var chapterState:ChapterState = Std.downcast(FlxG.state, ChapterState);
         if (chapterState != null && Reflect.field(chapterState, "player") != null)
         {
@@ -61,7 +61,6 @@ class KrisDeathState extends FlxSubState
             deathY = FlxG.height / 2;
         }
 
-        // 1. Initial Breaking Soul setup
         breakingSoul = new FlxSprite(deathX, deathY);
         breakingSoul.loadGraphic(AssetPaths.soul__png, true, 20, 16);
         breakingSoul.animation.add("break", [0, 1], 16, false);
@@ -70,14 +69,23 @@ class KrisDeathState extends FlxSubState
         breakingSoul.scale.set(1.5, 1.5);
         add(breakingSoul);
 
-        FlxG.sound.play(AssetPaths.kris_hit__ogg, 1);
+        FlxG.sound.play(AssetPaths.thekid_hit__ogg, 1, false);
 
-        // 2. Setup all UI Texts (Hidden initially)
+        gameOverImage = new FlxSprite();
+        gameOverImage.loadGraphic(AssetPaths.jevil_gameOver__png);
+        gameOverImage.screenCenter();
+        gameOverImage.y -= 200;
+        gameOverImage.scrollFactor.set(0, 0);
+        gameOverImage.alpha = 0;
+        gameOverImage.scale.set(2.5, 2.5);
+        FlxTween.tween(gameOverImage, {y: gameOverImage.y - 5}, 3.0, {type: PINGPONG, ease: FlxEase.sineInOut});
+        add(gameOverImage);
+
         mainText = new FlxText(0, 0, FlxG.width, "");
         mainText.setFormat(AssetPaths.deltarune__otf, 48, FlxColor.WHITE, CENTER);
-        mainText.setBorderStyle(OUTLINE, FlxColor.fromRGB(64, 64, 64), 2);
+        mainText.setBorderStyle(OUTLINE, FlxColor.fromRGB(64, 64, 64), 3);
         mainText.screenCenter();
-        mainText.y -= 125;
+        mainText.y += 75;
         mainText.scrollFactor.set(0, 0);
         mainText.alpha = 0.85;
         FlxTween.tween(mainText, {y: mainText.y - 3}, 0.8, {type: PINGPONG, ease: FlxEase.sineInOut});
@@ -88,18 +96,18 @@ class KrisDeathState extends FlxSubState
         subText.setFormat(AssetPaths.deltarune__otf, 48, FlxColor.WHITE, CENTER);
         subText.setBorderStyle(OUTLINE, FlxColor.fromRGB(64, 64, 64), 2);
         subText.screenCenter();
-        subText.y += 15; // Placed directly below the main text
+        subText.y += 15;
         subText.scrollFactor.set(0, 0);
         subText.alpha = 0.85;
         FlxTween.tween(subText, {y: subText.y - 3}, 0.8, {type: PINGPONG, ease: FlxEase.sineInOut});
         addGlowPulse(subText);
         add(subText);
 
-        yesText = new FlxText(0, 0, 0, "YES"); // Auto-sized width for easy centering
+        yesText = new FlxText(0, 0, 0, "YES");
         yesText.setFormat(AssetPaths.deltarune__otf, 32, FlxColor.WHITE, CENTER);
         yesText.screenCenter();
         yesText.y += 200;
-        yesText.x -= 150; // Huge gap to the left
+        yesText.x -= 150;
         yesText.scrollFactor.set(0, 0);
         yesText.alpha = 0;
         add(yesText);
@@ -108,24 +116,23 @@ class KrisDeathState extends FlxSubState
         noText.setFormat(AssetPaths.deltarune__otf, 32, FlxColor.WHITE, CENTER);
         noText.screenCenter();
         noText.y += 200;
-        noText.x += 150; // Huge gap to the right
+        noText.x += 150;
         noText.scrollFactor.set(0, 0);
         noText.alpha = 0;
         add(noText);
 
-        // 3. Choice Soul (Big x4 Soul)
         choiceSoul = new FlxSprite(0, 0);
         choiceSoul.loadGraphic(AssetPaths.soul__png, true, 20, 16);
         choiceSoul.animation.add("idle", [0], 0, false);
         choiceSoul.animation.play("idle");
         choiceSoul.scrollFactor.set(0, 0);
-        choiceSoul.scale.set(3, 3);
+        choiceSoul.scale.set(4, 4);
         choiceSoul.updateHitbox();
         choiceSoul.visible = false;
         choiceSoul.alpha = 0.85;
+        choiceSoul.y -= 35;
         insert(1, choiceSoul);
 
-        // 4. Overlays for transitions
         whiteFade = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.WHITE);
         whiteFade.scrollFactor.set(0, 0);
         whiteFade.alpha = 0;
@@ -136,7 +143,6 @@ class KrisDeathState extends FlxSubState
         blackFade.alpha = 0;
         add(blackFade);
 
-        // --- Sequence Timers ---
         mkTimer(1.2, function(tmplTimer:FlxTimer)
         {
             triggerBloodExplosion(chapterState);
@@ -154,7 +160,6 @@ class KrisDeathState extends FlxSubState
         });
     }
 
-    // Safely tracks active timers to avoid memory leaks or ghost executions if player quick-resets
     function mkTimer(time:Float, callback:FlxTimer->Void, loops:Int = 1):FlxTimer
     {
         var t = new FlxTimer().start(time, callback, loops);
@@ -162,9 +167,6 @@ class KrisDeathState extends FlxSubState
         return t;
     }
 
-    // A slight, ambient glow — a gentle alpha breathe between 0.8 and full opacity,
-    // one full pulse every ~1s. Runs continuously; harmless while the text is empty
-    // pre-typing since there's nothing visible to pulse yet.
     function addGlowPulse(text:FlxText):Void
     {
         FlxTween.tween(text, {alpha: 0.8}, 0.5, {type: PINGPONG, ease: FlxEase.sineInOut});
@@ -188,34 +190,22 @@ class KrisDeathState extends FlxSubState
         substateBlood.start(true, 0, 10);
     }
 
-
     function startCutsceneSequence():Void
     {
-        typeText(mainText, "IT APPEARS YOU HAVE REACHED", 0.1, function()
+        FlxTween.tween(gameOverImage, {alpha: 1}, 2.0);
+
+        mkTimer(3.0, function(_)
         {
-            mkTimer(3.0, function(_)
+            typeText(mainText, "WILL YOU TRY AGAIN?", 0.1, function()
             {
-                typeText(subText, "AN END.", 0.1, function()
-                {
-                    mkTimer(2.0, function(_)
+                FlxTween.tween(yesText, {alpha: 1}, 1.0);
+                FlxTween.tween(noText, {alpha: 1}, 1.0, {
+                    onComplete: function(_)
                     {
-                        // Clear the texts and spawn the choice sequence
-                        mainText.text = "";
-                        subText.text = "";
-                        
-                        mainText.text = "WILL YOU TRY AGAIN?";
-                        
-                        // Fade in YES and NO
-                        FlxTween.tween(yesText, {alpha: 1}, 1.0);
-                        FlxTween.tween(noText, {alpha: 1}, 1.0, {
-                            onComplete: function(_)
-                            {
-                                isChoosing = true;
-                                choiceSoul.visible = true;
-                                updateSoulPosition();
-                            }
-                        });
-                    });
+                        isChoosing = true;
+                        choiceSoul.visible = true;
+                        updateSoulPosition();
+                    }
                 });
             });
         });
@@ -231,6 +221,7 @@ class KrisDeathState extends FlxSubState
         {
             count++;
             textObj.text = content.substr(0, count);
+            FlxG.sound.play(AssetPaths.jevil_talk__ogg, 0.75, false);
             if (count >= content.length && onComplete != null)
             {
                 onComplete();
@@ -264,7 +255,7 @@ class KrisDeathState extends FlxSubState
 		{
 			if (gamepad.justPressed.LEFT_SHOULDER || gamepad.justPressed.RIGHT_SHOULDER) resetPressed = true;
 		}
-        if (resetPressed)
+        if (resetPressed && canReset)
         {
             quickReset();
         }
@@ -287,6 +278,9 @@ class KrisDeathState extends FlxSubState
                 isChoosing = false;
                 canReset = false;
 
+                if (FlxG.sound.music != null) FlxG.sound.music.stop();
+                FlxG.sound.play(AssetPaths.restart_jevil__ogg, 1, false);
+
                 FlxTween.tween(yesText, {alpha: 0}, 0.5);
                 FlxTween.tween(noText, {alpha: 0}, 0.5);
                 FlxTween.tween(choiceSoul, {alpha: 0}, 0.5, {
@@ -304,8 +298,9 @@ class KrisDeathState extends FlxSubState
     {
         mkTimer(0.5, function(_)
         {
-            FlxG.sound.play(AssetPaths.restart_kris_death__ogg, 1, false);
             mainText.alpha = 1;
+            mainText.y -= 150;
+            gameOverImage.visible = false;
             mainText.text = "THEN THE FUTURE IS IN YOUR HANDS";
             
             FlxTween.tween(whiteFade, {alpha: 1}, 2.5, {
@@ -328,14 +323,10 @@ class KrisDeathState extends FlxSubState
             
             typeText(mainText, "THEN THE WORLD WAS COVERED IN DARKNESS", 0.08, function()
             {
-                // Wait 1 second after letters finish appearing
                 mkTimer(1.0, function(_)
                 {
-                    // Screen goes totally black and music stops
-                    if (FlxG.sound.music != null) FlxG.sound.music.stop();
-                    blackFade.alpha = 1; // Instant black fade
+                    blackFade.alpha = 1; 
                     
-                    // After another 2 seconds, return to Main Menu
                     mkTimer(2.0, function(_)
                     {
                         FlxG.switchState(main.MenuState.new);

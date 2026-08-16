@@ -166,8 +166,7 @@ class ChapterState extends FlxState
 
 	public var tpBar:FlxBar; public var currentTP:Float = 0; public var maxTP:Float = 100;
 	public var tpBarDeco:FlxSprite; public var tpText:FlxText;
-    public var grazeHitbox:FlxSprite;
-    public var grazedObjects:Array<flixel.FlxObject> = [];
+    public var grazeHitbox:FlxSprite; public var grazedObjects:Array<flixel.FlxObject> = [];
 
 	var udpClient:UdpClient;
 	public var remotePlayers:Map<String, main.RemotePlayer> = new Map();
@@ -567,7 +566,7 @@ class ChapterState extends FlxState
                 }
             }
 
-            if (fightingBoss && !inmortal)
+            if (fightingBoss && !inmortal && jevil.state != "attackingCube" && jevil.state != "returningCube")
             {
                 FlxG.overlap(grazeHitbox, dangerObjects, function(hitbox:flixel.FlxObject, hazard:flixel.FlxObject)
                 {
@@ -575,7 +574,7 @@ class ChapterState extends FlxState
                     {
                         grazedObjects.push(hazard);
                         
-                        currentTP += 1;
+                        currentTP += jevil.tpIncrease;
                         if (currentTP > maxTP) currentTP = maxTP;
 
                         grazeHitbox.alpha = 0.4;

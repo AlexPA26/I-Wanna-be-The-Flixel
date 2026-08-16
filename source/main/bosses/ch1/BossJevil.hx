@@ -23,6 +23,7 @@ class Jevil extends FlxSprite
     public var hp:Float = 120;
     public var state:String = "waiting";
     public var trail:FlxTrail;
+    public var tpIncrease:Int = 1;
     public var isVulnerable:Bool = false;
     public var canBeHit:Bool = false;
     public var ultimateTriggered:Bool = false;
@@ -55,8 +56,11 @@ class Jevil extends FlxSprite
     var jailManager:main.bosses.ch1.JevilJailManager;
 
     var spadeComboCount:Int = 0;
+    var spamComboCount:Int = 0;
     var lastAttackWasLeft:Bool = false;
     var targetSpadeCombos:Int = 0;
+    var targetSpamCombos:Int = 0;
+
     var jailExploded:Bool = false;
 
     var fanComboCount:Int = 0;
@@ -133,14 +137,14 @@ class Jevil extends FlxSprite
         // PlayerData.jevilDialogueRead = false;
         FlxTween.tween(this, {y: y - 10}, 0.75, {type: PINGPONG, ease: FlxEase.sineInOut});
 
-        phase01Attacks = [attackSpades];
+        phase01Attacks = [attackSpam];
         // phase02Attacks = [attackSpades];
         // phase03Attacks = [attackSpades];
 
-        phase01Attacks =
-        [
-            attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
-        ];
+        // phase01Attacks =
+        // [
+        //     attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
+        // ];
 
         phase02Attacks =
         [
@@ -161,6 +165,11 @@ class Jevil extends FlxSprite
     override public function update(elapsed:Float)
     {
         super.update(elapsed);
+
+        if (!parentState.player.alive && !parentState.player.active && !parentState.player.exists)
+        {
+            parentState.circusBG.destroy();
+        }
 
         if (pirouetteManager != null)
         {
@@ -471,7 +480,7 @@ class Jevil extends FlxSprite
 
             new FlxTimer().start(1.0, function(_)
             {
-                if (parentState.circusBG.rotationSpeed == 0) parentState.circusBG.rotationSpeed = 80;
+                if (parentState.circusBG.rotationSpeed == 0) FlxTween.tween(parentState.circusBG, {rotationSpeed: 80}, 0.5, {ease: FlxEase.linear});
 
                 if (parentState.bg != null)
                 {
@@ -625,12 +634,12 @@ class Jevil extends FlxSprite
                 
             else if (hp >= 80)
             {
-                targetSpadeCombos = FlxG.random.int(6, 9);
+                targetSpadeCombos = FlxG.random.int(6, 8);
             }
                 
             else
             {
-                targetSpadeCombos = FlxG.random.int(9, 12);
+                targetSpadeCombos = FlxG.random.int(8, 10);
             }
 
         }
@@ -650,11 +659,13 @@ class Jevil extends FlxSprite
         if (goLeft)
         {
             animation.play("teleportReverse", true, false);
+            FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.65, false);
             lastAttackWasLeft = true;
         }
         else
         {
             animation.play("teleport", true, false);
+            FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.65, false);
             lastAttackWasLeft = false;
         }
 
@@ -666,9 +677,9 @@ class Jevil extends FlxSprite
         FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.beep__ogg, 0.25, false);
         
-        var cooldownAttack:Float = 0.75;
-        if (hp >= 80 && hp < 105) { cooldownAttack = 0.65; }
-        else if (hp > 0 && hp < 80) { cooldownAttack = 0.5; }
+        var cooldownAttack:Float = 0.85;
+        if (hp >= 80 && hp < 105) { cooldownAttack = 0.75; }
+        else if (hp > 0 && hp < 80) { cooldownAttack = 0.65; }
         var bulletSpawnX:Float = x + (width / 2) - 25;
         var bulletSpawnY:Float = y + (height / 2) - 50;
 
@@ -758,6 +769,75 @@ class Jevil extends FlxSprite
             teleport();
         });
     }
+
+    function attackSpam()
+    {
+        if (spamComboCount == 0)
+        {
+            if (hp >= 105) { targetSpamCombos = 18; }
+            else if (hp >= 80) { targetSpamCombos = 20; }
+            else { targetSpamCombos = 24; }
+        }
+
+        var goLeft:Bool = (spamComboCount == 0) ? FlxG.random.bool(50) : !lastAttackWasLeft;
+        var randomY:Float = FlxG.random.float(200, 400);
+
+        x = goLeft ? 150 : 1080;
+        y = randomY;
+
+        if (goLeft)
+        {
+            animation.play("teleportReverse", true, false);
+            lastAttackWasLeft = true;
+        }
+        else
+        {
+            animation.play("teleport", true, false);
+            lastAttackWasLeft = false;
+        }
+
+        FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.65, false);
+        FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75);
+
+        if (attackInterrupted()) return;
+        particlesJevil();
+
+        FlxTween.globalManager.cancelTweensOf(this);
+        if (parentState.player == null || !parentState.player.exists || !parentState.player.alive) return;
+
+        var jewelSpawnX:Float = x + (width / 2) - 10;
+        var jewelSpawnY:Float = y + (height / 2) - 16;
+
+        var targetX:Float = parentState.player.x + parentState.player.width / 2;
+        var targetY:Float = parentState.player.y + parentState.player.height / 2;
+
+        var jewel = new main.bosses.ch1.JevilProjectiles.JevilJewelSpam(jewelSpawnX, jewelSpawnY, targetX, targetY, parentState);
+        parentState.dangerObjects.add(jewel);
+
+        spamComboCount++;
+
+        if (spamComboCount >= targetSpamCombos)
+        {
+            spamComboCount = 0;
+            targetSpamCombos = 0;
+            createAttackTimer(0.4, function(_)
+            {
+                if (attackInterrupted()) return;
+                teleport();
+            });
+        }
+        else
+        {
+            createAttackTimer(0.4, function(_)
+            {
+                if (attackInterrupted()) return;
+                attackSpam();
+            });
+        }
+    }
+
+
+
 
     function attackFan()
     {
@@ -1027,7 +1107,7 @@ class Jevil extends FlxSprite
                     if (state != "attacking_jail" || !exists) return;
 
                     var randomX:Float = FlxG.random.float(cellLeftX + 50, cellRightX);
-                    var jewel = new main.bosses.ch1.JevilProjectiles.JevilJewel(randomX, cellBottomY, parentState);
+                    var jewel = new main.bosses.ch1.JevilProjectiles.JevilJewel(randomX, cellBottomY, parentState, "black_white");
                     
                     parentState.dangerObjects.add(jewel);
 
@@ -1331,6 +1411,7 @@ class Jevil extends FlxSprite
                 PlayerData.lastMusicTime = FlxG.sound.music.time;
                 FlxTween.cancelTweensOf(this);
                 this.flipX = false;
+                tpIncrease = 4;
                 main.RoomLoader.loadRoom(parentState, "boss-jevil03");
                 parentState.player.canJump = false;
                 FlxG.sound.music.time = PlayerData.lastMusicTime;

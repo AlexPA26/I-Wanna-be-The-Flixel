@@ -285,7 +285,7 @@ class JevilJewel extends FlxSprite
     var trail:FlxTrail;
     var stateRef:main.ChapterState;
 
-    public function new(x:Float, y:Float, state:main.ChapterState)
+    public function new(x:Float, y:Float, state:main.ChapterState, sprite:String)
     {
         super(x, y);
 
@@ -293,8 +293,18 @@ class JevilJewel extends FlxSprite
         this.alpha = 0;
         var randomVolume = FlxG.random.float(0.25, 0.5);
         loadGraphic(AssetPaths.jewel__png, true, 19, 33);
-        animation.add("idle", [0], 1, false);
-        animation.play("idle");
+        animation.add("black_white", [0], 1, false);
+        animation.add("white", [1], 1, false);
+        animation.add("black", [2], 1, false);
+
+        switch (sprite)
+        {
+            case "black_white": animation.play("black_white", true);
+            case "white": animation.play("white", true);
+            case "black": animation.play("black", true);
+
+            default: animation.play("black_white", true);
+        }
 
         var particle = new flixel.effects.particles.FlxEmitter(x + 8, y + 18, 8);
         particle.makeParticles(3, 3, FlxColor.WHITE, 12);
@@ -368,6 +378,71 @@ class JevilJewel extends FlxSprite
         destroy();
     }
     
+    override public function destroy()
+    {
+        if (trail != null)
+        {
+            if (stateRef != null)
+            {
+                stateRef.remove(trail);
+            }
+            trail.destroy();
+            trail = null;
+        }
+
+        super.destroy();
+    }
+}
+
+class JevilJewelSpam extends FlxSprite
+{
+    static inline var SPEED:Float = 620;
+    var trail:FlxTrail;
+    var stateRef:main.ChapterState;
+    
+    public function new(x:Float, y:Float, targetX:Float, targetY:Float, state:main.ChapterState)
+    {
+        super(x, y);
+
+        this.stateRef = state;
+        loadGraphic(AssetPaths.jewel__png, true, 19, 33);
+        animation.add("white", [1], 1, false);
+        animation.play("white");
+        updateHitbox();
+
+        flixel.math.FlxVelocity.moveTowardsPoint(this, flixel.math.FlxPoint.get(targetX, targetY), SPEED);
+        angle = (Math.atan2(velocity.y, velocity.x) * 180 / Math.PI) + 90;
+
+        FlxG.sound.play(AssetPaths.beep__ogg, 0.3, false);
+        trail = new FlxTrail(this, null, 12, 2, 0.25, 0.05);
+        stateRef.add(trail);
+    }
+
+    override public function update(elapsed:Float)
+    {
+        super.update(elapsed);
+
+        if (!isOnScreen())
+        {
+            destroyJewelSpam();
+        }
+    }
+
+    private function destroyJewelSpam():Void
+    {
+        if (trail != null)
+        {
+            var mainState = cast(FlxG.state, main.ChapterState);
+            if (mainState != null)
+            {
+                mainState.remove(trail);
+            }
+            trail.destroy();
+            trail = null;
+        }
+        destroy();
+    }
+
     override public function destroy()
     {
         if (trail != null)

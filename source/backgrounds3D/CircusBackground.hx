@@ -242,7 +242,7 @@ class CircusBackground extends FlxGroup
             var i3 = innerApex;
             
             var floorInnerColor = innerPalette[i % innerPalette.length];
-            var ceilingInnerColor = innerPalette[(i + 1) % innerPalette.length]; // Swapped colors for inner ceiling
+            var ceilingInnerColor = innerPalette[i % innerPalette.length];
 
             floorInnerQueue.push
             ({
