@@ -260,7 +260,7 @@ class RoomLoader
 		state.setupHUD();
 		state.autoScroll();
 		state.cameraScroll();
-		state.updateMusic();
+		main.iwbtf.MusicManager.updateMusic(state);
 		state.add(state.blackFade);
 		state.add(state.whiteFade);
 

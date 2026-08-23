@@ -396,7 +396,7 @@ class JevilJewel extends FlxSprite
 
 class JevilJewelSpam extends FlxSprite
 {
-    static inline var SPEED:Float = 620;
+    static inline var SPEED:Float = 700;
     var trail:FlxTrail;
     var stateRef:main.ChapterState;
     
@@ -414,7 +414,7 @@ class JevilJewelSpam extends FlxSprite
         angle = (Math.atan2(velocity.y, velocity.x) * 180 / Math.PI) + 90;
 
         FlxG.sound.play(AssetPaths.beep__ogg, 0.3, false);
-        trail = new FlxTrail(this, null, 12, 2, 0.25, 0.05);
+        trail = new FlxTrail(this, null, 12, 2, 0.1, 0.05);
         stateRef.add(trail);
     }
 

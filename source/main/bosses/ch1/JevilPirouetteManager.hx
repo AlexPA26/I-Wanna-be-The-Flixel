@@ -484,8 +484,7 @@ class JevilPirouetteManager
                 applyDamageAndCheckTired(5, 1);
 
             case 1:
-                FlxG.sound.play(AssetPaths.jevil_hypnosis__ogg, 1, false);
-                applyDamageAndCheckTired(15, 1);
+                startHypnosis();
 
             case 2:
                 FlxG.sound.play(AssetPaths.jevil_perfect__ogg, 1, false);
@@ -665,14 +664,14 @@ class JevilPirouetteManager
     function startHypnosis()
     {
         FlxG.sound.play(AssetPaths.jevil_hypnosis__ogg, 1, false);
-        applyDamageAndCheckTired(15, 999);
+        applyDamageAndCheckTired(10, 999);
         jevil.flash.alpha = 0.35;
 
         var blur:BlurFilter = new BlurFilter(8, 8, 2);
         if (FlxG.camera.filters == null) FlxG.camera.filters = [];
 
         FlxG.camera.filters.push(blur);
-        FlxTween.num(16, 0, 0.5, { ease: FlxEase.quadOut, onComplete: function(_)
+        FlxTween.num(16, 0, 1, { ease: FlxEase.quadOut, onComplete: function(_)
         {
             if (FlxG.camera.filters != null)
             {

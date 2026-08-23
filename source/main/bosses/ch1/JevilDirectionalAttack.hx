@@ -66,7 +66,8 @@ class JevilDirectionalAttack extends FlxBasic
         parentState.player.visible = false;
         parentState.player.active = false;
         parentState.player.velocity.set(0, 0);
-        FlxG.sound.play(AssetPaths.beep__ogg, 1, false);
+        FlxG.sound.play(AssetPaths.beep__ogg, 0.25, false);
+        FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.5, false);
 
         var dangerIdx:Int = parentState.members.indexOf(parentState.dangerObjects);
         if (dangerIdx == -1) dangerIdx = parentState.members.length;
@@ -393,6 +394,8 @@ class JevilDirectionalAttack extends FlxBasic
                 ease: FlxEase.quadInOut,
                 onComplete: function(_)
                 {
+                    soulInvulnerable = false;
+
                     soul.destroy();
                     jevil.playerHUD.visible = false;
                     jevil.playerHUD.destroy();
@@ -401,6 +404,7 @@ class JevilDirectionalAttack extends FlxBasic
 
                     parentState.player.visible = true;
                     parentState.player.active = true;
+                    parentState.player.alpha = 1;
 
                     parentState.dangerObjects.forEach(function(obj:flixel.FlxBasic)
                     {
@@ -425,6 +429,8 @@ class JevilDirectionalAttack extends FlxBasic
                     jevil.teleport();
                     parentState.remove(this);
                     FlxTween.tween(jevil.shield, {alpha: 1}, 1, { ease: FlxEase.backIn });
+                    for (t in activeTimers) { if (t != null) { t.cancel(); t.destroy(); } }
+                    activeTimers = [];
                     this.destroy();
                 }
             });

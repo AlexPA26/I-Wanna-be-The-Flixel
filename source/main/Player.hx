@@ -77,6 +77,7 @@ class Player extends FlxSprite
         doubleJumpEffect.scale.set(1.2, 1.2, 1.2, 1.2);
         doubleJumpEffect.alpha.set(1, 1, 0, 0);
         doubleJumpEffect.launchMode = CIRCLE;
+
     }
 
 public function flipGravity():Void

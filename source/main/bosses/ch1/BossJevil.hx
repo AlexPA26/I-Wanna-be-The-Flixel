@@ -60,6 +60,7 @@ class Jevil extends FlxSprite
     var lastAttackWasLeft:Bool = false;
     var targetSpadeCombos:Int = 0;
     var targetSpamCombos:Int = 0;
+    var activeFakeClones:Array<main.bosses.ch1.JevilClone> = [];
 
     var jailExploded:Bool = false;
 
@@ -138,25 +139,25 @@ class Jevil extends FlxSprite
         FlxTween.tween(this, {y: y - 10}, 0.75, {type: PINGPONG, ease: FlxEase.sineInOut});
 
         phase01Attacks = [attackSpam];
-        // phase02Attacks = [attackSpades];
-        // phase03Attacks = [attackSpades];
+        phase02Attacks = [attackSpam];
+        phase03Attacks = [attackSpam];
 
-        // phase01Attacks =
-        // [
-        //     attackSpades, attackBullets, attackFan, attackFan, attackHearts, attackBullets, attackFan, attackSpades
-        // ];
+        phase01Attacks =
+        [
+            attackSpades, attackBullets, attackFan, attackHearts, attackSpam, attackBullets, attackFan
+        ];
 
         phase02Attacks =
         [
             attackScythe, attackBombarding, attackJail, attackBullets, attackCircle, attackHearts, attackFan, attackScythe,
-            attackBombarding, attackScythe, attackJail, attackBullets, attackCircle
+            attackBombarding, attackSpam, attackJail, attackBullets, attackCircle
         ];
 
 
         phase03Attacks =
         [
             attackBombarding, attackScythe, attackCube, attackBullets, attackBombarding, attackJail, attackHearts,
-            attackBombarding, attackCircle, attackHearts, attackScythe, attackBullets, attackBombarding, attackJail,
+            attackBombarding, attackCircle, attackSpam, attackScythe, attackBullets, attackBombarding, attackJail,
             attackFan, attackCircle, attackBombarding, attackHearts, attackJail
         ];
 
@@ -471,7 +472,7 @@ class Jevil extends FlxSprite
             if (parentState.player != null && parentState.player.exists && parentState.player.alive)
             {
                 if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
-                var scythe = new IntroScythe(parentState.player.x -50, parentState.map.y - 100, parentState, 1200);
+                var scythe = new IntroScythe(parentState.player.x -50, parentState.map.y - 100, parentState, 1400);
                 FlxG.sound.play(AssetPaths.scythe_intro__ogg, 1, false);
                 parentState.dangerObjects.add(scythe);
                 parentState.player.active = true;
@@ -653,7 +654,7 @@ class Jevil extends FlxSprite
             goLeft = !lastAttackWasLeft;
         }
 
-        x = goLeft ? 150 : 1080;
+        x = goLeft ? 150 : 900;
         y = randomY;
 
         if (goLeft)
@@ -677,8 +678,8 @@ class Jevil extends FlxSprite
         FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.beep__ogg, 0.25, false);
         
-        var cooldownAttack:Float = 0.85;
-        if (hp >= 80 && hp < 105) { cooldownAttack = 0.75; }
+        var cooldownAttack:Float = 0.75;
+        if (hp >= 80 && hp < 105) { cooldownAttack = 0.70; }
         else if (hp > 0 && hp < 80) { cooldownAttack = 0.65; }
         var bulletSpawnX:Float = x + (width / 2) - 25;
         var bulletSpawnY:Float = y + (height / 2) - 50;
@@ -777,36 +778,32 @@ class Jevil extends FlxSprite
             if (hp >= 105) { targetSpamCombos = 18; }
             else if (hp >= 80) { targetSpamCombos = 20; }
             else { targetSpamCombos = 24; }
+
+            this.visible = false;
+            this.x = 590;
+            this.y = -400;
         }
 
         var goLeft:Bool = (spamComboCount == 0) ? FlxG.random.bool(50) : !lastAttackWasLeft;
-        var randomY:Float = FlxG.random.float(200, 400);
+        var randomY:Float = FlxG.random.float(100, 450);
+        var cloneX:Float = goLeft ? 150 : 900;
 
-        x = goLeft ? 150 : 1080;
-        y = randomY;
-
-        if (goLeft)
-        {
-            animation.play("teleportReverse", true, false);
-            lastAttackWasLeft = true;
-        }
-        else
-        {
-            animation.play("teleport", true, false);
-            lastAttackWasLeft = false;
-        }
-
-        FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.65, false);
-        FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75);
+        lastAttackWasLeft = goLeft;
 
         if (attackInterrupted()) return;
-        particlesJevil();
-
-        FlxTween.globalManager.cancelTweensOf(this);
         if (parentState.player == null || !parentState.player.exists || !parentState.player.alive) return;
 
-        var jewelSpawnX:Float = x + (width / 2) - 10;
-        var jewelSpawnY:Float = y + (height / 2) - 16;
+        FlxG.sound.play(AssetPaths.jevil_teleport__ogg, 0.35, false);
+        FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75);
+
+        if (!this.visible) this.visible;
+
+        var clone = new main.bosses.ch1.JevilClone(cloneX, randomY, parentState, goLeft);
+        parentState.add(clone);
+        activeFakeClones.push(clone);
+
+        var jewelSpawnX:Float = cloneX + (clone.width / 2) - 10;
+        var jewelSpawnY:Float = randomY + (clone.height / 2) - 16;
 
         var targetX:Float = parentState.player.x + parentState.player.width / 2;
         var targetY:Float = parentState.player.y + parentState.player.height / 2;
@@ -814,14 +811,38 @@ class Jevil extends FlxSprite
         var jewel = new main.bosses.ch1.JevilProjectiles.JevilJewelSpam(jewelSpawnX, jewelSpawnY, targetX, targetY, parentState);
         parentState.dangerObjects.add(jewel);
 
+        new FlxTimer().start(0.5, function(_)
+        {
+            if (clone != null && clone.exists)
+            {
+                clone.squishOutAndDestroy();
+            }
+            activeFakeClones.remove(clone);
+        });
+
         spamComboCount++;
 
         if (spamComboCount >= targetSpamCombos)
         {
             spamComboCount = 0;
             targetSpamCombos = 0;
+
             createAttackTimer(0.4, function(_)
             {
+                for (c in activeFakeClones)
+                {
+                    if (c != null && c.exists)
+                    {
+                        parentState.remove(c, true);
+                        c.destroy();
+                    }
+                }
+                activeFakeClones = [];
+
+                this.visible = true;
+                this.x = 590;
+                this.y = 335;
+
                 if (attackInterrupted()) return;
                 teleport();
             });
@@ -846,10 +867,10 @@ class Jevil extends FlxSprite
 
         if (fanComboCount == 0)
         {
-            targetFanCombos = FlxG.random.int(2, 4);
+            targetFanCombos = FlxG.random.int(6, 8);
         }
 
-        if (this.hp <= 60) targetFanCombos = FlxG.random.int(4, 6);
+        if (this.hp <= 75) targetFanCombos = FlxG.random.int(4, 6);
 
         var randomX = FlxG.random.float(250, 1000);
         this.x = randomX;
@@ -876,8 +897,8 @@ class Jevil extends FlxSprite
         this.flash.alpha = 0.2;
 
         var interval:Float;
-        if (hp >= 75) { interval = 1.5; }
-        else { interval = 1.25; }
+        if (hp >= 75) { interval = 1; }
+        else { interval = 0.85; }
 
         var offsets:Array<Float> = [-250, -125, 0, 125, 250];
 
@@ -1307,18 +1328,18 @@ class Jevil extends FlxSprite
         animation.play("dance");
         FlxG.sound.play(AssetPaths.jevil_strong_attack03__ogg, 0.75);
 
-        var totalBombs:Int = 16;
-        var dropInterval:Float = 0.65;
+        var totalBombs:Int = 20;
+        var dropInterval:Float = 0.55;
 
         if (hp <= 50 && hp >= 25)
         {
-            totalBombs = 18;
-            dropInterval = 0.55;
+            totalBombs = 24;
+            dropInterval = 0.5;
         }
         else if (hp < 25)
         {
-            totalBombs = 26;
-            dropInterval = 0.5;
+            totalBombs = 28;
+            dropInterval = 0.45;
         }
 
         var ceilingY:Float = parentState.map.y + 20;
@@ -1361,6 +1382,7 @@ class Jevil extends FlxSprite
         
         this.visible = true;
         state = "ultimate_cutscene";
+        teleportCount = 4;
         FlxTween.cancelTweensOf(this);
         scale.set(2.5, 2.5);
         updateHitbox();
@@ -1865,7 +1887,7 @@ class Jevil extends FlxSprite
         FlxG.camera.shake(0.01, 6);
 
         
-        var particle = new flixel.effects.particles.FlxEmitter(jevilEnding.x + (width / 2), jevilEnding.y + (height / 2), 25);
+        var particle = new flixel.effects.particles.FlxEmitter(jevilEnding.x + (width / 2), jevilEnding.y + (height / 2));
         particle.makeParticles(10, 10, FlxColor.WHITE, 150);
         particle.color.set(FlxColor.RED, FlxColor.GREEN, FlxColor.YELLOW, FlxColor.BLUE);
         particle.launchMode = CIRCLE;
@@ -1977,7 +1999,7 @@ class Jevil extends FlxSprite
 
     public function particlesJevil()
     {
-        var particle = new flixel.effects.particles.FlxEmitter(x + (width / 2), y + (height / 2), 25);
+        var particle = new flixel.effects.particles.FlxEmitter(x + (width / 2), y + (height / 2));
         particle.makeParticles(4, 4, FlxColor.WHITE, 50);
         particle.color.set(FlxColor.BLUE, FlxColor.PURPLE, FlxColor.WHITE);
         particle.launchMode = CIRCLE;
@@ -2064,3 +2086,4 @@ class Jevil extends FlxSprite
 
 
 }
+

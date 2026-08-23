@@ -14,6 +14,8 @@ import main.ChapterState;
 
 class KrisDeathState extends FlxSubState
 {
+    public static var jevilDeathCount:Int = 0;
+
     var breakingSoul:FlxSprite;
     var choiceSoul:FlxSprite;
     var gameOverImage:FlxSprite;
@@ -38,6 +40,8 @@ class KrisDeathState extends FlxSubState
     override public function create():Void
     {
         super.create();
+
+        jevilDeathCount++;
 
         bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
         bg.scrollFactor.set(0, 0);
@@ -196,7 +200,9 @@ class KrisDeathState extends FlxSubState
 
         mkTimer(3.0, function(_)
         {
-            typeText(mainText, "WILL YOU TRY AGAIN?", 0.1, function()
+            var promptText:String = (jevilDeathCount <= 2) ? "WILL YOU TRY AGAIN?" : "DO NOT GIVE UP!";
+
+            typeText(mainText, promptText, 0.1, function()
             {
                 FlxTween.tween(yesText, {alpha: 1}, 1.0);
                 FlxTween.tween(noText, {alpha: 1}, 1.0, {
@@ -257,6 +263,7 @@ class KrisDeathState extends FlxSubState
 		}
         if (resetPressed && canReset)
         {
+            PlayerData.totalDeaths += 1;
             quickReset();
         }
 
@@ -308,6 +315,7 @@ class KrisDeathState extends FlxSubState
                 {
                     mkTimer(0.5, function(_)
                     {
+                        PlayerData.totalDeaths += 1;
                         quickReset();
                     });
                 }
@@ -329,6 +337,7 @@ class KrisDeathState extends FlxSubState
                     
                     mkTimer(2.0, function(_)
                     {
+                        PlayerData.totalDeaths += 1;
                         FlxG.switchState(main.MenuState.new);
                     });
                 });

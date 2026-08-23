@@ -171,6 +171,7 @@ class DeathState extends FlxSubState
 		}
         if (resetPressed)
         {
+            PlayerData.totalDeaths += 1;
             restartLevel();
         }
         #else
