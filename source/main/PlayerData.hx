@@ -37,6 +37,10 @@ class PlayerData
 
     public static var jevilDialogueRead:Bool = false;
 
+    /* Options */
+
+    public static var enhancedVisuals:Bool = true;
+
 
     public static function isCoinCollected(id:String):Bool
     {

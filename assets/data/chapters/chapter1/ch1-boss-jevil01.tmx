@@ -145,7 +145,7 @@
  <objectgroup id="14" name="small-spike"/>
  <objectgroup id="15" name="switch-spike"/>
  <objectgroup id="21" name="spike-normal">
-  <object id="154" name="spike" gid="99" x="2450" y="250" width="50" height="50">
+  <object id="154" name="spike" gid="99" x="2450" y="450" width="50" height="50">
    <properties>
     <property name="id" value="0"/>
    </properties>

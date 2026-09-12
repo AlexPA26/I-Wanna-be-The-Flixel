@@ -150,6 +150,7 @@ class KrisDeathState extends FlxSubState
         mkTimer(1.2, function(tmplTimer:FlxTimer)
         {
             triggerBloodExplosion(chapterState);
+            FlxG.sound.play(AssetPaths.thekid_broken__ogg, 1, false);
         });
 
         mkTimer(3, function(musicTimer:FlxTimer)

@@ -28,6 +28,7 @@ class SaveManager
 
         /* Character Unlocks */
         save.data.reachedSewers = PlayerData.reachedSewers;
+        save.data.enhancedVisuals = PlayerData.enhancedVisuals;
 
         if (PlayerData.collectedCoins != null)
         {
@@ -88,6 +89,10 @@ class SaveManager
 
             /* Character Unlock */
             if (save.data.reachedSewers != null) PlayerData.reachedSewers = save.data.reachedSewers;
+
+            /* Options */
+
+            if (save.data.enhancedVisuals != null) PlayerData.enhancedVisuals = save.data.enhancedVisuals;
 
             if (save.data == null) 
             {

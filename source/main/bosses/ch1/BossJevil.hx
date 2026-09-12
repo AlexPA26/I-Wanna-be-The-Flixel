@@ -215,7 +215,7 @@ class Jevil extends FlxSprite
             parentState.spawnTimer = 9999;
         }
 
-        if (FlxG.keys.justPressed.L) { hp -= 115; }
+        if (FlxG.keys.justPressed.L) { hp -= 20; }
 
         if (FlxG.keys.justPressed.C)
         {
@@ -678,9 +678,9 @@ class Jevil extends FlxSprite
         FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.beep__ogg, 0.25, false);
         
-        var cooldownAttack:Float = 0.75;
-        if (hp >= 80 && hp < 105) { cooldownAttack = 0.70; }
-        else if (hp > 0 && hp < 80) { cooldownAttack = 0.65; }
+        var cooldownAttack:Float = 0.80;
+        if (hp >= 80 && hp < 105) { cooldownAttack = 0.75; }
+        else if (hp > 0 && hp < 80) { cooldownAttack = 0.70; }
         var bulletSpawnX:Float = x + (width / 2) - 25;
         var bulletSpawnY:Float = y + (height / 2) - 50;
 
@@ -867,10 +867,10 @@ class Jevil extends FlxSprite
 
         if (fanComboCount == 0)
         {
-            targetFanCombos = FlxG.random.int(6, 8);
+            targetFanCombos = FlxG.random.int(5, 6);
         }
 
-        if (this.hp <= 75) targetFanCombos = FlxG.random.int(4, 6);
+        if (this.hp <= 75) targetFanCombos = FlxG.random.int(6, 8);
 
         var randomX = FlxG.random.float(250, 1000);
         this.x = randomX;
@@ -897,8 +897,8 @@ class Jevil extends FlxSprite
         this.flash.alpha = 0.2;
 
         var interval:Float;
-        if (hp >= 75) { interval = 1; }
-        else { interval = 0.85; }
+        if (hp >= 75) { interval = 1.25; }
+        else { interval = 1; }
 
         var offsets:Array<Float> = [-250, -125, 0, 125, 250];
 

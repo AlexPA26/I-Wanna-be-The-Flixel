@@ -507,13 +507,13 @@ class ChapterState extends FlxState
 					if (standingOnThis)
 					{
 						player.x += deltaX;
-
-						player.y = plat.y - player.height;
-
-						player.velocity.y = 0;
-						
-						player.isRidingPlatform = true;
-						player.touching = flixel.util.FlxDirectionFlags.DOWN;
+						if (plat.velocity.y <= 0)
+						{
+							player.y = plat.y - player.height;
+							player.velocity.y = 0;
+							player.isRidingPlatform = true;
+							player.touching = flixel.util.FlxDirectionFlags.DOWN;
+						}
 					}
 				}
 			});
@@ -874,7 +874,7 @@ class ChapterState extends FlxState
 		if (FlxG.keys.justPressed.EIGHT && !fightingBoss)
 		{
 			PlayerData.currentChapter = 1;
-			RoomLoader.loadRoom(this, "boss-reznor01");
+			RoomLoader.loadRoom(this, "map23");
 		}
 
 		if (FlxG.keys.justPressed.NINE && !fightingBoss)

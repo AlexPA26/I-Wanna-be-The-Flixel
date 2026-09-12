@@ -470,7 +470,7 @@ class JevilDirectionalJewel extends FlxSprite
     {
         super(x, y);
 
-        FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.4, false);
+        FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.2, false);
         loadGraphic(AssetPaths.jewel__png, true, 19, 33);
         animation.add("idle", [0], 1, false);
         animation.play("idle");

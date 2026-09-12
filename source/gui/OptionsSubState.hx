@@ -19,6 +19,7 @@ class OptionsSubState extends FlxSubState
     var btnAnti:FlxSprite;
     var btnSync:FlxSprite;
     var btnFPS:FlxSprite;
+    var buttonEnhancedVisuals:FlxSprite;
     
     override public function create()
     {
@@ -26,6 +27,7 @@ class OptionsSubState extends FlxSubState
         var bgShader = new FlxSprite();
         var mainText = new FlxText();
         var fullScreenText = new FlxText();
+        var enhancedVisualsText = new FlxText();
 
         super.create();
 
@@ -74,6 +76,23 @@ class OptionsSubState extends FlxSubState
         fullScreenText.y -= 100;
         assetsGroup.add(fullScreenText);
 
+        buttonEnhancedVisuals = new FlxSprite();
+        buttonEnhancedVisuals.loadGraphic(AssetPaths.checkOptions__png, true, 64, 64);
+        buttonEnhancedVisuals.animation.add("normal", [0], 1, false);
+        buttonEnhancedVisuals.animation.add("active", [1], 1, false);
+        buttonEnhancedVisuals.animation.play(main.PlayerData.enhancedVisuals ? "active" : "normal");
+        buttonEnhancedVisuals.screenCenter();
+        buttonEnhancedVisuals.x -= 450;
+        buttonEnhancedVisuals.y = buttonFullScreen.y + 100;
+        assetsGroup.add(buttonEnhancedVisuals);
+
+        enhancedVisualsText.setFormat(null, 32, FlxColor.WHITE);
+        enhancedVisualsText.text = "Enhanced Visuals";
+        enhancedVisualsText.screenCenter();
+        enhancedVisualsText.x -= 225;
+        enhancedVisualsText.y = fullScreenText.y + 100;
+        assetsGroup.add(enhancedVisualsText);
+
         mainText = new FlxText("Options");
 		mainText.size = 80;
 		mainText.color = FlxColor.WHITE;
@@ -88,7 +107,7 @@ class OptionsSubState extends FlxSubState
         
     }
 
-override public function update(elapsed:Float)
+    override public function update(elapsed:Float)
     {
         super.update(elapsed);
 
@@ -118,8 +137,9 @@ override public function update(elapsed:Float)
         }
         
         fullScreenButton();
+        enhancedVisualsLogic();
 
-        if (FlxG.mouse.overlaps(closeBoton) || FlxG.mouse.overlaps(buttonFullScreen))
+        if (FlxG.mouse.overlaps(closeBoton) || FlxG.mouse.overlaps(buttonFullScreen) || FlxG.mouse.overlaps(buttonEnhancedVisuals))
         {
             openfl.ui.Mouse.cursor = openfl.ui.MouseCursor.BUTTON;
         }
@@ -148,6 +168,17 @@ override public function update(elapsed:Float)
                 FlxG.fullscreen = false;
                 buttonFullScreen.animation.play("normal");
             }
+        }
+        #end
+    }
+
+    function enhancedVisualsLogic():Void
+    {
+        #if !mobile
+        if (FlxG.mouse.overlaps(buttonEnhancedVisuals) && (FlxG.mouse.justPressed))
+        {   
+            main.PlayerData.enhancedVisuals = !main.PlayerData.enhancedVisuals;
+            buttonEnhancedVisuals.animation.play(main.PlayerData.enhancedVisuals ? "active" : "normal");
         }
         #end
     }

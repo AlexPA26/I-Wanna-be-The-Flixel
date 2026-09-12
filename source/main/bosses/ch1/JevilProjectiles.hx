@@ -226,7 +226,7 @@ class JevilDiamondScythe extends FlxSprite
 
     public function new(x:Float, y:Float, state:main.ChapterState)
     {
-        var size = 1.75;
+        var size = 1.50;
         scaleScythe = size;
         super(x, y);
         this.playerRef = state.player;

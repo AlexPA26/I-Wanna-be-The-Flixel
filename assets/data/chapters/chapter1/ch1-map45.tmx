@@ -90,6 +90,7 @@
   <object id="624" name="platform" gid="27" x="1150" y="400" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
+    <property name="speed" value="100"/>
    </properties>
   </object>
  </objectgroup>

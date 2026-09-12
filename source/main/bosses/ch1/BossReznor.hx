@@ -488,7 +488,7 @@ class ReznorMinion extends FlxSprite
     {
         if (centerAnchor.status == "dead" || centerAnchor.status == "ending" || !alive) return;
 
-        var randomDelay = FlxG.random.float(0.5, 1.25);
+        var randomDelay = FlxG.random.float(0.75, 1.5);
 
         minionAttackTimer = new FlxTimer().start(randomDelay, function(tmr:FlxTimer)
         {
@@ -497,7 +497,7 @@ class ReznorMinion extends FlxSprite
                 return;
             }
 
-            if (FlxG.random.bool(20))
+            if (FlxG.random.bool(15))
             {
                 var attacks = ["attackFlames", "attackFireball"];
                 var chosenAttack = FlxG.random.getObject(attacks);
