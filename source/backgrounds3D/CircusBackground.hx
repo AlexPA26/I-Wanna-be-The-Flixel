@@ -3,21 +3,21 @@ package backgrounds3D;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
-import openfl.display.BitmapData;
-import openfl.geom.Rectangle;
+import flixel.util.FlxColor;
+import openfl.Vector;
 
 typedef RenderTriangle =
 {
-    var x1:Int; var y1:Int;
-    var x2:Int; var y2:Int;
-    var x3:Int; var y3:Int;
+    var x1:Float; var y1:Float;
+    var x2:Float; var y2:Float;
+    var x3:Float; var y3:Float;
     var color:Int;
     var avgZ:Float;
 }
 
 class CircusBackground extends FlxGroup
 {
-    public var canvas:FlxSprite;
+    public var canvas:CircusCanvas;
     
     public var focalLength:Float = 500;
     public var rotationAngle:Float = 0;
@@ -32,397 +32,314 @@ class CircusBackground extends FlxGroup
     public var numSides:Int = 8;
     
     public var innerSquareSize:Float = 100;
-    public var innerCenterHeight:Float = -170; // Floor inner apex height
-    public var ceilingInnerCenterHeight:Float = -400; // Ceiling inner apex height
+    public var innerCenterHeight:Float = -170;
+    public var ceilingInnerCenterHeight:Float = -400;
     public var meetInMiddle:Bool = false; 
     
     public var numSidesInner:Int = 8;
     
-    // --- PERSPECTIVE CONTROLS ---
-    public var floorPitchAngle:Float = 15;    // Pitch for floor cone (tilted down)
-    public var ceilingPitchAngle:Float = 45;  // Pitch for ceiling cone (tilted up)
-    
-    // --- SHIFT CEILING INNER TRIANGLE DOWNWARD ---
+    public var floorPitchAngle:Float = 15;
+    public var ceilingPitchAngle:Float = 45;
     public var ceilingInnerOffsetY:Float = 55; 
 
     public var palette:Array<Int>;
     public var innerPalette:Array<Int>;
-    var _rect:Rectangle;
 
-    public var targetRenderFPS:Int = 10; 
-    var renderTimer:Float = 0;
+    var paletteColors:Array<Int> = [];
+    var colorIndexMap:Map<Int, Int> = new Map();
 
     public function new()
     {
         super();
         
-        _rect = new Rectangle(0, 0, 0, 1);
+        palette = [0xff050d80, 0xff1f2463];
+        innerPalette = [0xff050d80, 0xff1f2463];
 
-        palette =
-        [
-            0xff050d80, 0xff1f2463
-        ];
-
-        innerPalette = [
-            0xff050d80, 0xff1f2463
-        ];
-
-        var monitorHz:Int = 60; 
-        if (openfl.Lib.current.stage != null && openfl.Lib.current.stage.window != null)
-        {
-            var detectedHz = openfl.Lib.current.stage.window.displayMode.refreshRate;
-            if (detectedHz > 0) monitorHz = detectedHz;
-        }
-
-        // Apply setting
-        if (main.PlayerData.enhancedVisuals)
-        {
-            targetRenderFPS = monitorHz;
-        }
-        else
-        {
-            targetRenderFPS = 40;
-        }
-
-        canvas = new FlxSprite(0, 0);
-        canvas.makeGraphic(FlxG.width, FlxG.height, 0x00000000, true);
+        canvas = new CircusCanvas();
         add(canvas);
+
+        buildPaletteTexture();
+    }
+
+
+    public function buildPaletteTexture():Void
+    {
+        paletteColors = [];
+        colorIndexMap = new Map();
+
+        for (c in palette) registerColor(c);
+        for (c in innerPalette) registerColor(c);
+        if (paletteColors.length == 0) registerColor(0xffffffff);
+
+        // unique = true so this never collides with another cached graphic.
+        canvas.makeGraphic(paletteColors.length, 1, FlxColor.TRANSPARENT, true);
+        for (i in 0...paletteColors.length)
+        {
+            canvas.pixels.setPixel32(i, 0, paletteColors[i]);
+        }
+        canvas.dirty = true;
+
+        // Nearest-neighbour sampling, otherwise adjacent palette pixels blend
+        // into each other and the colours come out muddy.
+        canvas.antialiasing = false;
+    }
+
+    inline function registerColor(c:Int):Void
+    {
+        if (!colorIndexMap.exists(c))
+        {
+            colorIndexMap.set(c, paletteColors.length);
+            paletteColors.push(c);
+        }
+    }
+
+    // U coordinate of the centre of this colour's pixel in the palette strip.
+    function colorU(c:Int):Float
+    {
+        var idx = colorIndexMap.exists(c) ? colorIndexMap.get(c) : 0;
+        return (idx + 0.5) / paletteColors.length;
     }
 
     override public function update(elapsed:Float)
     {
         super.update(elapsed);
         
-        // 1. ALWAYS update the angle smoothly so the rotation speed stays consistent
         rotationAngle += rotationSpeed * elapsed;
         if (rotationAngle >= 360) rotationAngle -= 360;
 
-        // 2. Throttle the rendering: Add elapsed time to our timer
-        renderTimer += elapsed;
+        var t = innerSquareSize / squareSize;
+        var innerBaseHeight = centerHeight * (1 - t);
+        
+        var floorApexY = innerCenterHeight;
+        var ceilingApexY = ceilingInnerCenterHeight;
 
-        // 3. Only run the heavy rendering math if enough time has passed (e.g., 1/60th of a second)
-        if (renderTimer >= (1.0 / targetRenderFPS))
+        if (meetInMiddle)
         {
-            // Reset the timer for the next frame
-            renderTimer = 0; 
+            var midPointY = (floorY + ceilingY) / 2.0;
+            floorApexY = (midPointY - floorY) - innerBaseHeight;
+            ceilingApexY = (ceilingY - midPointY) - innerBaseHeight;
+        }
 
-            canvas.pixels.lock();
-            canvas.pixels.fillRect(canvas.pixels.rect, 0x00000000);
+        var verticesFloor = new Array<Array<Float>>();
+        var verticesCeiling = new Array<Array<Float>>();
 
-            // ==========================================
-            // 1. CALCULATE APEX HEIGHTS
-            // ==========================================
-            var t = innerSquareSize / squareSize;
-            var innerBaseHeight = centerHeight * (1 - t);
+        var outerApex = verticesFloor.length;
+        verticesFloor.push([0.0, centerHeight, 0.0]);
+        
+        for (i in 0...numSides)
+        {
+            var angle = (i * Math.PI * 2) / numSides;
+            verticesFloor.push([Math.cos(angle) * squareSize, 0.0, Math.sin(angle) * squareSize]);
+        }
+
+        var innerApex = verticesFloor.length;
+        verticesFloor.push([0.0, innerBaseHeight + floorApexY, 0.0]);
+        
+        for (i in 0...numSidesInner)
+        {
+            var angle = (i * Math.PI * 2) / numSidesInner;
+            verticesFloor.push([Math.cos(angle) * innerSquareSize, innerBaseHeight, Math.sin(angle) * innerSquareSize]);
+        }
+
+        verticesCeiling.push([0.0, -centerHeight, 0.0]);
+        for (i in 0...numSides)
+        {
+            var angle = (i * Math.PI * 2) / numSides;
+            verticesCeiling.push([Math.cos(angle) * squareSize, 0.0, Math.sin(angle) * squareSize]);
+        }
+        verticesCeiling.push([0.0, -(innerBaseHeight + ceilingApexY), 0.0]);
+        for (i in 0...numSidesInner)
+        {
+            var angle = (i * Math.PI * 2) / numSidesInner;
+            verticesCeiling.push([Math.cos(angle) * innerSquareSize, -innerBaseHeight, Math.sin(angle) * innerSquareSize]);
+        }
+
+        var rad = rotationAngle * Math.PI / 180;
+        var cosY = Math.cos(rad);
+        var sinY = Math.sin(rad);
+
+        var projX_floor = new Array<Float>();
+        var projY_floor = new Array<Float>();
+        var worldZ_floor = new Array<Float>();
+
+        var floorPitchRad = floorPitchAngle * Math.PI / 180;
+        var cosX_f = Math.cos(floorPitchRad);
+        var sinX_f = Math.sin(floorPitchRad);
+
+        for (v in verticesFloor)
+        {
+            var rx = v[0] * cosY - v[2] * sinY;
+            var rz = v[0] * sinY + v[2] * cosY;
+            var ry = v[1];
+
+            var finalY = ry * cosX_f - rz * sinX_f;
+            var finalZ = ry * sinX_f + rz * cosX_f;
+
+            var wz = finalZ + distanceZ;
+            var safeWz = (wz < -focalLength + 1) ? -focalLength + 1 : wz;
+            var perspective = focalLength / (focalLength + safeWz);
+
+            projX_floor.push(FlxG.width / 2 + rx * perspective);
+            projY_floor.push(FlxG.height / 2 + (finalY + floorY) * perspective);
+            worldZ_floor.push(wz);
+        }
+
+        var projX_ceiling = new Array<Float>();
+        var projY_ceiling = new Array<Float>();
+        var worldZ_ceiling = new Array<Float>();
+
+        var ceilingPitchRad = ceilingPitchAngle * Math.PI / 180;
+        var cosX_c = Math.cos(ceilingPitchRad);
+        var sinX_c = Math.sin(ceilingPitchRad);
+
+        for (v in verticesCeiling)
+        {
+            var rx = v[0] * cosY - v[2] * sinY;
+            var rz = v[0] * sinY + v[2] * cosY;
+            var ry = v[1];
+
+            var finalY = ry * cosX_c - rz * sinX_c;
+            var finalZ = ry * sinX_c + rz * cosX_c;
+
+            var wz = finalZ + distanceZ;
+            var safeWz = (wz < -focalLength + 1) ? -focalLength + 1 : wz;
+            var perspective = focalLength / (focalLength + safeWz);
+
+            projX_ceiling.push(FlxG.width / 2 + rx * perspective);
+            projY_ceiling.push(FlxG.height / 2 + (finalY + ceilingY) * perspective);
+            worldZ_ceiling.push(wz);
+        }
+
+        var floorOuterQueue = new Array<RenderTriangle>();
+        var floorInnerQueue = new Array<RenderTriangle>();
+        var ceilingOuterQueue = new Array<RenderTriangle>();
+        var ceilingInnerQueue = new Array<RenderTriangle>();
+
+        var sortByDepth = function(a:RenderTriangle, b:RenderTriangle)
+        {
+            if (a.avgZ > b.avgZ) return -1;
+            if (a.avgZ < b.avgZ) return 1;
+            return 0;
+        };
+
+        for (i in 0...numSides)
+        {
+            var i1 = i + 1;
+            var i2 = ((i + 1) % numSides) + 1;
+            var i3 = 0;
             
-            var floorApexY = innerCenterHeight;
-            var ceilingApexY = ceilingInnerCenterHeight;
+            var floorColor = palette[i % palette.length];
+            var ceilingColor = palette[(i + 1) % palette.length]; 
 
-            if (meetInMiddle)
-            {
-                var midPointY = (floorY + ceilingY) / 2.0;
-                floorApexY = (midPointY - floorY) - innerBaseHeight;
-                ceilingApexY = (ceilingY - midPointY) - innerBaseHeight;
-            }
+            floorOuterQueue.push({
+                x1: projX_floor[i1], y1: projY_floor[i1],
+                x2: projX_floor[i2], y2: projY_floor[i2],
+                x3: projX_floor[i3], y3: projY_floor[i3],
+                color: floorColor,
+                avgZ: (worldZ_floor[i1] + worldZ_floor[i2] + worldZ_floor[i3]) / 3.0
+            });
 
-            // ==========================================
-            // 2. BUILD VERTICES FOR FLOOR & CEILING
-            // ==========================================
-            var verticesFloor = new Array<Array<Float>>();
-            var verticesCeiling = new Array<Array<Float>>();
+            ceilingOuterQueue.push({
+                x1: projX_ceiling[i1], y1: projY_ceiling[i1],
+                x2: projX_ceiling[i2], y2: projY_ceiling[i2],
+                x3: projX_ceiling[i3], y3: projY_ceiling[i3],
+                color: ceilingColor,
+                avgZ: (worldZ_ceiling[i1] + worldZ_ceiling[i2] + worldZ_ceiling[i3]) / 3.0
+            });
+        }
 
-            var outerApex = verticesFloor.length;
-            verticesFloor.push([0.0, centerHeight, 0.0]);
+        var innerStartIndex = innerApex + 1;
+        for (i in 0...numSidesInner)
+        {
+            var i1 = innerStartIndex + i;
+            var i2 = innerStartIndex + ((i + 1) % numSidesInner);
+            var i3 = innerApex;
             
-            for (i in 0...numSides)
-            {
-                var angle = (i * Math.PI * 2) / numSides;
-                verticesFloor.push([Math.cos(angle) * squareSize, 0.0, Math.sin(angle) * squareSize]);
-            }
+            var floorInnerColor = innerPalette[i % innerPalette.length];
+            var ceilingInnerColor = innerPalette[i % innerPalette.length];
 
-            var innerApex = verticesFloor.length;
-            verticesFloor.push([0.0, innerBaseHeight + floorApexY, 0.0]);
-            
-            for (i in 0...numSidesInner)
-            {
-                var angle = (i * Math.PI * 2) / numSidesInner;
-                verticesFloor.push([Math.cos(angle) * innerSquareSize, innerBaseHeight, Math.sin(angle) * innerSquareSize]);
-            }
+            floorInnerQueue.push({
+                x1: projX_floor[i1], y1: projY_floor[i1],
+                x2: projX_floor[i2], y2: projY_floor[i2],
+                x3: projX_floor[i3], y3: projY_floor[i3],
+                color: floorInnerColor,
+                avgZ: (worldZ_floor[i1] + worldZ_floor[i2] + worldZ_floor[i3]) / 3.0
+            });
 
-            verticesCeiling.push([0.0, -centerHeight, 0.0]);
-            for (i in 0...numSides)
-            {
-                var angle = (i * Math.PI * 2) / numSides;
-                verticesCeiling.push([Math.cos(angle) * squareSize, 0.0, Math.sin(angle) * squareSize]);
-            }
-            verticesCeiling.push([0.0, -(innerBaseHeight + ceilingApexY), 0.0]);
-            for (i in 0...numSidesInner)
-            {
-                var angle = (i * Math.PI * 2) / numSidesInner;
-                verticesCeiling.push([Math.cos(angle) * innerSquareSize, -innerBaseHeight, Math.sin(angle) * innerSquareSize]);
-            }
+            ceilingInnerQueue.push({
+                x1: projX_ceiling[i1], y1: projY_ceiling[i1] + ceilingInnerOffsetY,
+                x2: projX_ceiling[i2], y2: projY_ceiling[i2] + ceilingInnerOffsetY,
+                x3: projX_ceiling[i3], y3: projY_ceiling[i3] + ceilingInnerOffsetY,
+                color: ceilingInnerColor,
+                avgZ: (worldZ_ceiling[i1] + worldZ_ceiling[i2] + worldZ_ceiling[i3]) / 3.0
+            });
+        }
 
-            var rad = rotationAngle * Math.PI / 180;
-            var cosY = Math.cos(rad);
-            var sinY = Math.sin(rad);
+        floorOuterQueue.sort(sortByDepth);
+        floorInnerQueue.sort(sortByDepth);
+        ceilingOuterQueue.sort(sortByDepth);
+        ceilingInnerQueue.sort(sortByDepth);
 
-            // ==========================================
-            // 3. PROJECT 3D TO SCREEN SPACE
-            // ==========================================
-            var projX_floor = new Array<Int>();
-            var projY_floor = new Array<Int>();
-            var worldZ_floor = new Array<Float>();
+        var vCount:Int = 0;
+        canvas.vertices.length = 0;
+        canvas.indices.length = 0;
+        canvas.uvtData.length = 0;
 
-            var floorPitchRad = floorPitchAngle * Math.PI / 180;
-            var cosX_f = Math.cos(floorPitchRad);
-            var sinX_f = Math.sin(floorPitchRad);
+        var pushTriangle = function(t:RenderTriangle)
+        {
+            canvas.vertices.push(t.x1); canvas.vertices.push(t.y1);
+            canvas.vertices.push(t.x2); canvas.vertices.push(t.y2);
+            canvas.vertices.push(t.x3); canvas.vertices.push(t.y3);
 
-            for (v in verticesFloor)
-            {
-                var rx = v[0] * cosY - v[2] * sinY;
-                var rz = v[0] * sinY + v[2] * cosY;
-                var ry = v[1];
+            canvas.indices.push(vCount);
+            canvas.indices.push(vCount + 1);
+            canvas.indices.push(vCount + 2);
 
-                var finalY = ry * cosX_f - rz * sinX_f;
-                var finalZ = ry * sinX_f + rz * cosX_f;
+            // All 3 vertices sample the SAME palette pixel, so the triangle
+            // comes out flat-filled in that colour.
+            var u = colorU(t.color);
+            canvas.uvtData.push(u); canvas.uvtData.push(0.5);
+            canvas.uvtData.push(u); canvas.uvtData.push(0.5);
+            canvas.uvtData.push(u); canvas.uvtData.push(0.5);
 
-                var wz = finalZ + distanceZ;
-                var safeWz = (wz < -focalLength + 1) ? -focalLength + 1 : wz;
-                var perspective = focalLength / (focalLength + safeWz);
+            vCount += 3;
+        };
 
-                projX_floor.push(Std.int(FlxG.width / 2 + rx * perspective));
-                projY_floor.push(Std.int(FlxG.height / 2 + (finalY + floorY) * perspective));
-                worldZ_floor.push(wz);
-            }
+        for (t in ceilingInnerQueue) pushTriangle(t);
+        for (t in ceilingOuterQueue) pushTriangle(t);
+        for (t in floorOuterQueue) pushTriangle(t);
+        for (t in floorInnerQueue) pushTriangle(t);
+    }
+}
 
-            var projX_ceiling = new Array<Int>();
-            var projY_ceiling = new Array<Int>();
-            var worldZ_ceiling = new Array<Float>();
+class CircusCanvas extends FlxSprite
+{
+    public var vertices:Vector<Float> = new Vector<Float>();
+    public var indices:Vector<Int> = new Vector<Int>();
+    public var uvtData:Vector<Float> = new Vector<Float>();
 
-            var ceilingPitchRad = ceilingPitchAngle * Math.PI / 180;
-            var cosX_c = Math.cos(ceilingPitchRad);
-            var sinX_c = Math.sin(ceilingPitchRad);
-
-            for (v in verticesCeiling)
-            {
-                var rx = v[0] * cosY - v[2] * sinY;
-                var rz = v[0] * sinY + v[2] * cosY;
-                var ry = v[1];
-
-                var finalY = ry * cosX_c - rz * sinX_c;
-                var finalZ = ry * sinX_c + rz * cosX_c;
-
-                var wz = finalZ + distanceZ;
-                var safeWz = (wz < -focalLength + 1) ? -focalLength + 1 : wz;
-                var perspective = focalLength / (focalLength + safeWz);
-
-                projX_ceiling.push(Std.int(FlxG.width / 2 + rx * perspective));
-                projY_ceiling.push(Std.int(FlxG.height / 2 + (finalY + ceilingY) * perspective));
-                worldZ_ceiling.push(wz);
-            }
-
-            // ==========================================
-            // 4. FOUR SEPARATE QUEUES FOR CORRECT LAYERING
-            // ==========================================
-            var floorOuterQueue = new Array<RenderTriangle>();
-            var floorInnerQueue = new Array<RenderTriangle>();
-            var ceilingOuterQueue = new Array<RenderTriangle>();
-            var ceilingInnerQueue = new Array<RenderTriangle>();
-
-            var sortByDepth = function(a:RenderTriangle, b:RenderTriangle)
-            {
-                if (a.avgZ > b.avgZ) return -1;
-                if (a.avgZ < b.avgZ) return 1;
-                return 0;
-            };
-
-            for (i in 0...numSides)
-            {
-                var i1 = i + 1;
-                var i2 = ((i + 1) % numSides) + 1;
-                var i3 = 0;
-                
-                var floorColor = palette[i % palette.length];
-                var ceilingColor = palette[(i + 1) % palette.length]; 
-
-                floorOuterQueue.push
-                ({
-                    x1: projX_floor[i1], y1: projY_floor[i1],
-                    x2: projX_floor[i2], y2: projY_floor[i2],
-                    x3: projX_floor[i3], y3: projY_floor[i3],
-                    color: floorColor,
-                    avgZ: (worldZ_floor[i1] + worldZ_floor[i2] + worldZ_floor[i3]) / 3.0
-                });
-
-                ceilingOuterQueue.push
-                ({
-                    x1: projX_ceiling[i1], y1: projY_ceiling[i1],
-                    x2: projX_ceiling[i2], y2: projY_ceiling[i2],
-                    x3: projX_ceiling[i3], y3: projY_ceiling[i3],
-                    color: ceilingColor,
-                    avgZ: (worldZ_ceiling[i1] + worldZ_ceiling[i2] + worldZ_ceiling[i3]) / 3.0
-                });
-            }
-
-            var innerStartIndex = innerApex + 1;
-            for (i in 0...numSidesInner)
-            {
-                var i1 = innerStartIndex + i;
-                var i2 = innerStartIndex + ((i + 1) % numSidesInner);
-                var i3 = innerApex;
-                
-                var floorInnerColor = innerPalette[i % innerPalette.length];
-                var ceilingInnerColor = innerPalette[i % innerPalette.length];
-
-                floorInnerQueue.push
-                ({
-                    x1: projX_floor[i1], y1: projY_floor[i1],
-                    x2: projX_floor[i2], y2: projY_floor[i2],
-                    x3: projX_floor[i3], y3: projY_floor[i3],
-                    color: floorInnerColor,
-                    avgZ: (worldZ_floor[i1] + worldZ_floor[i2] + worldZ_floor[i3]) / 3.0
-                });
-
-                ceilingInnerQueue.push
-                ({
-                    x1: projX_ceiling[i1], y1: projY_ceiling[i1] + Std.int(ceilingInnerOffsetY),
-                    x2: projX_ceiling[i2], y2: projY_ceiling[i2] + Std.int(ceilingInnerOffsetY),
-                    x3: projX_ceiling[i3], y3: projY_ceiling[i3] + Std.int(ceilingInnerOffsetY),
-                    color: ceilingInnerColor,
-                    avgZ: (worldZ_ceiling[i1] + worldZ_ceiling[i2] + worldZ_ceiling[i3]) / 3.0
-                });
-            }
-
-            floorOuterQueue.sort(sortByDepth);
-            floorInnerQueue.sort(sortByDepth);
-            ceilingOuterQueue.sort(sortByDepth);
-            ceilingInnerQueue.sort(sortByDepth);
-
-            // ==========================================
-            // 5. RENDER IN THE CORRECT OVERLAP ORDER
-            // ==========================================
-            
-            for (t in ceilingInnerQueue)
-            {
-                drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
-            }
-            
-            for (t in ceilingOuterQueue)
-            {
-                drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
-            }
-            
-            for (t in floorOuterQueue)
-            {
-                drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
-            }
-            
-            for (t in floorInnerQueue)
-            {
-                drawTriangle(canvas.pixels, t.x1, t.y1, t.x2, t.y2, t.x3, t.y3, t.color);
-            }
-
-            canvas.pixels.unlock();
-            canvas.dirty = true;
-        } // --- END OF RENDER THROTTLE BLOCK ---
+    public function new()
+    {
+        super(0, 0);
+        // The real texture (a palette strip) is built by
+        // CircusBackground.buildPaletteTexture(); this is only a placeholder so
+        // `graphic` is never null if draw() somehow runs first.
+        makeGraphic(1, 1, FlxColor.WHITE, true);
+        antialiasing = false;
     }
 
-    function drawTriangle(bmp:BitmapData, x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int, color:Int)
+    override public function draw():Void
     {
-        if (y1 > y2) { var ty = y1; y1 = y2; y2 = ty; var tx = x1; x1 = x2; x2 = tx; }
-        if (y1 > y3) { var ty = y1; y1 = y3; y3 = ty; var tx = x1; x1 = x3; x3 = tx; }
-        if (y2 > y3) { var ty = y2; y2 = y3; y3 = ty; var tx = x2; x2 = x3; x3 = tx; }
-
-        if (y1 == y3) return;
-
-        if (y2 == y3)
+        if (vertices.length == 0 || alpha == 0 || !visible || graphic == null) return;
+        
+        for (camera in cameras)
         {
-            drawFlatBottomTriangle(bmp, x1, y1, x2, y2, x3, y3, color);
-        }
-        else if (y1 == y2)
-        {
-            drawFlatTopTriangle(bmp, x1, y1, x2, y2, x3, y3, color);
-        }
-        else
-        {
-            var x4 = Std.int(x1 + ((y2 - y1) / (y3 - y1)) * (x3 - x1));
-            drawFlatBottomTriangle(bmp, x1, y1, x2, y2, x4, y2, color);
-            drawFlatTopTriangle(bmp, x2, y2, x4, y2, x3, y3, color);
-        }
-    }
+            if (!camera.visible || !camera.exists) continue;
 
-    function drawFlatBottomTriangle(bmp:BitmapData, x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int, color:Int)
-    {
-        var invslope1:Float = (x2 - x1) / (y2 - y1);
-        var invslope2:Float = (x3 - x1) / (y3 - y1);
-        var curx1:Float = x1;
-        var curx2:Float = x1;
-        var startY = y1;
-        var endY = y2;
-
-        if (startY < 0)
-        {
-            curx1 += invslope1 * (-startY);
-            curx2 += invslope2 * (-startY);
-            startY = 0;
-        }
-        if (endY >= bmp.height) endY = bmp.height - 1;
-
-        for (y in startY...endY + 1)
-        {
-            renderScanline(bmp, y, curx1, curx2, color);
-            curx1 += invslope1;
-            curx2 += invslope2;
-        }
-    }
-
-    function drawFlatTopTriangle(bmp:BitmapData, x1:Int, y1:Int, x2:Int, y2:Int, x3:Int, y3:Int, color:Int)
-    {
-        var invslope1:Float = (x3 - x1) / (y3 - y1);
-        var invslope2:Float = (x3 - x2) / (y3 - y2);
-        var curx1:Float = x1;
-        var curx2:Float = x2;
-        var startY = y1;
-        var endY = y3;
-
-        if (startY < 0)
-        {
-            curx1 += invslope1 * (-startY);
-            curx2 += invslope2 * (-startY);
-            startY = 0;
-        }
-        if (endY >= bmp.height) endY = bmp.height - 1;
-
-        for (y in startY...endY + 1)
-        {
-            renderScanline(bmp, y, curx1, curx2, color);
-            curx1 += invslope1;
-            curx2 += invslope2;
-        }
-    }
-
-    @:inline
-    function renderScanline(bmp:BitmapData, y:Int, xStart:Float, xEnd:Float, color:Int)
-    {
-        if (xStart > xEnd)
-        {
-            var tmp = xStart;
-            xStart = xEnd;
-            xEnd = tmp;
-        }
-
-        var ix1 = Std.int(xStart);
-        var ix2 = Std.int(xEnd);
-
-        if (ix1 < 0) ix1 = 0;
-        if (ix2 >= bmp.width) ix2 = bmp.width - 1;
-
-        if (ix1 <= ix2)
-        {
-            _rect.x = ix1;
-            _rect.y = y;
-            _rect.width = (ix2 - ix1) + 1;
-            bmp.fillRect(_rect, color);
+            // One call that works in BOTH renderTile and renderBlit - it picks
+            // the right path internally. No `colors` argument any more, because
+            // the colour now lives in the texture itself via the UVs.
+            camera.drawTriangles(graphic, vertices, indices, uvtData);
         }
     }
 }

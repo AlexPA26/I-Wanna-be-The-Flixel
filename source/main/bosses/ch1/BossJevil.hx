@@ -1,10 +1,5 @@
 package main.bosses.ch1;
 
-import backgrounds3D.CircusBackground;
-import leveldata.hazards.SolidBlock;
-import leveldata.hazards.SmallSpike;
-import leveldata.blockdata.NormalSlab;
-import leveldata.events.NormalTrampolineMini;
 import flixel.effects.FlxFlicker;
 import flixel.addons.effects.FlxTrail;
 import flixel.math.FlxPoint;
@@ -1329,17 +1324,17 @@ class Jevil extends FlxSprite
         FlxG.sound.play(AssetPaths.jevil_strong_attack03__ogg, 0.75);
 
         var totalBombs:Int = 20;
-        var dropInterval:Float = 0.55;
+        var dropInterval:Float = 0.6;
 
         if (hp <= 50 && hp >= 25)
         {
-            totalBombs = 24;
-            dropInterval = 0.5;
+            totalBombs = 22;
+            dropInterval = 0.55;
         }
         else if (hp < 25)
         {
-            totalBombs = 28;
-            dropInterval = 0.45;
+            totalBombs = 24;
+            dropInterval = 0.50;
         }
 
         var ceilingY:Float = parentState.map.y + 20;
@@ -1382,7 +1377,7 @@ class Jevil extends FlxSprite
         
         this.visible = true;
         state = "ultimate_cutscene";
-        teleportCount = 4;
+        teleportCount = 0;
         FlxTween.cancelTweensOf(this);
         scale.set(2.5, 2.5);
         updateHitbox();
@@ -1433,7 +1428,7 @@ class Jevil extends FlxSprite
                 PlayerData.lastMusicTime = FlxG.sound.music.time;
                 FlxTween.cancelTweensOf(this);
                 this.flipX = false;
-                tpIncrease = 4;
+                tpIncrease = 3;
                 main.RoomLoader.loadRoom(parentState, "boss-jevil03");
                 parentState.player.canJump = false;
                 FlxG.sound.music.time = PlayerData.lastMusicTime;

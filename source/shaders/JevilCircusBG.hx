@@ -87,7 +87,7 @@ void main()
     vec4 color = flixel_texture2D(bitmap, uv);
     color.rgb *= tint;
 
-    gl_FragColor = color;
+    gl_FragColor = color * openfl_ColorMultiplierv;
 }
 ')
 	public var speed:Float = 0.1;
