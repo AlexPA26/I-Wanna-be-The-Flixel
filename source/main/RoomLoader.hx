@@ -26,7 +26,7 @@ class RoomLoader
 			state.roomAcid.destroy();
 			state.roomAcid = null;
 		}
-		#if !html5
+		#if !mobile
 		var chartPath = "assets/data/chapters/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + ".tmx";
 		#else
 		var chartPath = "assets/data/chapters_mobile/chapter" + PlayerData.currentChapter + "/ch" + PlayerData.currentChapter + "-" + roomName + "-mobile" + ".tmx";

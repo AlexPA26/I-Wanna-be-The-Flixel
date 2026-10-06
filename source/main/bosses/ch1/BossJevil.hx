@@ -186,47 +186,47 @@ class Jevil extends FlxSprite
             flash.alpha -= elapsed;
         }
 
-        #if !mobile
-        if (FlxG.keys.justPressed.U)
-        {
-            ultimateTriggered = true;
-            startUltimateAttack();
-            return;
-        }
+        // #if !mobile
+        // if (FlxG.keys.justPressed.U)
+        // {
+        //     ultimateTriggered = true;
+        //     startUltimateAttack();
+        //     return;
+        // }
 
-        if (FlxG.keys.justPressed.Y)
-        {
-            parentState.currentTP += 90;
-        }
+        // if (FlxG.keys.justPressed.Y)
+        // {
+        //     parentState.currentTP += 90;
+        // }
 
-        if (FlxG.keys.justPressed.J)
-        {
-            attackCube();
-            return;
-        }
+        // if (FlxG.keys.justPressed.J)
+        // {
+        //     attackCube();
+        //     return;
+        // }
 
-        if (FlxG.keys.justPressed.I)
-        {
-            parentState.spawnTimer = 9999;
-        }
+        // if (FlxG.keys.justPressed.I)
+        // {
+        //     parentState.spawnTimer = 9999;
+        // }
 
-        if (FlxG.keys.justPressed.L) { hp -= 20; }
+        // if (FlxG.keys.justPressed.L) { hp -= 20; }
 
-        if (FlxG.keys.justPressed.C)
-        {
-            trace("------------------------------");
-            trace("Current Phase: " + state);
-            trace("Current Jevil animation: " + animation.curAnim.name);
-            trace("Current Health: " + this.hp);
-            trace("Player alive and exists: " + parentState.player.alive + " || " + parentState.player.exists);
-            trace("Player Y: " + parentState.player.y);
-            trace("Player Inmortal?: " + parentState.inmortal);
-            trace("Jevil POS: X-" + this.x + " || Y-" + this.y);
-            trace("Jevil Direction: " + this.flipX);
-            trace("------------------------------");
-        }
+        // if (FlxG.keys.justPressed.C)
+        // {
+        //     trace("------------------------------");
+        //     trace("Current Phase: " + state);
+        //     trace("Current Jevil animation: " + animation.curAnim.name);
+        //     trace("Current Health: " + this.hp);
+        //     trace("Player alive and exists: " + parentState.player.alive + " || " + parentState.player.exists);
+        //     trace("Player Y: " + parentState.player.y);
+        //     trace("Player Inmortal?: " + parentState.inmortal);
+        //     trace("Jevil POS: X-" + this.x + " || Y-" + this.y);
+        //     trace("Jevil Direction: " + this.flipX);
+        //     trace("------------------------------");
+        // }
 
-        #end
+        // #end
 
         if (craziness && animation.curAnim != null && animation.curAnim.name == "dance")
         {
@@ -625,17 +625,17 @@ class Jevil extends FlxSprite
         {
             if (hp >= 105)
             {
-                targetSpadeCombos = FlxG.random.int(5, 6);
+                targetSpadeCombos = FlxG.random.int(4, 5);
             }
                 
             else if (hp >= 80)
             {
-                targetSpadeCombos = FlxG.random.int(6, 8);
+                targetSpadeCombos = FlxG.random.int(5, 6);
             }
                 
             else
             {
-                targetSpadeCombos = FlxG.random.int(8, 10);
+                targetSpadeCombos = FlxG.random.int(6, 8);
             }
 
         }
@@ -673,9 +673,9 @@ class Jevil extends FlxSprite
         FlxG.sound.play(AssetPaths.jevil_attack01__ogg, 0.75, false);
         FlxG.sound.play(AssetPaths.beep__ogg, 0.25, false);
         
-        var cooldownAttack:Float = 0.80;
-        if (hp >= 80 && hp < 105) { cooldownAttack = 0.75; }
-        else if (hp > 0 && hp < 80) { cooldownAttack = 0.70; }
+        var cooldownAttack:Float = 1;
+        if (hp >= 80 && hp < 105) { cooldownAttack = 0.9; }
+        else if (hp > 0 && hp < 80) { cooldownAttack = 0.85; }
         var bulletSpawnX:Float = x + (width / 2) - 25;
         var bulletSpawnY:Float = y + (height / 2) - 50;
 
@@ -822,7 +822,7 @@ class Jevil extends FlxSprite
             spamComboCount = 0;
             targetSpamCombos = 0;
 
-            createAttackTimer(0.4, function(_)
+            createAttackTimer(0.75, function(_)
             {
                 for (c in activeFakeClones)
                 {
@@ -844,7 +844,7 @@ class Jevil extends FlxSprite
         }
         else
         {
-            createAttackTimer(0.4, function(_)
+            createAttackTimer(0.6, function(_)
             {
                 if (attackInterrupted()) return;
                 attackSpam();
@@ -862,10 +862,10 @@ class Jevil extends FlxSprite
 
         if (fanComboCount == 0)
         {
-            targetFanCombos = FlxG.random.int(5, 6);
+            targetFanCombos = FlxG.random.int(3, 4);
         }
 
-        if (this.hp <= 75) targetFanCombos = FlxG.random.int(6, 8);
+        if (this.hp <= 75) targetFanCombos = FlxG.random.int(5, 6);
 
         var randomX = FlxG.random.float(250, 1000);
         this.x = randomX;
@@ -939,7 +939,7 @@ class Jevil extends FlxSprite
         state = "attacking_hearts";
         isVulnerable = false;
 
-        var totalBombs = hp <= 50 ? 48 : 36;
+        var totalBombs = hp <= 50 ? 36 : 28;
         var travelSpeed = hp <= 50 ? 450 : 400;
 
         var totalWaves = Std.int(totalBombs / 4);

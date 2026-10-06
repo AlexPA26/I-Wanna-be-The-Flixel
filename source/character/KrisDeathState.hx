@@ -73,7 +73,7 @@ class KrisDeathState extends FlxSubState
         breakingSoul.scale.set(1.5, 1.5);
         add(breakingSoul);
 
-        FlxG.sound.play(AssetPaths.thekid_hit__ogg, 1, false);
+        // FlxG.sound.play(AssetPaths.thekid_hit__ogg, 1, false);
 
         gameOverImage = new FlxSprite();
         gameOverImage.loadGraphic(AssetPaths.jevil_gameOver__png);
@@ -150,7 +150,7 @@ class KrisDeathState extends FlxSubState
         mkTimer(1.2, function(tmplTimer:FlxTimer)
         {
             triggerBloodExplosion(chapterState);
-            FlxG.sound.play(AssetPaths.thekid_broken__ogg, 1, false);
+            // FlxG.sound.play(AssetPaths.thekid_broken__ogg, 1, false);
         });
 
         mkTimer(3, function(musicTimer:FlxTimer)
@@ -287,7 +287,7 @@ class KrisDeathState extends FlxSubState
                 canReset = false;
 
                 if (FlxG.sound.music != null) FlxG.sound.music.stop();
-                FlxG.sound.play(AssetPaths.restart_jevil__ogg, 1, false);
+                // FlxG.sound.play(AssetPaths.restart_jevil__ogg, 1, false);
 
                 FlxTween.tween(yesText, {alpha: 0}, 0.5);
                 FlxTween.tween(noText, {alpha: 0}, 0.5);

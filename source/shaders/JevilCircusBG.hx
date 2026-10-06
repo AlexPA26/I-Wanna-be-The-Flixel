@@ -29,7 +29,7 @@ void main()
 
     vec2 p = uv - 0.5;
 
-    float strength = -4;
+    float strength = -4.0;
     float r = length(p);
 
     p *= 1.0 + strength * pow(r, 4.0);

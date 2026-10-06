@@ -8,7 +8,6 @@ import shaders.*;
 import main.Multiplayer.UdpClient;
 import main.Multiplayer.Multiplayer;
 import main.Multiplayer.CoopMode;
-import coop.NATUPnP;
 import coop.LocalCoopSubstate.LocalCoopSubState;
 import flixel.sound.FlxSound;
 import openfl.media.Sound;
@@ -40,6 +39,8 @@ import leveldata.collectibles.*;
 import flixel.addons.effects.FlxTrail;
 import main.mods.ModLoader;
 import flixel.ui.FlxBar;
+
+#if !html5 import coop.NATUPnP; #end
 
 @:allow(main.iwbtf)
 @:allow(main.RoomLoader)
@@ -196,6 +197,7 @@ class ChapterState extends FlxState
 			#end
 		#end
 
+		#if !html5
 		var clientAddr = UdpClient.getClientAddress();
 		if (clientAddr != null)
 		{
@@ -226,7 +228,7 @@ class ChapterState extends FlxState
 			udpClient = null;
 			trace("Multiplayer client inactive");
 		}
-
+		#end
 		#end
 
 		hudGroup = new FlxGroup();
@@ -810,7 +812,7 @@ class ChapterState extends FlxState
                             
                             if (distance < 50)
                             {
-								var isCrit = FlxG.random.int(1, 14) == 1;
+								var isCrit = FlxG.random.int(1, 2) == 1;
 								var damage = isCrit ? 2 : 1;
                                 jevilBoss.takeDamage(damage, false);
 								jevilBoss.jevilWasHit = true;
