@@ -546,7 +546,7 @@ class ChapterState extends FlxState
 		}
 
 
-		#if !debug
+		#if !mobile
 		if (FlxG.keys.justPressed.TAB)
 		{
 			FlxG.debugger.drawDebug = !FlxG.debugger.drawDebug;
@@ -563,26 +563,31 @@ class ChapterState extends FlxState
 			FlxG.resetState();
 		}
 
+		#if !mobile
 		if (FlxG.keys.justPressed.K && player.exists && player.alive && player.active && !specialState)
 		{
 			if (PlayerData.currentChapter == 0) return;
 			killPlayer();
 		}
-
+		#end
 
 		var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
-		
-		var shootPressed = FlxG.keys.justPressed.Z;
-		var pausePressed = FlxG.keys.justPressed.ESCAPE;
+		var shootPressed:Bool = false;
+		var pausePressed:Bool = false;
 
+		#if !mobile
+		shootPressed = FlxG.keys.justPressed.Z;
+		pausePressed = FlxG.keys.justPressed.ESCAPE;
+		#end
 		if (gamepad != null)
 		{
 			if (gamepad.justPressed.RIGHT_TRIGGER || gamepad.justPressed.LEFT_TRIGGER) shootPressed = true;
 			if (gamepad.justPressed.START) pausePressed = true;
 		}
 
-		if (shootPressed && player.exists) playerShoot();
+		if (shootPressed && player.exists)
 		{
+			playerShoot();
 			FlxG.collide(bullets, map, (bullet, wall) ->
 			{
 				bullet.kill();

@@ -188,7 +188,11 @@ class PauseState extends FlxSubState
 
 
         var gamepad:flixel.input.gamepad.FlxGamepad = FlxG.gamepads.lastActive;
-        var closePressed = FlxG.keys.justPressed.ESCAPE;
+        var closePressed:Bool = false;
+
+        #if !mobile
+        closePressed = FlxG.keys.justPressed.ESCAPE;
+        #end
 
         if (gamepad != null)
 		{
