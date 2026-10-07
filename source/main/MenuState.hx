@@ -326,7 +326,7 @@ class MenuState extends FlxState
     {
         #if sys
         var musicPath = ModLoader.getAsset("music/mainMenu.ogg");
-        trace("Music Path: " + musicPath);
+        trace("Main Menu Music Path: " + musicPath);
 
         var sound = Sound.fromFile(musicPath);
 

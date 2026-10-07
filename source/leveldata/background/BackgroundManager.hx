@@ -1,7 +1,7 @@
 package leveldata.background;
 
 import shaders.*;
-import backgrounds3D.CircusBackground;
+import backgrounds3D.*;
 import openfl.display.BitmapData;
 import main.mods.ModLoader;
 import main.ChapterState;
@@ -243,7 +243,7 @@ class BackgroundManager
                     
                     if (state.circusBG == null)
                     {
-                        state.circusBG = new CircusBackground();
+                        state.circusBG = new leveldata.backgrounds3D.CircusBackground();
                         state.circusBG.canvas.scrollFactor.set(0, 0);
                     }
 

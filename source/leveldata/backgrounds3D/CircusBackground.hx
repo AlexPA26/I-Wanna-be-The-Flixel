@@ -1,4 +1,4 @@
-package backgrounds3D;
+package leveldata.backgrounds3D;
 
 import flixel.FlxG;
 import flixel.FlxSprite;

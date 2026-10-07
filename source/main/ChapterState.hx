@@ -1,5 +1,6 @@
 package main;
 
+import leveldata.backgrounds3D.CircusBackground;
 import main.InputManager.Action;
 import backgrounds3D.*;
 import flixel.util.FlxTimer;
@@ -74,7 +75,7 @@ class ChapterState extends FlxState
 	public var specialState:Bool = false;
 
 	public var bg:FlxSprite;
-	public var circusBG:CircusBackground;
+	public var circusBG:leveldata.backgrounds3D.CircusBackground;
 
 	public var rainShader:RainShader;
 	public var sunsetShader:SunsetRayShader;
