@@ -39,7 +39,16 @@ class RoomLoader
 			if (!PlayerData.reachedSewers)
 			{
 				PlayerData.reachedSewers = true;
-				trace("Sewers reached! Skin Unlocked.");
+				trace("Sewers reached! New Skin Unlocked.");
+			}
+		}
+
+		if (roomName == "map43" && PlayerData.currentChapter == 1)
+		{
+			if (!PlayerData.reachedMorning)
+			{
+				PlayerData.reachedMorning = true;
+				trace("Castle Morning reached! New Skin Unlocked.");
 			}
 		}
 

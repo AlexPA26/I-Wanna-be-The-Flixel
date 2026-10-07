@@ -1,0 +1,54 @@
+########################
+Music Used:
+########################
+
+[========== GENERAL/SHARED ==========]
+
+Main menu:
+Link:
+
+Death theme:
+Link:
+
+[========== CHAPTER 1 ==========]
+
+Castle theme:
+Link:
+
+Reznor miniboss:
+Link:
+
+Castle sewers:
+Link:
+
+Castle elevator:
+Link:
+
+Castle morning:
+Author: TobyFox
+Link:
+
+Bonus room 1:
+Link:
+
+Castle circus: 'The Circus'
+Author: TobyFox
+Link:
+
+JEVIL Boss: 'THE WORLD REVOLVING' (MIDI)
+Author: TobyFox
+Link: https://www.youtube.com/watch?v=Z01Tsgwe2dQ
+
+JEVIL Boss Game Over: 'Faint Courage (Game Over)'
+Author: TobyFox
+Link:
+
+Teleport room:
+Author: Siivagunner
+Link:
+
+[========== CHARACTER SPECIFICS ==========]
+
+Boyfriend Game Over: 'Game Over (Don't Stop)'
+Author: Kawai Sprite
+Link:

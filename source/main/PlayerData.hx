@@ -32,6 +32,7 @@ class PlayerData
 
     /* Character Unlocks */
     public static var reachedSewers:Bool = false;
+    public static var reachedMorning:Bool = false;
 
     /* Boss Specifics */
 

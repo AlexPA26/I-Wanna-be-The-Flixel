@@ -28,6 +28,9 @@ class SaveManager
 
         /* Character Unlocks */
         save.data.reachedSewers = PlayerData.reachedSewers;
+        save.data.reachedMorning = PlayerData.reachedMorning;
+
+        /* Options Specifics */
         save.data.enhancedVisuals = PlayerData.enhancedVisuals;
 
         if (PlayerData.collectedCoins != null)
@@ -89,6 +92,7 @@ class SaveManager
 
             /* Character Unlock */
             if (save.data.reachedSewers != null) PlayerData.reachedSewers = save.data.reachedSewers;
+            if (save.data.reachedMorning != null) PlayerData.reachedMorning = save.data.reachedMorning;
 
             /* Options */
 
@@ -152,7 +156,10 @@ class SaveManager
 
         PlayerData.jevilDialogueRead = false;
 
+        /* Character Specific */
+
         PlayerData.reachedSewers = false;
+        PlayerData.reachedMorning = false;
         saveGame(); 
     }
 }

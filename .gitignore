@@ -2,14 +2,19 @@
 .idea/
 .vscode/
 .builds/
+.github/
+.psd/
 mods/
 export/
 mapeditor/
 screenshots/
 templates/
 assets/testing
+assets/private
 
+*.sfx
 *.psd
 .DS_Store
 release.keystore
 hxformat.json
+setup_mac.sh

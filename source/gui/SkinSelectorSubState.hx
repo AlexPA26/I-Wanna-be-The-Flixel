@@ -36,7 +36,8 @@ class SkinSelectorSubState extends FlxSubState
     var skins:Array<SkinData> =
     [
         {name: "The Kid", assetName: "thekid", unlockAt: 0},
-        {name: "Ginger", assetName: "ginger", unlockAt: 0},
+        {name: "Ginger", assetName: "ginger", unlockAt: 0, milestone: "sewers"},
+        {name: "Toxic Boy", assetName: "toxickid", unlockAt: 0, milestone: "morning"},
         {name: "Boyfriend", assetName: "boyfriend", unlockAt: 0},
         {name: "Boshy", assetName: "boshy", unlockAt: 0},
         {name: "The Kris", assetName: "thekris", unlockAt: 15},
@@ -126,6 +127,7 @@ class SkinSelectorSubState extends FlxSubState
         if (skin.milestone != null)
         {
             if (skin.milestone == "sewers") isUnlocked = PlayerData.reachedSewers;
+            if (skin.milestone == "morning") isUnlocked = PlayerData.reachedMorning;
         }
         else
         {
@@ -164,12 +166,16 @@ class SkinSelectorSubState extends FlxSubState
         }
         else
         {
-            trace(skin.milestone);
             skinPreview.color = FlxColor.BLACK;
 
             if (skin.milestone == "sewers")
             {
-                unlockText.text = "Reach 'The Sewers'";
+                unlockText.text = "Reach the Sewers";
+            }
+
+            else if (skin.milestone == "morning")
+            {
+                unlockText.text = "Exit the Sewers";
             }
 
             else
@@ -187,11 +193,14 @@ class SkinSelectorSubState extends FlxSubState
             case "thekid":
                 skinEmitter.color.set(FlxColor.BLUE, FlxColor.RED, FlxColor.BLUE, FlxColor.WHITE);
                 setupParticles();
-            case "boyfriend":
-                skinEmitter.color.set(FlxColor.BLUE, FlxColor.RED, FlxColor.BLUE, FlxColor.RED);
-                setupParticles();
             case "ginger":
                 skinEmitter.color.set(FlxColor.ORANGE, FlxColor.YELLOW, FlxColor.ORANGE, FlxColor.WHITE);
+                setupParticles();
+            case "toxickid":
+                skinEmitter.color.set(FlxColor.GREEN, FlxColor.LIME, FlxColor.YELLOW, FlxColor.GREEN);
+                setupParticles();
+            case "boyfriend":
+                skinEmitter.color.set(FlxColor.BLUE, FlxColor.RED, FlxColor.BLUE, FlxColor.RED);
                 setupParticles();
             case "boshy":
                 skinEmitter.color.set(FlxColor.YELLOW, FlxColor.YELLOW, FlxColor.WHITE);
@@ -202,11 +211,10 @@ class SkinSelectorSubState extends FlxSubState
 
         }
 
-        if (!skinEmitter.emitting) 
+        if (!skinEmitter.emitting && isUnlocked) 
         {
             skinEmitter.start(true, 0.02);
 
-            // todo: stop the particles when it is blocked so it cannot hint the character
         }
     
     }
