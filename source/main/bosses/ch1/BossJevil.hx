@@ -1656,7 +1656,8 @@ class Jevil extends FlxSprite
         }
 
         if (parentState.tpText != null && parentState.tpText.visible) parentState.tpText.visible = false;
-        if (parentState.playerDeaths != null && parentState.playerDeaths.visible) parentState.playerDeaths.visible = false;
+        if (parentState.chapterHUD.playerDeaths != null && parentState.chapterHUD.playerDeaths.visible) 
+        parentState.chapterHUD.playerDeaths.visible = false;
 
         if (flash != null) flash.alpha = 0.75;
 

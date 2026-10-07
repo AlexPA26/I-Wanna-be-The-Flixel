@@ -9,7 +9,8 @@ import flixel.util.FlxColor;
 import flixel.ui.FlxButton;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
-import flixel.addons.ui.FlxInputText;
+import flixel.text.FlxInputText;
+import flixel.text.FlxInputText.FlxInputTextFilterMode;
 import flixel.util.FlxSave;
 import leveldata.misc.SaveManager;
 import main.ChapterState;
@@ -110,7 +111,6 @@ class LocalCoopSubState extends FlxSubState
         assetsGroup.add(labelIP);
 
         inputIP = new FlxInputText(centerX - 240, centerY - 25, 220, savedIP, 20, FlxColor.BLACK, FlxColor.WHITE);
-        inputIP.filterMode = FlxInputText.NO_FILTER;
         assetsGroup.add(inputIP);
 
         labelPort = new FlxText(centerX + 20, centerY - 65, 220, "Port");
@@ -118,7 +118,7 @@ class LocalCoopSubState extends FlxSubState
         assetsGroup.add(labelPort);
 
         inputPort = new FlxInputText(centerX + 20, centerY - 25, 220, savedPort, 20, FlxColor.BLACK, FlxColor.WHITE);
-        inputPort.filterMode = FlxInputText.ONLY_NUMERIC;
+        inputPort.filterMode = FlxInputTextFilterMode.NUMERIC;
         assetsGroup.add(inputPort);
 
         warningText = new FlxText(centerX - 240, centerY + 25, 480, "localhost not permitted");

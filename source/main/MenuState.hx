@@ -39,14 +39,9 @@ class MenuState extends FlxState
     var globe:FlxSprite;
     var bg:FlxSprite;
 
-    var isActiveNew:Bool = false;
-    var isActiveCont:Bool = false;
-
     var btnNewGame:FlxButton;
     var btnContinue:FlxButton;
     var btnStages:FlxButton;
-    var btnSpriteNew:FlxSprite;
-    var btnSpriteCont:FlxSprite;
     var btnOptions:FlxButton;
     var btnSkins:FlxButton;
     var btnExit:FlxButton;
@@ -61,10 +56,7 @@ class MenuState extends FlxState
     var activeTweens:Map<FlxButton, FlxTween> = new Map();
     var activeLabelTweens:Map<FlxText, FlxTween> = new Map();
 
-    var outlineColors:Array<FlxColor> =
-    [
-        FlxColor.RED, FlxColor.GREEN, FlxColor.BLUE, FlxColor.YELLOW, FlxColor.CYAN
-    ];
+
 
     override public function create():Void
     {
@@ -152,47 +144,42 @@ class MenuState extends FlxState
         add(versionText);
 
         btnNewGame = new FlxButton(150, 250, "New Game", clickNewGame);
-        customizeNewGame(btnNewGame);
+        setupButton(btnNewGame, AssetPaths.buttonNewGame__png);
         add(btnNewGame);
 
         btnContinue = new FlxButton(150, 350, "Continue", clickContinue);
-        customizeButton(btnContinue);
+        setupButton(btnContinue, AssetPaths.buttonTitle__png);
         add(btnContinue);
 
         btnOptions = new FlxButton(150, 450, "Options", clickOptions);
-        customizeButton(btnOptions);
+        setupButton(btnOptions, AssetPaths.buttonTitle__png);
         add(btnOptions);
 
-        btnSkins = new FlxButton(150, 550, "Skins", function()
-        {
+        btnSkins = new FlxButton(150, 550, "Skins", function() {
             openSubState(new gui.SkinSelectorSubState());
-            
         });
-        customizeButton(btnSkins);
+        setupButton(btnSkins, AssetPaths.buttonTitle__png);
         add(btnSkins);
 
-        #if (!mobile && !html5)
+        #if (!mobile && !html5 && !sys && !windows)
+            btnStages = new FlxButton(850, 550, "Stages", clickStages);
+            setupButton(btnStages, AssetPaths.buttonTitle__png);
+            add(btnStages);
 
-        btnStages = new FlxButton(850, 550, "Stages", clickStages);
-        customizeButton(btnStages);
-        add(btnStages);
+            btnCoop = new FlxButton(850, 350, "Coop", clickCoop);
+            setupButton(btnCoop, AssetPaths.buttonTitle__png);
+            add(btnCoop);
 
-
-        btnCoop = new FlxButton(850, 350, "Coop", clickCoop);
-        customizeButton(btnCoop);
-        add(btnCoop);
-        
-        btnMods = new FlxButton(850, 450, "Mods", function()
-        {
-            openSubState(new main.mods.ModsSubState());
-        });
-        customizeButton(btnMods);
-        add(btnMods);
+            btnMods = new FlxButton(850, 450, "Mods", function() {
+                openSubState(new main.mods.ModsSubState());
+            });
+            setupButton(btnMods, AssetPaths.buttonTitle__png);
+            add(btnMods);
         #end
-
+        
         btnExit = new FlxButton(1020, 650, "Quit Game", clickQuit);
         btnExit.color = FlxColor.RED;
-        customizeExit(btnExit);
+        setupButton(btnExit, "transparent", false);
         #if !html5 add(btnExit); #end
 
         playMenuMusic();
@@ -222,198 +209,78 @@ class MenuState extends FlxState
         globe.alpha = 1 - Math.random() * 0.2;
     }
 
-    function customizeButton(btn:FlxButton):Void
+    function setupButton(btn:FlxButton, graphicPath:String, wobble:Bool = true):Void
     {
-        var w:Int = 250;
-        var h:Int = 60;
+    var w:Int = 250;
+    var h:Int = 60;
 
-        btn.loadGraphic(AssetPaths.buttonTitle__png, false, w, h);
-        // btn.makeGraphic(w, h, FlxColor.fromRGB(255, 255, 255, 128));
-
-        if (btn.label != null) 
-        {
-            btn.label.setFormat(null, 28, FlxColor.WHITE, CENTER);
-            btn.label.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-
-            btn.label.fieldWidth = w;
-            btn.label.alignment = CENTER;
-
-            for (offset in btn.labelOffsets)
-            {
-                offset.y += 10;
-            }
-
-            btn.label.centerOrigin();
-            btn.label.centerOffsets();
-
-            
-        }
-
-        btn.onOver.callback = function()
-        {
-            openfl.ui.Mouse.cursor = MouseCursor.BUTTON;
-
-            FlxTween.tween(btn.label.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
-            FlxTween.tween(btn.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
-
-            var btnTwn = FlxTween.angle(btn, -5, 5, 0.6, {type: PINGPONG, ease: FlxEase.sineInOut});
-            var txtTwn = FlxTween.angle(btn.label, -5, 5, 0.6, {type: PINGPONG, ease: FlxEase.sineInOut});
-
-            activeTweens.set(btn, btnTwn);
-            activeLabelTweens.set(btn.label, txtTwn);
-            FlxG.sound.play(AssetPaths.trigger__ogg, 0.1, false);
-        };
-
-        btn.onOut.callback = function()
-        {
-            openfl.ui.Mouse.cursor = MouseCursor.ARROW;
-
-            FlxTween.tween(btn.label.scale, {x: 1.0, y: 1.0}, 0.05, {ease: FlxEase.quadIn});
-            FlxTween.tween(btn.scale, {x: 1.0, y: 1.0}, 0.05, {ease: FlxEase.quadIn});
-
-            if (activeTweens.exists(btn))
-            {
-                activeTweens.get(btn).cancel();
-                activeTweens.remove(btn);
-            }
-
-            if (activeLabelTweens.exists(btn.label))
-            {
-                activeLabelTweens.get(btn.label).cancel();
-                activeLabelTweens.remove(btn.label);
-            }
-
-            FlxTween.tween(btn, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
-            FlxTween.tween(btn.label, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
-            
-        };
-    }
-
-    function customizeNewGame(btn:FlxButton):Void
+    if (graphicPath == "transparent") 
     {
-        var w:Int = 250;
-        var h:Int = 60;
-
-        btn.loadGraphic(AssetPaths.buttonNewGame__png, false, w, h);
-
-        if (btn.label != null) 
-        {
-            btn.label.setFormat(null, 28, FlxColor.WHITE, CENTER);
-            btn.label.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-
-            btn.label.fieldWidth = w;
-            btn.label.alignment = CENTER;
-
-            for (offset in btn.labelOffsets)
-            {
-                offset.y += 10;
-            }
-
-            btn.label.centerOrigin();
-            btn.label.centerOffsets();
-
-            
-        }
-
-        btn.onOver.callback = function()
-        {
-            openfl.ui.Mouse.cursor = MouseCursor.BUTTON;
-
-            FlxTween.tween(btn.label.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
-            FlxTween.tween(btn.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
-
-            var btnTwn = FlxTween.angle(btn, -5, 5, 0.6, {type: PINGPONG, ease: FlxEase.sineInOut});
-            var txtTwn = FlxTween.angle(btn.label, -5, 5, 0.6, {type: PINGPONG, ease: FlxEase.sineInOut});
-
-            activeTweens.set(btn, btnTwn);
-            activeLabelTweens.set(btn.label, txtTwn);
-            FlxG.sound.play(AssetPaths.trigger__ogg, 0.1, false);
-        };
-
-        btn.onOut.callback = function()
-        {
-            openfl.ui.Mouse.cursor = MouseCursor.ARROW;
-
-            FlxTween.tween(btn.label.scale, {x: 1.0, y: 1.0}, 0.05, {ease: FlxEase.quadIn});
-            FlxTween.tween(btn.scale, {x: 1.0, y: 1.0}, 0.05, {ease: FlxEase.quadIn});
-
-            if (activeTweens.exists(btn))
-            {
-                activeTweens.get(btn).cancel();
-                activeTweens.remove(btn);
-            }
-
-            if (activeLabelTweens.exists(btn.label))
-            {
-                activeLabelTweens.get(btn.label).cancel();
-                activeLabelTweens.remove(btn.label);
-            }
-
-            FlxTween.tween(btn, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
-            FlxTween.tween(btn.label, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
-            
-        };
-    }
-
-    function customizeExit(btn:FlxButton):Void
-    {
-        var w:Int = 250;
-        var h:Int = 60;
-
         btn.makeGraphic(w, h, FlxColor.TRANSPARENT);
+    } 
+    else 
+    {
+        btn.loadGraphic(graphicPath, false, w, h);
+    }
 
-        if (btn.label != null) 
+    if (btn.label != null) 
+    {
+        btn.label.setFormat(null, 28, FlxColor.WHITE, CENTER);
+        btn.label.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
+        btn.label.fieldWidth = w;
+        btn.label.alignment = CENTER;
+
+        for (offset in btn.labelOffsets) offset.y += 10;
+
+        btn.label.centerOrigin();
+        btn.label.centerOffsets();
+    }
+
+    btn.onOver.callback = function()
+    {
+        openfl.ui.Mouse.cursor = MouseCursor.BUTTON;
+
+        FlxTween.tween(btn.label.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
+        FlxTween.tween(btn.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
+        FlxG.sound.play(AssetPaths.trigger__ogg, 0.1, false);
+
+        if (wobble)
         {
-            btn.label.setFormat(null, 28, FlxColor.WHITE, CENTER);
-            btn.label.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
+            var btnTwn = FlxTween.angle(btn, -5, 5, 0.6, {type: PINGPONG, ease: FlxEase.sineInOut});
+            var txtTwn = FlxTween.angle(btn.label, -5, 5, 0.6, {type: PINGPONG, ease: FlxEase.sineInOut});
+            activeTweens.set(btn, btnTwn);
+            activeLabelTweens.set(btn.label, txtTwn);
+        }
+    };
 
-            btn.label.fieldWidth = w;
-            btn.label.alignment = CENTER;
+    btn.onOut.callback = function()
+    {
+        openfl.ui.Mouse.cursor = MouseCursor.ARROW;
 
-            for (offset in btn.labelOffsets)
-            {
-                offset.y += 10;
-            }
+        FlxTween.tween(btn.label.scale, {x: 1.0, y: 1.0}, 0.05, {ease: FlxEase.quadIn});
+        FlxTween.tween(btn.scale, {x: 1.0, y: 1.0}, 0.05, {ease: FlxEase.quadIn});
 
-            btn.label.centerOrigin();
-            btn.label.centerOffsets();
-
-            
+        if (activeTweens.exists(btn))
+        {
+            activeTweens.get(btn).cancel();
+            activeTweens.remove(btn);
         }
 
-        btn.onOver.callback = function()
+        if (activeLabelTweens.exists(btn.label))
         {
-            openfl.ui.Mouse.cursor = MouseCursor.BUTTON;
+            activeLabelTweens.get(btn.label).cancel();
+            activeLabelTweens.remove(btn.label);
+        }
 
-            FlxTween.tween(btn.label.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
-            FlxTween.tween(btn.scale, {x: 1.1, y: 1.1}, 0.05, {ease: FlxEase.quadOut});
-            FlxG.sound.play(AssetPaths.trigger__ogg, 0.1, false);
-        };
-
-        btn.onOut.callback = function()
+        if (wobble)
         {
-            openfl.ui.Mouse.cursor = MouseCursor.ARROW;
-
-            FlxTween.tween(btn.label.scale, {x: 1.0, y: 1.0}, 0.05, {ease: FlxEase.quadIn});
-            FlxTween.tween(btn.scale, {x: 1.0, y: 1.0}, 0.05, {ease: FlxEase.quadIn});
-
-            if (activeTweens.exists(btn))
-            {
-                activeTweens.get(btn).cancel();
-                activeTweens.remove(btn);
-            }
-
-            if (activeLabelTweens.exists(btn.label))
-            {
-                activeLabelTweens.get(btn.label).cancel();
-                activeLabelTweens.remove(btn.label);
-            }
-
             FlxTween.tween(btn, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
             FlxTween.tween(btn.label, {angle: 0}, 0.1, {ease: FlxEase.quadOut});
-            
-        };
+        }
+    };
     }
+
+
     function clickNewGame():Void
     {
         leveldata.misc.SaveManager.clearSaveData();
@@ -469,7 +336,8 @@ class MenuState extends FlxState
         }
 
         FlxG.sound.music = new FlxSound();
-        FlxG.sound.music.loadEmbedded(sound, true, false);
+        FlxG.sound.music.load(sound);
+        FlxG.sound.music.looped = true;
         FlxG.sound.music.volume = 0.7;
         FlxG.sound.music.play();
         #else
@@ -481,6 +349,7 @@ class MenuState extends FlxState
 
     }
 
+    #if !html5
     function clickCoop():Void
     {
         #if sys
@@ -503,7 +372,7 @@ class MenuState extends FlxState
         openSubState(new CoopSubState());
         #end
     }
-
+    #end
     override public function closeSubState():Void
     {
         super.closeSubState();

@@ -35,11 +35,13 @@ class Main extends Sprite
 		var skipSplash:Bool = true;
 		var startFullscreen:Bool = false;
 
+		/*
 		#if !html5
 		trace("======= ModLoader Active =======");
 		ModLoader.init();
 		trace("======= ModLoader Fin =======");
 		#end
+		*/
 
 		#if html5
 			var document = js.Browser.document;

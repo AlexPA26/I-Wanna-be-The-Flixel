@@ -95,12 +95,12 @@
  <objectgroup id="33" name="image">
   <object id="2245" name="image" gid="8" x="725" y="200" width="50" height="50">
    <properties>
-    <property name="imageName" value="red_arrow"/>
+    <property name="imageName" value="red_arrow_ch1"/>
    </properties>
   </object>
   <object id="2246" name="image" gid="8" x="725" y="400" width="50" height="50">
    <properties>
-    <property name="imageName" value="red_arrow"/>
+    <property name="imageName" value="red_arrow_ch1"/>
    </properties>
   </object>
  </objectgroup>

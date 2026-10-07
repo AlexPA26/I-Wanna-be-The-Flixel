@@ -7,10 +7,6 @@ import character.KrisDeathState;
 import shaders.*;
 import main.Multiplayer.UdpClient;
 import main.Multiplayer.Multiplayer;
-import main.Multiplayer.CoopMode;
-import coop.LocalCoopSubstate.LocalCoopSubState;
-import flixel.sound.FlxSound;
-import openfl.media.Sound;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -45,11 +41,14 @@ import flixel.ui.FlxBar;
 @:allow(main.iwbtf)
 @:allow(main.RoomLoader)
 @:allow(leveldata.events.EventLoader)
+@:allow(coop)
 @:allow(main.bosses.ch1)
 class ChapterState extends FlxState
 {
 	var player:Player;
 	var currentDeaths = PlayerData.totalDeaths;
+	public var playerDeathsTrigger:Bool = false;
+	public var chapterHUD:gui.ChapterHUD;
 	var blood:flixel.effects.particles.FlxEmitter;
 	var cameraSnapTimer:Int = 1;
 	var playerTrail:FlxTrail;
@@ -87,9 +86,6 @@ class ChapterState extends FlxState
 
 	public var screenShader:flixel.system.FlxAssets.FlxShader;
 	public var screenShaderName:String;
-
-
-
 
 	public var currentBGName:String = "";
 	public var mainTilesPath:String = "assets/images/levels/tiles/ch" + PlayerData.currentChapter + "tiles.png";
@@ -156,11 +152,6 @@ class ChapterState extends FlxState
 	var tiledData:TiledMap;
 	var spawnTimer:Float = 0.1;
 	var inmortal:Bool = false;
-	var timeElapsed:FlxText;
-	var currentChapter:FlxText;
-	public var playerDeathsTrigger:Bool = false;
-	var playerDeaths:FlxText;
-	var lastSave:FlxText;
 	var bossHpBar:FlxBar;
     var bossDebugText:FlxText;
 	public var jevil:main.bosses.ch1.BossJevil.Jevil;
@@ -170,24 +161,16 @@ class ChapterState extends FlxState
 	public var tpBarDeco:FlxSprite; public var tpText:FlxText;
     public var grazeHitbox:FlxSprite; public var grazedObjects:Array<flixel.FlxObject> = [];
 
-	var udpClient:UdpClient;
-	public var remotePlayers:Map<String, main.RemotePlayer> = new Map();
-
-	var networkTimer:Float = 0;
-	var tickRate:Float = 0.05; // 20 ticks per second
-	var pingTimer:Float = 0;
-	var testingUDP:Bool = false;
-	var udpTestTimer:Float = 0;
-	var udpReceivedResponse:Bool = false;
-	public var teleportCooldownTimer:Float = 0;
+	public var coopManager:coop.CoopManager;
 
 	override public function create():Void
 	{
 		#if (!html5 && !mobile)
 		Multiplayer.usingTCP = false;
-		#if !debug
-			#if !mobile
-				FlxG.mouse.visible = false;
+			#if !debug
+				#if !mobile
+					FlxG.mouse.visible = false;
+				#end
 			#end
 		#end
 
@@ -197,42 +180,11 @@ class ChapterState extends FlxState
 			#end
 		#end
 
-		#if !html5
-		var clientAddr = UdpClient.getClientAddress();
-		if (clientAddr != null)
-		{
-			trace("Multiplayer client active: " + clientAddr.host + ":" + clientAddr.port + " (bound to local port " + clientAddr.localPort + ")");
-			NATUPnP.mapPortAsync(clientAddr.localPort);
-		}
-		else if (Multiplayer.activeMode == Local)
-		{
-			var host = Multiplayer.targetIP;
-			var port = Multiplayer.targetPort;
-			udpClient = new UdpClient(host, port, port);
-			trace("Multiplayer client active (via Local Coop): " + host + ":" + port + " (bound to local port " + port + ")");
-			NATUPnP.mapPortAsync(port);
-		}
-		else if (Multiplayer.activeMode == Server)
-		{
-			var host = Multiplayer.targetIP;
-			var port = Multiplayer.targetPort;
-			// Start with UDP to check if NAT is open
-			udpClient = new UdpClient(host, port, 0, false);
-			testingUDP = true;
-			udpTestTimer = 0;
-			udpReceivedResponse = false;
-			trace("Multiplayer client active (via Server Coop): " + host + ":" + port + " (testing UDP connectivity...)");
-		}
-		else
-		{
-			udpClient = null;
-			trace("Multiplayer client inactive");
-		}
-		#end
-		#end
-
 		hudGroup = new FlxGroup();
+		chapterHUD = new gui.ChapterHUD(); add(chapterHUD);
 		virtualPad = new FlxVirtualPad(LEFT_RIGHT, A);
+		coopManager = new coop.CoopManager();
+		coopManager.init();
 
 		FlxG.bitmap.clearUnused();
 
@@ -346,52 +298,12 @@ class ChapterState extends FlxState
 
 		super.update(elapsed);
 
-		if (rainShader != null)
-		{
-			rainShader.update(elapsed);
-		}
+		coopManager.update(this, elapsed);
+		shaders.ShaderManager.updateShaders(this, elapsed);
 
-		if (castleShader != null)
-		{
-			castleShader.update(elapsed);
-		}
-
-		if (castleInsideShader != null)
-		{
-			castleInsideShader.update(elapsed);
-		}
-		
-		if (toxicShader != null)
-		{
-			toxicShader.update(elapsed);
-		}
-
-		if (sunsetShader != null)
-		{
-			sunsetShader.update(elapsed);
-		}
-
-		if (circusShader != null && bg != null)
-		{
-			if (bg != null) bg.shader = circusShader;
-			bg.x = -200;
-			circusShader.update(elapsed);
-		}
-
-		if (rainbowShader != null)
-		{
-			if (bg != null) bg.shader = rainbowShader;
-			rainbowShader.data.time.value[0] += elapsed;
-		}
-
-		if (screenShader != null)
-		{
-			try
-			{
-				screenShader.data.time.value[0] += elapsed;
-			}
-			catch (e:Dynamic) {}
-		}
+		var pExists = player != null && player.exists;
+		var pAlive = player != null && player.alive;
+		chapterHUD.updateTimeAndDeaths(pExists, pAlive, playerDeathsTrigger);
 
 		FlxG.collide(player, map);
 		FlxG.collide(player, slabs);
@@ -633,10 +545,6 @@ class ChapterState extends FlxState
 				PlayerData.saveCooldown = 0;
 		}
 
-		if (timeElapsed != null)
-		{
-			timeElapsed.text = "Time: " + PlayerData.formatTime();
-		}
 
 		#if !debug
 		if (FlxG.keys.justPressed.TAB)
@@ -707,17 +615,6 @@ class ChapterState extends FlxState
 		{ 
 			PlayerData.blackFadeTrigger = false;
 			blackFade.alpha = 1;
-		}
-
-		if (PlayerData.currentChapter >= 1 && player.exists && player.alive && !playerDeathsTrigger)
-		{
-			playerDeaths.visible = true;
-			playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
-		}
-
-		else if (playerDeaths != null || playerDeathsTrigger)
-		{
-			playerDeaths.visible = false;
 		}
 
 		bullets.forEachAlive((bullet) ->
@@ -903,52 +800,6 @@ class ChapterState extends FlxState
 			trace("IDs in memory: " + PlayerData.collectedCoins);
 		}
 
-
-		if (FlxG.keys.justPressed.F && udpClient != null && player != null && player.alive)
-		{
-			if (teleportCooldownTimer <= 0)
-			{
-				FlxG.sound.play(AssetPaths.error__ogg, 0.65, false);
-				FlxG.camera.shake(0.01, 0.15);
-				return;
-			}
-			var nearestPlayer:main.RemotePlayer = null;
-			var minDistance:Float = 999999;
-			for (rPlayer in remotePlayers)
-			{
-				if (rPlayer != null && rPlayer.exists && rPlayer.visible)
-				{
-					var dx = rPlayer.x - player.x;
-					var dy = rPlayer.y - player.y;
-					var dist = Math.sqrt(dx * dx + dy * dy);
-					if (dist < minDistance)
-					{
-						minDistance = dist;
-						nearestPlayer = rPlayer;
-					}
-				}
-			}
-
-			if (nearestPlayer != null)
-			{
-				teleportCooldownTimer = 2.0;
-				player.x = nearestPlayer.x;
-				player.y = nearestPlayer.y;
-
-				var emitter = new flixel.effects.particles.FlxEmitter(player.x + (player.width / 2), player.y + (player.height / 2), 20);
-				emitter.makeParticles(3, 3, FlxColor.WHITE, 20);
-				emitter.color.set(FlxColor.RED, FlxColor.YELLOW, FlxColor.BLUE, FlxColor.LIME);
-				emitter.lifespan.set(0.4, 0.8);
-				emitter.speed.set(50, 150);
-				emitter.launchMode = CIRCLE;
-				add(emitter);
-				emitter.start(true, 0, 20);
-
-				FlxG.sound.play(AssetPaths.warp__ogg, 0.6, false);
-				trace("Teleported to remote player: " + nearestPlayer.username);
-			}
-		}
-
 		#end
 
 		if (cameraType != "normal" && !isAutoscrolling)
@@ -967,186 +818,11 @@ class ChapterState extends FlxState
 			}
 		}
 
-		#if (!mobile && !html5)
-		if (udpClient != null)
-		{
-			if (testingUDP)
-			{
-				udpTestTimer += elapsed;
-				
-				if (Math.floor(udpTestTimer / 0.3) > Math.floor((udpTestTimer - elapsed) / 0.3))
-				{
-					var payload = '{"ping":true,"reply":false,"time":' + haxe.Timer.stamp() + '}';
-					udpClient.send(payload);
-				}
-				
-				if (udpTestTimer >= 1.5)
-				{
-					testingUDP = false;
-					trace("[Multiplayer] UDP test timed out. Falling back to TCP...");
-					udpClient.close();
-					
-					var host = Multiplayer.targetIP;
-					var port = Multiplayer.targetPort;
-					udpClient = new UdpClient(host, port, 0, true);
-					Multiplayer.usingTCP = true;
-				}
-			}
-
-			pingTimer += elapsed;
-			if (pingTimer >= 2.0)
-			{
-				pingTimer = 0;
-				var payload = '{"ping":true,"reply":false,"time":' + haxe.Timer.stamp() + '}';
-				udpClient.send(payload);
-			}
-
-			if (player != null && player.alive)
-			{
-				networkTimer += elapsed;
-				if (networkTimer >= tickRate)
-				{
-					networkTimer = 0;
-					var currentAnim = (player.animation.curAnim != null ? player.animation.curAnim.name : "idle");
-					var userStr = (Multiplayer.activeMode == Server) ? Multiplayer.username : "peer";
-					var payload:String = '{"x":' + player.x + ',"y":' + player.y + ',"flip":' + player.isFlipped + ',"facingRight":' + Player.isFacingRIGHT
-						+ ',"skin":"' + PlayerData.currentSkin + '","anim":"' + currentAnim + '","currentRoom":"' + currentRoomName + '","username":"' + userStr + '"}';
-					udpClient.send(payload);
-				}
-			}
-
-			var packet:String = null;
-			while ((packet = udpClient.receive()) != null)
-			{
-				if (testingUDP)
-				{
-					testingUDP = false;
-					udpReceivedResponse = true;
-					trace("[Multiplayer] UDP connection verified! Using UDP mode.");
-				}
-				try
-				{
-					var data = haxe.Json.parse(packet);
-
-					if (data.ping == true)
-					{
-						var timeVal:Float = cast data.time;
-						if (data.reply == false)
-						{
-							var replyPayload = '{"ping":true,"reply":true,"time":' + timeVal + '}';
-							udpClient.send(replyPayload);
-						}
-						else
-						{
-							var rtt = haxe.Timer.stamp() - timeVal;
-							Multiplayer.currentPing = rtt * 1000;
-							trace("Current Ping: " + Multiplayer.currentPing + "ms");
-						}
-						continue;
-					}
-					
-					if (Multiplayer.activeMode == Server && data.username != null && data.username == Multiplayer.username)
-					{
-						continue;
-					}
-
-					var peerKey = (Multiplayer.activeMode == Server) ? data.username : "peer";
-					if (peerKey == null || peerKey == "")
-					{
-						peerKey = "peer";
-					}
-
-					if (data.death == true)
-					{
-						var dRoomStr:String = data.currentRoom != null ? cast data.currentRoom : "";
-						var cRoomStr:String = currentRoomName != null ? cast currentRoomName : "";
-						var isBossDeathMatch = (dRoomStr != "" && cRoomStr != "" && StringTools.startsWith(dRoomStr, "boss-")
-						&& StringTools.startsWith(cRoomStr, "boss-") && dRoomStr.split("-")[1] == cRoomStr.split("-")[1]);
-						if (data.currentRoom == null || data.currentRoom == currentRoomName || isBossDeathMatch) 
-						{
-							var rPlayer = remotePlayers.get(peerKey);
-							var spawnX = (data.x != null) ? data.x : (rPlayer != null ? rPlayer.x : 0);
-							var spawnY = (data.y != null) ? data.y : (rPlayer != null ? rPlayer.y : 0);
-							FlxG.sound.play(AssetPaths.kill_sound_effect__ogg, 0.75, false);
-							bloodParticles(spawnX, spawnY);
-							if (rPlayer != null)
-							{
-								rPlayer.visible = false;
-								rPlayer.exists = false;
-								if (rPlayer.usernameText != null)
-								{
-									rPlayer.usernameText.visible = false;
-								}
-							}
-						}
-					}
-					else if (data.x != null && data.y != null)
-					{
-						var rPlayer = remotePlayers.get(peerKey);
-						if (rPlayer == null)
-						{
-							rPlayer = new main.RemotePlayer(data.x, data.y, peerKey);
-							remotePlayers.set(peerKey, rPlayer);
-							add(rPlayer);
-							add(rPlayer.usernameText);
-						}
-						rPlayer.exists = true;
-						rPlayer.visible = true;
-						rPlayer.loadSkin(data.skin != null ? data.skin : "thekid");
-						rPlayer.applyNetworkPacket(data.x, data.y, data.flip == true, data.facingRight == true, data.anim, data.currentRoom != null ? data.currentRoom : "");
-					}
-				}
-				catch (e:Dynamic)
-				{
-					trace("Error al procesar el paquete recibido: " + e);
-				}
-			}
-
-			var inactiveKeys:Array<String> = [];
-			for (key in remotePlayers.keys())
-			{
-				var rPlayer = remotePlayers.get(key);
-				if (rPlayer != null && rPlayer.timeSincePacket >= 10.0)
-				{
-					inactiveKeys.push(key);
-				}
-			}
-			for (key in inactiveKeys)
-			{
-				var rPlayer = remotePlayers.get(key);
-				if (rPlayer != null)
-				{
-					FlxG.sound.play(AssetPaths.kill_sound_effect__ogg, 0.75, false);
-					bloodParticles(rPlayer.x, rPlayer.y);
-					remove(rPlayer.usernameText);
-					remove(rPlayer);
-					rPlayer.destroy();
-					remotePlayers.remove(key);
-				}
-			}
-		}
-		#end
 	}
 
 	override public function destroy():Void
 	{
-		if (udpClient != null)
-		{
-			udpClient.close();
-			udpClient = null;
-		}
-		for (rPlayer in remotePlayers) {
-			if (rPlayer != null) {
-				remove(rPlayer.usernameText);
-				rPlayer.destroy();
-			}
-		}
-		remotePlayers.clear();
-
-		super.destroy();
-		remotePlayers.clear();
-
-		super.destroy();
+		coopManager.destroy(this);
 	}
 
 	function playerShoot():Void
@@ -1227,47 +903,6 @@ class ChapterState extends FlxState
 		#end
 
 		spawnTimer = 0.15;
-	}
-
-	function setupHUD():Void
-	{
-		#if debug
-		currentChapter = new FlxText(50, FlxG.height - 90, 0, "Chapter: ", 18);
-		currentChapter.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-		currentChapter.scrollFactor.set(0, 0);
-		currentChapter.alpha = 0.5;
-		add(hud);
-
-		lastSave = new FlxText(50, FlxG.height - 60, 0, "Last Save: ", 18);
-		lastSave.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-		lastSave.scrollFactor.set(0, 0);
-		lastSave.alpha = 0.5;
-		add(hud);
-		#end
-
-		#if !mobile
-		playerDeaths = new FlxText(FlxG.width - 260, FlxG.height - 80, 0, "Total Resets: ", 22);
-		playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-		playerDeaths.scrollFactor.set(0, 0);
-		playerDeaths.alpha = 0.5;
-		playerDeaths.visible = false;
-		add(hud);
-		#end
-
-		#if mobile
-		playerDeaths = new FlxText(FlxG.width - 260, 30, 0, "Total Deaths: ", 22);
-		playerDeaths.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-		playerDeaths.scrollFactor.set(0, 0);
-		playerDeaths.alpha = 0.5;
-		playerDeaths.visible = false;
-		add(hud);
-		#end
-
-		timeElapsed = new FlxText(50, 20, 0, "Time: 00:00:00", 22);
-		timeElapsed.setBorderStyle(OUTLINE, FlxColor.BLACK, 2);
-		timeElapsed.scrollFactor.set(0, 0);
-		timeElapsed.visible = false;
-		add(timeElapsed);
 	}
 
 	function SaveLogicSprite(saveObj:SavePoint):Void
@@ -1353,13 +988,11 @@ class ChapterState extends FlxState
 	function PortalWarpLogic(portalLogic:PortalWarp):Void
 	{
 		PlayerData.tutorialCompleted = true;
-		PlayerData.currentChapter = 1;
 		PlayerData.currentRoom = "map01";
 		PlayerData.totalDeaths = 0;
 		player.exists = false;
 		
 		whiteFade.alpha = 1;
-		playerDeaths.visible = false;
 		
 		if (FlxG.sound.music != null) { FlxG.sound.music.stop(); }
 		FlxG.sound.play(AssetPaths.warp__ogg, 0.85, false);
@@ -1394,7 +1027,6 @@ class ChapterState extends FlxState
 		PlayerData.jevilDialogueRead = false;
 		whiteFade.alpha = 1;
 
-		PlayerData.currentChapter = 1;
 		RoomLoader.loadRoom(this, "boss-jevil01");
 
 		var blur:openfl.filters.BlurFilter = new openfl.filters.BlurFilter(8, 8, 2);
@@ -1420,10 +1052,12 @@ class ChapterState extends FlxState
         });
 
 	}
+
 	function killPlayer():Void
 	{
 		if (PlayerData.currentChapter == 0)
 		{
+			coopManager.sendDeathPacket(this);
 			player.x = 250;
 			player.y = 450;
 			player.velocity.set(0, 0);
@@ -1461,12 +1095,6 @@ class ChapterState extends FlxState
 			PlayerData.totalDeaths -= 1;
 
 			bloodParticles();
-
-			if (udpClient != null) {
-				var userStr = (Multiplayer.activeMode == Server) ? Multiplayer.username : "peer";
-				var payload:String = '{"death": true, "x": ' + player.x + ', "y": ' + player.y + ', "currentRoom": "' + currentRoomName + '","username":"' + userStr + '"}';
-				udpClient.send(payload);
-			}
 
 			var isJevilRoom = (currentBossName == "jevil");
 			if (isJevilRoom)
@@ -1546,23 +1174,23 @@ class ChapterState extends FlxState
 			switch (cameraType)
 			{
 				case "unlockX":
-					trace("UnlockX");
+					trace("New Camera triggered: UnlockX");
 					FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height + 65, false);
 
 				case "unlockY":
-					trace("UnlockY");
+					trace("New Camera triggered: UnlockY");
 					FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height - 115, false);
 
 				case "unlockXY":
-					trace("UnlockXY");
+					trace("New Camera triggered: UnlockXY");
 					FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 120, map.height - 115, false);
 
 				case "debug":
-					trace("debug");
+					trace("New Camera triggered: debug");
 					FlxG.camera.follow(player, FlxCameraFollowStyle.LOCKON);
 
 				default:
-					trace("Default");
+					trace("New Camera triggered: Default");
 					FlxG.camera.setScrollBoundsRect(map.x + 60, map.y + 65, map.width - 50, map.height + 65, false);
 			}
 

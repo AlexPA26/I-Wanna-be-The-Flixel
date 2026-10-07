@@ -202,7 +202,7 @@ class RoomLoader
 		state.add(state.roomImages);
 		state.add(state.player);
 
-		for (rPlayer in state.remotePlayers)
+		for (rPlayer in state.coopManager.remotePlayers)
 		{
 			if (rPlayer != null)
 			{
@@ -245,7 +245,8 @@ class RoomLoader
 		BackgroundManager.updateAllEffects(state, state.tiledData);
 
 		/**Remote player logic (re-add after BG effects so they stay on top)**/
-		for (rPlayer in state.remotePlayers) {
+		for (rPlayer in state.coopManager.remotePlayers)
+		{
 			if (rPlayer != null) {
 				state.remove(rPlayer);
 				state.add(rPlayer);
@@ -257,7 +258,9 @@ class RoomLoader
 		}
 
 		state.add(state.lightsGroup);
-		state.setupHUD();
+		state.hudGroup.add(state.chapterHUD.currentChapter);
+		state.hudGroup.add(state.chapterHUD.lastSave);
+		state.hudGroup.add(state.chapterHUD.playerDeaths);
 		state.autoScroll();
 		state.cameraScroll();
 		main.iwbtf.MusicManager.updateMusic(state);
@@ -274,9 +277,9 @@ class RoomLoader
 
 		state.hudGroup.clear();
 		state.hudGroup.add(state.virtualPad);
-		state.hudGroup.add(state.currentChapter);
-		state.hudGroup.add(state.lastSave);
-		state.hudGroup.add(state.playerDeaths);
+		state.hudGroup.add(state.chapterHUD.currentChapter);
+		state.hudGroup.add(state.chapterHUD.lastSave);
+		state.hudGroup.add(state.chapterHUD.playerDeaths);
 		state.add(state.hudGroup);
 		state.layoutVirtualPad();
 		state.virtualPad.active = false;
@@ -289,15 +292,29 @@ class RoomLoader
 		// state.player.pad.alpha = state.padAlpha;
 		#end
 
-		if (state.currentChapter != null)
-			state.currentChapter.text = "Chapter: " + PlayerData.currentChapter;
+		if (state.chapterHUD.currentChapter != null)
+		{
+			state.chapterHUD.currentChapter.text = "Chapter: " + PlayerData.currentChapter;
+		}
+			
+
 		#if mobile
-		// if (playerDeaths != null) playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
+		{
+			// if (playerDeaths != null) playerDeaths.text = "Total Deaths: " + PlayerData.totalDeaths;
+		}
 		#else
-		if (state.playerDeaths != null)
-			state.playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
+
+		if (state.chapterHUD.playerDeaths != null)
+		{
+			state.chapterHUD.playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
+		}
+			
 		#end
-		if (state.lastSave != null)
-			state.lastSave.text = "Last Save: " + PlayerData.currentRoom;
+
+		if (state.chapterHUD.lastSave != null)
+		{
+			state.chapterHUD.lastSave.text = "Last Save: " + PlayerData.currentRoom;
+		}
+			
 	}
 }
