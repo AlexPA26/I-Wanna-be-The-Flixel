@@ -131,7 +131,7 @@ class ChapterState extends FlxState
 	public var redCoinsGroup:FlxTypedGroup<RedCoin>;
 	public var doubleJumpGroup:FlxTypedGroup<DoubleJumpObj>;
 	public var flipGroup:FlxTypedGroup<FlipSwitch>;
-	public var portalGroup:FlxTypedGroup<PortalWarp>;
+	public var portalGroup:FlxTypedGroup<TutorialWarp>;
 	public var invisPortalGroup:FlxTypedGroup<InvisWarp>;
 	public var roomAcid:AcidFluid = null;
 	public var waterDeco:WaterDeco = null;
@@ -199,7 +199,7 @@ class ChapterState extends FlxState
 		doubleJumpGroup = new FlxTypedGroup<DoubleJumpObj>();
 		eventEffectGroup = new FlxTypedGroup();
 		flipGroup = new FlxTypedGroup<FlipSwitch>();
-		portalGroup = new FlxTypedGroup<PortalWarp>();
+		portalGroup = new FlxTypedGroup<TutorialWarp>();
 		invisPortalGroup = new FlxTypedGroup<InvisWarp>();
 		trampolines = new FlxTypedGroup<NormalTrampoline>();
 		trampolinesMini = new FlxTypedGroup<NormalTrampolineMini>();
@@ -315,7 +315,7 @@ class ChapterState extends FlxState
 		FlxG.overlap(player, savesGroup, (p, s) -> { SaveLogicSprite(cast s); });
 		FlxG.overlap(player, redCoinsGroup, (p, c) -> { RedCoinLogic(cast c); });
 		FlxG.overlap(player, doubleJumpGroup, (p, d) -> { DoubleJumpLogic(cast d); });
-		FlxG.overlap(player, portalGroup, (p, pw) -> { PortalWarpLogic(cast pw); });
+		FlxG.overlap(player, portalGroup, (p, pw) -> { TutorialWarpLogic(cast pw); });
 		FlxG.overlap(player, invisPortalGroup, (p, ipw) -> { InvisWarpLogic(cast ipw); });
 		FlxG.overlap(player, flipGroup, (p, sw) -> { FlipSwitchObjLogic(cast sw); });
 
@@ -557,7 +557,7 @@ class ChapterState extends FlxState
 		{
 			if (fightingBoss && FlxG.sound.music != null) FlxG.sound.music.stop();
 			var currentSeconds = PlayerData.totalSeconds;
-			if (PlayerData.tutorialCompleted == true) PlayerData.totalDeaths++;
+			if (PlayerData.currentChapter != 0) PlayerData.totalDeaths++;
 			leveldata.misc.SaveManager.saveGameRestart();
 			leveldata.misc.SaveManager.loadGame();
 			PlayerData.totalSeconds = currentSeconds;
@@ -616,7 +616,7 @@ class ChapterState extends FlxState
 			whiteFade.alpha = 1;
 		}
 
-		if (blackFade.alpha > 0) { blackFade.alpha -= 0.01; }
+		if (blackFade.alpha > 0) { blackFade.alpha -= 0.002; }
 		if (PlayerData.blackFadeTrigger == true)
 		{ 
 			PlayerData.blackFadeTrigger = false;
@@ -991,10 +991,11 @@ class ChapterState extends FlxState
 		});
 	}
 
-	function PortalWarpLogic(portalLogic:PortalWarp):Void
+	function TutorialWarpLogic(portalLogic:TutorialWarp):Void
 	{
 		PlayerData.tutorialCompleted = true;
 		PlayerData.currentRoom = "map01";
+		PlayerData.currentChapter = 1;
 		PlayerData.totalDeaths = 0;
 		player.exists = false;
 		
@@ -1014,7 +1015,7 @@ class ChapterState extends FlxState
 				{
 					trace("Tutorial Complete!");
 					SaveManager.saveGame();
-					FlxG.switchState(gui.IntroState.new);
+					FlxG.switchState(animation.TutoralCutscene.new);
 				}
 			});
 

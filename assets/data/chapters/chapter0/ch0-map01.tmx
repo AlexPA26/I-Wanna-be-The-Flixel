@@ -85,13 +85,6 @@
     <property name="tween" value="5"/>
    </properties>
   </object>
-  <object id="77" name="image" gid="5" x="1759" y="500" width="50" height="50">
-   <properties>
-    <property name="alpha" value="1"/>
-    <property name="imageName" value="red_arrow"/>
-    <property name="scale" value="0.85"/>
-   </properties>
-  </object>
  </objectgroup>
  <objectgroup id="8" name="spike-normal">
   <object id="58" name="spike" gid="33" x="2800" y="550" width="50" height="50">

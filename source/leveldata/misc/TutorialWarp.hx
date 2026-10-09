@@ -5,7 +5,7 @@ import flixel.effects.particles.FlxEmitter;
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 
-class PortalWarp extends FlxSprite
+class TutorialWarp extends FlxSprite
 {
 	var onTweenComplete(default, null):Null<TweenCallback>;
     public var particles:FlxEmitter;

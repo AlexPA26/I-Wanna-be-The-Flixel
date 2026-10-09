@@ -164,26 +164,9 @@ class CacheState extends FlxState
 
             new FlxTimer().start(2, function(_)
             {
-                var hasSave:Bool = leveldata.misc.SaveManager.loadGame();
+                
+                FlxG.switchState(MenuState.new);
 
-                if (!hasSave || PlayerData.currentRoom == null || PlayerData.currentRoom == "")
-                {
-                    PlayerData.currentChapter = 0;
-                    PlayerData.currentRoom = "map01";
-                    PlayerData.spawnX = 250; // Initial tutorial spawn X
-                    PlayerData.spawnY = 450; // Initial tutorial spawn Y
-                }
-
-                if (PlayerData.tutorialCompleted == false)
-                {
-                    trace("Starting tutorial..");
-                    FlxG.switchState(ChapterState.new);
-                }
-
-                else
-                {
-                    FlxG.switchState(MenuState.new);
-                }
             });
         }
 

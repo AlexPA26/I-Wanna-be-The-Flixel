@@ -15,7 +15,7 @@ class PlayerData
     public static var showFPS:Bool = true;
 
     public static var spawnX:Float = 250;
-    public static var spawnY:Float = 450;
+    public static var spawnY:Float = 700;
     public static var deathX:Float;
     public static var deathY:Float;
     public static var lastVelX:Float = 0;

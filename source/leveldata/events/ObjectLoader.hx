@@ -133,7 +133,7 @@ class ObjectLoader
                             state.flipGroup.add(flip);
 
                         case "portal":
-                            var portal = new PortalWarp(spawnX, spawnY);
+                            var portal = new TutorialWarp(spawnX, spawnY);
                             state.portalGroup.add(portal);
 
                         case "invisPortal":

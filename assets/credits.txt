@@ -1,35 +1,41 @@
 ########################
-Music Used:
+###   Music Used:    ###
 ########################
 
 [========== GENERAL/SHARED ==========]
 
-Main menu:
-Link:
+Main menu: '~|| Video Games [new]'
+Author: T-Free
+Link: https://www.newgrounds.com/audio/listen/351701
 
-Death theme:
-Link:
+Death theme: 'Garden Party'
+Author: blarsa
+Link: https://www.newgrounds.com/audio/listen/199965
 
 [========== CHAPTER 1 ==========]
 
-Castle theme:
-Link:
+Castle theme: MM9: 'Galaxy Man (NES-like)'
+Author: Reone662
+Link: https://www.newgrounds.com/audio/listen/278487
 
-Reznor miniboss:
-Link:
+Reznor Miniboss: 'bigboo' (MIDI)
+Author: ???
+Link: https://www.youtube.com/watch?v=GWTAh_9s0EI
 
-Castle sewers:
-Link:
+Castle sewers: 'Darker Cave'
+Author: Cetaphobic
+Link: https://www.newgrounds.com/audio/listen/272095
 
 Castle elevator:
 Link:
 
-Castle morning:
+Castle morning: 'Quiet Autumn'
 Author: TobyFox
-Link:
+Link: https://www.youtube.com/watch?v=SWAQzCNeGWg
 
-Bonus room 1:
-Link:
+Bonus room 1: 'Spelunker - Stage 01 Theme' (Remix)
+Author: plsdonhackme
+Link: https://www.youtube.com/watch?v=Cc6vQQxgyVs
 
 Castle circus: 'The Circus'
 Author: TobyFox
@@ -41,14 +47,18 @@ Link: https://www.youtube.com/watch?v=Z01Tsgwe2dQ
 
 JEVIL Boss Game Over: 'Faint Courage (Game Over)'
 Author: TobyFox
-Link:
+Link: https://www.youtube.com/watch?v=TkvdhHEuCNY
 
-Teleport room:
+Teleport room: 'Meadow of Bowser - Super Mariofell World'
 Author: Siivagunner
-Link:
+Link: https://www.youtube.com/watch?v=_9PR3BwD-zA
 
 [========== CHARACTER SPECIFICS ==========]
 
 Boyfriend Game Over: 'Game Over (Don't Stop)'
 Author: Kawai Sprite
-Link:
+Link: https://www.youtube.com/watch?v=Ul0aFqd0dy4
+
+Boshy Game Over: 'Lol U Died'
+Author: Diabolo-ical
+Link: https://www.newgrounds.com/audio/listen/83408

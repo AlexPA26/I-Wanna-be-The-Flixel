@@ -93,14 +93,14 @@ class PauseState extends FlxSubState
         btnTitle = new FlxButton(0, 0, "Main Menu", clickMainMenu);
         setupButtonPosition(btnTitle, 350, 80);
 
-        btnStages = new FlxButton(0, 0, "Stages", clickStages);
-        setupButtonPosition(btnStages, 350, 180);
+        // btnStages = new FlxButton(0, 0, "Stages", clickStages);
+        // setupButtonPosition(btnStages, 350, 180);
 
         assetsGroup.cameras = [uiCamera];
         respawnBtn.cameras = [uiCamera];
         optionsBtn.cameras = [uiCamera];
         btnTitle.cameras = [uiCamera];
-        btnStages.cameras = [uiCamera];
+        // btnStages.cameras = [uiCamera];
 
         var statsStr:String =
                         "Red Coins: " + main.PlayerData.collectedCoins.length + "\n" +
@@ -133,7 +133,7 @@ class PauseState extends FlxSubState
         FlxTween.globalManager.cancelTweensOf(respawnBtn);
         FlxTween.globalManager.cancelTweensOf(optionsBtn);
         FlxTween.globalManager.cancelTweensOf(btnTitle);
-        FlxTween.globalManager.cancelTweensOf(btnStages);
+        // FlxTween.globalManager.cancelTweensOf(btnStages);
         FlxTween.globalManager.cancelTweensOf(statsText);
 
         FlxG.sound.volume = originalVolume;
@@ -226,7 +226,7 @@ class PauseState extends FlxSubState
 
     function clickRespawn():Void
     {
-        main.PlayerData.totalDeaths++;
+        if (main.PlayerData.tutorialCompleted) main.PlayerData.totalDeaths++;
         cleanup();
         FlxG.resetState();
     }
@@ -255,12 +255,12 @@ class PauseState extends FlxSubState
         respawnBtn.visible = state;
         optionsBtn.visible = state;
         btnTitle.visible = state;
-        btnStages.visible = state;
+        // btnStages.visible = state;
         statsText.visible = state;        
         respawnBtn.active = state;
         optionsBtn.active = state;
         btnTitle.active = state;
-        btnStages.active = state;
+        // btnStages.active = state;
     }
 
     function customizeButton(btn:FlxButton):Void

@@ -1,4 +1,4 @@
-package gui;
+package animation;
 
 import main.ChapterState;
 import flixel.FlxG;
@@ -10,7 +10,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 
-class IntroState extends FlxState
+class TutoralCutscene extends FlxState
 {
     var logo:FlxSprite;
     var creditText:FlxText;

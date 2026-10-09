@@ -38,8 +38,8 @@ class SkinSelectorSubState extends FlxSubState
         {name: "The Kid", assetName: "thekid", unlockAt: 0},
         {name: "Ginger", assetName: "ginger", unlockAt: 0, milestone: "sewers"},
         {name: "Toxic Boy", assetName: "toxickid", unlockAt: 0, milestone: "morning"},
-        {name: "Boyfriend", assetName: "boyfriend", unlockAt: 0},
-        {name: "Boshy", assetName: "boshy", unlockAt: 0},
+        {name: "Boyfriend", assetName: "boyfriend", unlockAt: 5},
+        {name: "Boshy", assetName: "boshy", unlockAt: 10},
         {name: "The Kris", assetName: "thekris", unlockAt: 15},
 
     ];
