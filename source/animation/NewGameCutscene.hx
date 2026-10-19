@@ -100,15 +100,14 @@ class NewGameCutscene extends FlxSubState
 
                             new FlxTimer().start(1.5, function(_) 
                             {
+                                #if !mobile
                                 if (!FlxG.mouse.enabled) FlxG.mouse.enabled = true;
                                 if (!FlxG.mouse.visible) FlxG.mouse.visible = true;
+                                #end
                                 PlayerData.blackFadeTrigger = true;
                                 FlxTween.cancelTweensOf(ch1Txt);
                                 FlxTween.cancelTweensOf(subTxt);
                                 vhsShader = null;
-                                #if !mobile
-                                FlxG.mouse.visible = true;
-                                #end
                                 FlxG.switchState(ChapterState.new);
                                 FlxG.cameras.remove(cutsceneCam);
 

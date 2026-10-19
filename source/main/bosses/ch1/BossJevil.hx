@@ -186,47 +186,47 @@ class Jevil extends FlxSprite
             flash.alpha -= elapsed;
         }
 
-        // #if !mobile
-        // if (FlxG.keys.justPressed.U)
-        // {
-        //     ultimateTriggered = true;
-        //     startUltimateAttack();
-        //     return;
-        // }
+        #if !mobile
+        if (FlxG.keys.justPressed.U)
+        {
+            ultimateTriggered = true;
+            startUltimateAttack();
+            return;
+        }
 
-        // if (FlxG.keys.justPressed.Y)
-        // {
-        //     parentState.currentTP += 90;
-        // }
+        if (FlxG.keys.justPressed.Y)
+        {
+            parentState.currentTP += 90;
+        }
 
-        // if (FlxG.keys.justPressed.J)
-        // {
-        //     attackCube();
-        //     return;
-        // }
+        if (FlxG.keys.justPressed.J)
+        {
+            attackCube();
+            return;
+        }
 
-        // if (FlxG.keys.justPressed.I)
-        // {
-        //     parentState.spawnTimer = 9999;
-        // }
+        if (FlxG.keys.justPressed.I)
+        {
+            parentState.spawnTimer = 9999;
+        }
 
-        // if (FlxG.keys.justPressed.L) { hp -= 20; }
+        if (FlxG.keys.justPressed.L) { hp -= 20; }
 
-        // if (FlxG.keys.justPressed.C)
-        // {
-        //     trace("------------------------------");
-        //     trace("Current Phase: " + state);
-        //     trace("Current Jevil animation: " + animation.curAnim.name);
-        //     trace("Current Health: " + this.hp);
-        //     trace("Player alive and exists: " + parentState.player.alive + " || " + parentState.player.exists);
-        //     trace("Player Y: " + parentState.player.y);
-        //     trace("Player Inmortal?: " + parentState.inmortal);
-        //     trace("Jevil POS: X-" + this.x + " || Y-" + this.y);
-        //     trace("Jevil Direction: " + this.flipX);
-        //     trace("------------------------------");
-        // }
+        if (FlxG.keys.justPressed.C)
+        {
+            trace("------------------------------");
+            trace("Current Phase: " + state);
+            trace("Current Jevil animation: " + animation.curAnim.name);
+            trace("Current Health: " + this.hp);
+            trace("Player alive and exists: " + parentState.player.alive + " || " + parentState.player.exists);
+            trace("Player Y: " + parentState.player.y);
+            trace("Player Inmortal?: " + parentState.inmortal);
+            trace("Jevil POS: X-" + this.x + " || Y-" + this.y);
+            trace("Jevil Direction: " + this.flipX);
+            trace("------------------------------");
+        }
 
-        // #end
+        #end
 
         if (craziness && animation.curAnim != null && animation.curAnim.name == "dance")
         {
