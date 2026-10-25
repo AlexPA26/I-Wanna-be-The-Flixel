@@ -13,6 +13,18 @@ class PlayerCombat
 		if (player == null || !player.active || player.alpha == 0 || !player.visible)
 			return;
 
+		var bullets = state.bullets;
+		if (bullets == null)
+			return;
+
+		var activeBulletCount = 0;
+		bullets.forEachAlive(function(_)
+		{
+			activeBulletCount++;
+		});
+		
+		if (activeBulletCount >= 4) return;
+
 		var bullet = new FlxSprite();
 		bullet.loadGraphic(AssetPaths.bullet__png, false);
 		state.add(bullet);
@@ -30,10 +42,7 @@ class PlayerCombat
 			bullet.y = player.y + 4;
 		}
 
-		if (state.bullets != null)
-		{
-			state.bullets.add(bullet);
-		}
+		bullets.add(bullet);
 
 		FlxG.sound.play(AssetPaths.playershoot__ogg, 1, false);
 	}
@@ -61,4 +70,3 @@ class PlayerCombat
 		}
 	}
 }
-

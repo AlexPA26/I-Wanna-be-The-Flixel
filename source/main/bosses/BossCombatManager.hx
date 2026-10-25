@@ -238,7 +238,7 @@ class BossCombatManager
 
 						if (distance < 50)
 						{
-							var isCrit = FlxG.random.int(1, 2) == 1;
+							var isCrit = FlxG.random.int(1, 14) == 1;
 							var damage = isCrit ? 2 : 1;
 							jevilBoss.takeDamage(damage, false);
 							jevilBoss.jevilWasHit = true;

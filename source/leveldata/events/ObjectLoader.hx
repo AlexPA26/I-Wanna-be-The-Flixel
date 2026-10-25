@@ -182,7 +182,13 @@ class ObjectLoader
                                 speed = Std.parseInt(obj.properties.get("speed"));
                             }
 
-                            var plat = new MovingBlock(spawnX, spawnY, dir, localID, speed);
+                            var autoMoving:Bool = false;
+                            if (obj.properties.contains("autoMoving"))
+                            {
+                                autoMoving = (obj.properties.get("autoMoving") == "true");
+                            }
+
+                            var plat = new MovingBlock(spawnX, spawnY, dir, localID, speed, autoMoving);
                             state.platforms.add(plat);
 
                         case "falling":

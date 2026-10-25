@@ -29,6 +29,8 @@ class SaveManager
         /* Character Unlocks */
         save.data.reachedSewers = PlayerData.reachedSewers;
         save.data.reachedMorning = PlayerData.reachedMorning;
+        save.data.exitedCircus = PlayerData.exitedCircus;
+        save.data.jevilPacifist = PlayerData.jevilPacifist;
 
         /* Options Specifics */
         save.data.enhancedVisuals = PlayerData.enhancedVisuals;
@@ -93,6 +95,8 @@ class SaveManager
             /* Character Unlock */
             if (save.data.reachedSewers != null) PlayerData.reachedSewers = save.data.reachedSewers;
             if (save.data.reachedMorning != null) PlayerData.reachedMorning = save.data.reachedMorning;
+            if (save.data.exitedCircus != null) PlayerData.exitedCircus = save.data.exitedCircus;
+            if (save.data.jevilPacifist != null) PlayerData.jevilPacifist = save.data.jevilPacifist;
 
             /* Options */
 
@@ -160,6 +164,8 @@ class SaveManager
 
         PlayerData.reachedSewers = false;
         PlayerData.reachedMorning = false;
+        PlayerData.exitedCircus = false;
+        PlayerData.jevilPacifist = false;
         saveGame(); 
     }
 }

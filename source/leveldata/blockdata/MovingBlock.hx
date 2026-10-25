@@ -8,9 +8,10 @@ class MovingBlock extends FlxSprite
 {
     var moveDir:String;
     var speed:Float;
-    var activeMoving:Bool = false;
+    public var activeMoving:Bool = false;
+    public var autoMoving:Bool = false;
 
-    public function new(X:Float, Y:Float, MoveDir:String, TileID:Int, speed:Int)
+    public function new(X:Float, Y:Float, MoveDir:String, TileID:Int, speed:Int, autoMoving:Bool = false)
     {
         super(X, Y);
         loadGraphic(AssetPaths.ch1tiles__png, true, 50, 50);
@@ -19,6 +20,8 @@ class MovingBlock extends FlxSprite
         
         this.moveDir = MoveDir;
         this.speed = speed;
+        this.autoMoving = autoMoving;
+        this.activeMoving = autoMoving;
         immovable = true;
     }
 
@@ -47,7 +50,6 @@ class MovingBlock extends FlxSprite
             }
         }
 
-
         super.update(elapsed);
 
         if ((velocity.y < 0 && touching.has(UP)) || 
@@ -60,7 +62,6 @@ class MovingBlock extends FlxSprite
 
         if (x < -500 || x > FlxG.worldBounds.width + 100 || y < -100 || y > FlxG.worldBounds.height + 100) { kill(); }
 
-    
         touching = FlxDirectionFlags.NONE;
     }
 }

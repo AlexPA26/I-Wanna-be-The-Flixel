@@ -33,6 +33,8 @@ class PlayerData
     /* Character Unlocks */
     public static var reachedSewers:Bool = false;
     public static var reachedMorning:Bool = false;
+    public static var exitedCircus:Bool = false;
+    public static var jevilPacifist:Bool = false;
 
     /* Boss Specifics */
 

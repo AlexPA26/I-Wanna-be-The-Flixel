@@ -47,7 +47,7 @@ class DebugCheats
 			else if (FlxG.keys.justPressed.TWO)
 			{
 				PlayerData.currentChapter = 1;
-				RoomLoader.loadRoom(state, "map25");
+				RoomLoader.loadRoom(state, "map16");
 			}
 			else if (FlxG.keys.justPressed.THREE)
 			{

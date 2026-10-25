@@ -38,10 +38,11 @@ class SkinSelectorSubState extends FlxSubState
         {name: "The Kid", assetName: "thekid", unlockAt: 0},
         {name: "Ginger", assetName: "ginger", unlockAt: 0, milestone: "sewers"},
         {name: "Toxic Boy", assetName: "toxickid", unlockAt: 0, milestone: "morning"},
+        {name: "Bozo Kid", assetName: "ginger", unlockAt: 0, milestone: "jevil_ending1"},
+        {name: "The Kris", assetName: "ginger", unlockAt: 0, milestone: "jevil_ending2"},
         {name: "Boyfriend", assetName: "boyfriend", unlockAt: 5},
-        {name: "Boshy", assetName: "boshy", unlockAt: 10},
-        {name: "The Kris", assetName: "thekris", unlockAt: 15},
-
+        {name: "Boshy", assetName: "boshy", unlockAt: 10}
+        
     ];
     
     var curSelected:Int = 0;
@@ -128,6 +129,8 @@ class SkinSelectorSubState extends FlxSubState
         {
             if (skin.milestone == "sewers") isUnlocked = PlayerData.reachedSewers;
             if (skin.milestone == "morning") isUnlocked = PlayerData.reachedMorning;
+            if (skin.milestone == "jevil_ending1") isUnlocked = PlayerData.exitedCircus;
+            if (skin.milestone == "jevil_ending2") isUnlocked = PlayerData.jevilPacifist;
         }
         else
         {
@@ -168,20 +171,15 @@ class SkinSelectorSubState extends FlxSubState
         {
             skinPreview.color = FlxColor.BLACK;
 
-            if (skin.milestone == "sewers")
-            {
-                unlockText.text = "Reach the Sewers";
-            }
+            if (skin.milestone == "sewers") { unlockText.text = "Reach the Sewers"; }
 
-            else if (skin.milestone == "morning")
-            {
-                unlockText.text = "Exit the Sewers";
-            }
+            else if (skin.milestone == "morning") { unlockText.text = "Exit the Sewers"; }
 
-            else
-            {
-                unlockText.text = "Locked: Need " + skin.unlockAt + " Coins";
-            }
+            else if (skin.milestone == "jevil_ending1") { unlockText.text = "Exit the Circus"; }
+
+            else if (skin.milestone == "jevil_ending2") { unlockText.text = "Defeat ??? without shooting"; }
+
+            else { unlockText.text = "Locked: Need " + skin.unlockAt + " Coins"; }
                 
             unlockText.color = FlxColor.RED;
             applyBtn.visible = false;

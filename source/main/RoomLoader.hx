@@ -52,6 +52,15 @@ class RoomLoader
 			}
 		}
 
+		if (roomName == "boss-jevil05" && PlayerData.currentChapter == 1)
+		{
+			if (!PlayerData.exitedCircus)
+			{
+				PlayerData.exitedCircus = true;
+				trace("Exited circus reached! New Skin Unlocked.");
+			}
+		}
+
 		// ##########################
 
 		if (chartPath != null) state.tiledData = new TiledMap(chartPath);

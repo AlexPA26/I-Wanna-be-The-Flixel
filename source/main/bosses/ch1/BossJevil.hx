@@ -304,6 +304,7 @@ class Jevil extends FlxSprite
             parentState.player.alpha = 1;
             parentState = cast FlxG.state;
             state = "cooldown";
+            teleportCount = 0;
             ultimateTriggered = false;
             craziness = true;
 
@@ -844,7 +845,7 @@ class Jevil extends FlxSprite
         }
         else
         {
-            createAttackTimer(0.6, function(_)
+            createAttackTimer(0.5, function(_)
             {
                 if (attackInterrupted()) return;
                 attackSpam();
@@ -1775,6 +1776,9 @@ class Jevil extends FlxSprite
 
         else if (!jevilWasHit)
         {
+            PlayerData.jevilPacifist = true;
+            trace("Jevil pacifist! new Skin unlocked!");
+            
             lines =
             [
                 "* WHAT FUN!!!\n* I'M EXHAUSTED!!!\n* YOU KNOW HOW TO TIRE ME OUT!!",
@@ -1989,9 +1993,7 @@ class Jevil extends FlxSprite
     }
 
     // ########################################
-    // ########################################
-    // ########################################
-    // ########################################
+
 
     public function particlesJevil()
     {
@@ -2082,4 +2084,3 @@ class Jevil extends FlxSprite
 
 
 }
-

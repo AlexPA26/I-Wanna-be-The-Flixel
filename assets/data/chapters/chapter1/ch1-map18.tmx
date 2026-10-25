@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="22" nextobjectid="967">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="22" nextobjectid="968">
  <properties>
   <property name="songName" value="castle1"/>
  </properties>
@@ -81,9 +81,10 @@
    <property name="direction" value="down"/>
   </properties>
  </objectgroup>
- <objectgroup id="13" name="platform" visible="0">
+ <objectgroup id="13" name="platform">
   <object id="839" name="platform" gid="27" x="200" y="875" width="50" height="50">
    <properties>
+    <property name="autoMoving" value="true"/>
     <property name="direction" value="up"/>
    </properties>
   </object>

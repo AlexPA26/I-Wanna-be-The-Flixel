@@ -286,7 +286,7 @@
   </object>
  </objectgroup>
  <objectgroup id="19" name="platform">
-  <object id="101" name="platform" gid="27" x="1000" y="827" width="50" height="50">
+  <object id="101" name="platform" gid="27" x="1000" y="840" width="50" height="50">
    <properties>
     <property name="direction" value="up"/>
    </properties>

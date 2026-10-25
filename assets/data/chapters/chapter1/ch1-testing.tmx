@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="35" nextobjectid="88">
+<map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="28" height="18" tilewidth="50" tileheight="50" infinite="0" nextlayerid="35" nextobjectid="103">
  <properties>
   <property name="doubleEffectType" value="dark-cloud"/>
  </properties>
@@ -22,11 +22,11 @@
 9,9,9,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
 9,9,9,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
 9,9,9,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
-9,9,9,8,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
-9,9,9,8,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
-9,9,9,8,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
-9,9,9,8,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
-9,9,9,8,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
+9,9,9,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
+9,9,9,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
+9,9,9,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
+9,9,9,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
+9,9,9,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,9,9,9,
 9,9,9,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,9,9,9,
 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
@@ -76,28 +76,7 @@
    <property name="foregroundEffectType" value="rain"/>
   </properties>
  </objectgroup>
- <objectgroup id="34" name="platform">
-  <object id="84" name="platform" gid="28" x="650" y="500" width="50" height="50">
-   <properties>
-    <property name="direction" value="right"/>
-   </properties>
-  </object>
-  <object id="85" name="platform" gid="30" x="1050" y="450" width="50" height="50">
-   <properties>
-    <property name="direction" value="left"/>
-   </properties>
-  </object>
-  <object id="86" name="platform" gid="27" x="800" y="700" width="50" height="50">
-   <properties>
-    <property name="direction" value="up"/>
-   </properties>
-  </object>
-  <object id="87" name="platform" gid="29" x="900" y="300" width="50" height="50">
-   <properties>
-    <property name="direction" value="down"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup id="34" name="platform"/>
  <objectgroup id="26" name="topEffect">
   <properties>
    <property name="topEffectType" value="wind"/>
@@ -112,8 +91,24 @@
  </objectgroup>
  <objectgroup id="33" name="double_jump">
   <object id="81" gid="104" x="300" y="0" width="32" height="32"/>
+  <object id="90" name="doubleJump" gid="104" x="400" y="450" width="32" height="32"/>
+  <object id="91" name="doubleJump" gid="104" x="450" y="300" width="32" height="32"/>
+  <object id="92" name="doubleJump" gid="104" x="550" y="600" width="32" height="32"/>
+  <object id="93" name="doubleJump" gid="104" x="650" y="400" width="32" height="32"/>
+  <object id="94" name="doubleJump" gid="104" x="550" y="500" width="32" height="32"/>
+  <object id="95" name="doubleJump" gid="104" x="400" y="600" width="32" height="32"/>
+  <object id="96" name="doubleJump" gid="104" x="250" y="450" width="32" height="32"/>
+  <object id="97" name="doubleJump" gid="104" x="250" y="250" width="32" height="32"/>
+  <object id="98" name="doubleJump" gid="104" x="600" y="250" width="32" height="32"/>
+  <object id="99" name="doubleJump" gid="104" x="750" y="300" width="32" height="32"/>
+  <object id="100" name="doubleJump" gid="104" x="550" y="350" width="32" height="32"/>
+  <object id="101" name="doubleJump" gid="104" x="350" y="350" width="32" height="32"/>
+  <object id="102" name="doubleJump" gid="104" x="300" y="550" width="32" height="32"/>
  </objectgroup>
- <objectgroup id="29" name="flip"/>
+ <objectgroup id="29" name="flip">
+  <object id="88" name="flip" gid="106" x="650" y="650" width="32" height="32"/>
+  <object id="89" name="flip" gid="106" x="900" y="300" width="32" height="32"/>
+ </objectgroup>
  <objectgroup id="30" name="small-spike"/>
  <objectgroup id="7" name="spike-normal"/>
  <objectgroup id="11" name="music">
