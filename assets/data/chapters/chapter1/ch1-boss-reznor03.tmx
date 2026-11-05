@@ -108,9 +108,7 @@
   </object>
  </objectgroup>
  <objectgroup id="21" name="redCoin"/>
- <objectgroup id="8" name="save">
-  <object id="637" name="save" gid="92" x="200" y="100" width="50" height="50"/>
- </objectgroup>
+ <objectgroup id="8" name="save"/>
  <objectgroup id="10" name="laser">
   <object id="576" name="laser" gid="101" x="650" y="150" width="50" height="50">
    <properties>
