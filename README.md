@@ -30,18 +30,18 @@ Currently the game has only a few areas, each with unique atmosphere and ideas:
 
 ## 📸 Screenshots
 <p align="center">
-  <img src="screenshots/Screenshot_Beginning.png" alt="Game Screenshot" width="500">
-  <img src="screenshots/Screenshot_Castle.png" alt="Game Screenshot" width="500">
+  <img src="screenshots/Screenshot_Beginning.png" alt="Game Screenshot" width="400">
+  <img src="screenshots/Screenshot_Castle.png" alt="Game Screenshot" width="400">
 </p>
 
 <p align="center">
-  <img src="screenshots/Screenshot_Miniboss1.png" alt="Game Screenshot" width="500">
-  <img src="screenshots/Screenshot_Sewers.png" alt="Game Screenshot" width="500">
+  <img src="screenshots/Screenshot_Miniboss1.png" alt="Game Screenshot" width="400">
+  <img src="screenshots/Screenshot_Sewers.png" alt="Game Screenshot" width="400">
 </p>
 
 <p align="center">
-  <img src="screenshots/Screenshot_Outdoors.png" alt="Game Screenshot" width="500">
-  <img src="screenshots/Screenshot_Boss1.png" alt="Game Screenshot" width="500">
+  <img src="screenshots/Screenshot_Outdoors.png" alt="Game Screenshot" width="400">
+  <img src="screenshots/Screenshot_Boss1.png" alt="Game Screenshot" width="400">
 </p>
 
 ---
