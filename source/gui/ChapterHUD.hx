@@ -62,7 +62,7 @@ class ChapterHUD extends FlxGroup
 
         if (PlayerData.currentChapter >= 1 && playerExists && isAlive && !playerDeathsTrigger)
         {
-            playerDeaths.visible = false;
+            playerDeaths.visible = true;
             playerDeaths.text = "Total Resets: " + PlayerData.totalDeaths;
         }
         else if (playerDeathsTrigger)

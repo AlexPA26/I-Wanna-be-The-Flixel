@@ -177,7 +177,7 @@ class SkinSelectorSubState extends FlxSubState
 
             else if (skin.milestone == "jevil_ending1") { unlockText.text = "Exit the Circus"; }
 
-            else if (skin.milestone == "jevil_ending2") { unlockText.text = "Defeat ??? without shooting"; }
+            else if (skin.milestone == "jevil_ending2") { unlockText.text = "Defeat ??? without damaging him"; }
 
             else { unlockText.text = "Locked: Need " + skin.unlockAt + " Coins"; }
                 
