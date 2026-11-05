@@ -3,6 +3,8 @@
 
 Created from the ground up, this is an individual project of recreating a difficult and fun to play platformer. Heavily inspired by [I Wanna kill the guy](https://delicious-fruit.com/game/12373) by Thenewgeezer
 
+Currently it is only available for Windows. HTML5 and Android versions are in the works! 🥲🥲
+
 ---
 
 ## ⚠️ How it plays
