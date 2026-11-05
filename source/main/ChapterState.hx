@@ -174,7 +174,7 @@ class ChapterState extends FlxState
 		chapterHUD = new gui.ChapterHUD();
 		add(chapterHUD);
 
-		virtualPad = new FlxVirtualPad(LEFT_RIGHT, A);
+		virtualPad = new FlxVirtualPad(ANALOG, A);
 		coopManager = new coop.CoopManager();
 		coopManager.init();
 
@@ -319,7 +319,8 @@ class ChapterState extends FlxState
 		}
 
 		#if mobile
-		if (virtualPad != null && virtualPad.buttonA != null && virtualPad.buttonA.justPressed)
+		var actionButton = virtualPad == null ? null : virtualPad.getButton(A);
+		if (actionButton != null && actionButton.justPressed)
 		{
 			shootPressed = true;
 		}

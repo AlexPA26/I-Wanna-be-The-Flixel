@@ -11,7 +11,7 @@ class VirtualPadHelper
 			return;
 
 		var hitboxPadding:Float = 40;
-		var allButtons = [virtualPad.getButton(LEFT), virtualPad.getButton(RIGHT), virtualPad.getButton(A)];
+		var allButtons = [virtualPad.getButton(A)];
 
 		for (button in allButtons)
 		{
@@ -30,20 +30,16 @@ class VirtualPadHelper
 			button.alpha = targetAlpha;
 		}
 
-		var leftBtn = virtualPad.getButton(LEFT);
-		var rightBtn = virtualPad.getButton(RIGHT);
+		var stick = virtualPad.stick;
 		var aBtn = virtualPad.getButton(A);
 
-		if (leftBtn != null)
+		if (stick != null)
 		{
-			leftBtn.x = 100;
-			leftBtn.y = FlxG.height - leftBtn.height - 90;
-		}
-
-		if (rightBtn != null && leftBtn != null)
-		{
-			rightBtn.x = leftBtn.x + leftBtn.width + 40;
-			rightBtn.y = leftBtn.y;
+			stick.x = 100;
+			stick.y = FlxG.height - stick.height - 90;
+			stick.scrollFactor.set(0, 0);
+			stick.base.alpha = targetAlpha;
+			stick.thumb.alpha = targetAlpha;
 		}
 
 		if (aBtn != null)
@@ -53,4 +49,3 @@ class VirtualPadHelper
 		}
 	}
 }
-

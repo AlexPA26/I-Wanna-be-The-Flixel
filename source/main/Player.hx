@@ -267,10 +267,10 @@ public function flipGravity():Void
 
         }
         #if mobile
-        if (pad != null)
+        if (pad != null && pad.stick != null)
         {
-            inputLeft = pad.buttonLeft.pressed;
-            inputRight = pad.buttonRight.pressed;
+            inputLeft = pad.stick.value.x < -0.25;
+            inputRight = pad.stick.value.x > 0.25;
         }
 
         for (touch in FlxG.touches.list)
@@ -280,9 +280,10 @@ public function flipGravity():Void
                 var onPad = false;
                 if (pad != null)
                 {
-                    if (pad.buttonLeft.overlapsPoint(touch.getScreenPosition()) || 
-                        pad.buttonRight.overlapsPoint(touch.getScreenPosition()) || 
-                        pad.buttonA.overlapsPoint(touch.getScreenPosition())) 
+                    var stick = pad.stick;
+                    var actionButton = pad.getButton(A);
+                    if ((stick != null && stick.overlapsPoint(touch.getWorldPosition(), true)) ||
+                        (actionButton != null && actionButton.overlapsPoint(touch.getWorldPosition(), true)))
                         onPad = true;
                 }
 

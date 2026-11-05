@@ -57,7 +57,8 @@ class InputManager
 
             case SHOOT:
                 #if mobile
-                return virtualPad != null && virtualPad.buttonA.justPressed;
+                var actionButton = virtualPad == null ? null : virtualPad.getButton(A);
+                return actionButton != null && actionButton.justPressed;
                 #else
                 var padPress = (gamepad != null && (gamepad.justPressed.RIGHT_TRIGGER || gamepad.justPressed.LEFT_TRIGGER));
                 return FlxG.keys.justPressed.Z || padPress;
@@ -89,7 +90,8 @@ class InputManager
             case JEVIL_SKIP_DIALOGUE:
                 #if mobile
                 var touchPress = FlxG.touches.justStarted().length > 0;
-                var padPress = (virtualPad != null && virtualPad.buttonA.justPressed);
+                var actionButton = virtualPad == null ? null : virtualPad.getButton(A);
+                var padPress = actionButton != null && actionButton.justPressed;
                 return touchPress || padPress;
                 #else
                 var padPress = (gamepad != null && (gamepad.justPressed.A || gamepad.justPressed.B));
@@ -152,7 +154,7 @@ class InputManager
         {
             case LEFT:
                 #if mobile
-                return virtualPad != null && virtualPad.buttonLeft.pressed;
+                return virtualPad != null && virtualPad.stick != null && virtualPad.stick.value.x < -0.3;
                 #else
                 var padPress = (gamepad != null && (gamepad.pressed.DPAD_LEFT || gamepad.analog.value.LEFT_STICK_X < -0.3));
                 return FlxG.keys.pressed.LEFT || padPress;
@@ -160,7 +162,7 @@ class InputManager
 
             case RIGHT:
                 #if mobile
-                return virtualPad != null && virtualPad.buttonRight.pressed;
+                return virtualPad != null && virtualPad.stick != null && virtualPad.stick.value.x > 0.3;
                 #else
                 var padPress = (gamepad != null && (gamepad.pressed.DPAD_RIGHT || gamepad.analog.value.LEFT_STICK_X > 0.3));
                 return FlxG.keys.pressed.RIGHT || padPress;
