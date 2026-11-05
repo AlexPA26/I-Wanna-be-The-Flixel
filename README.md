@@ -26,6 +26,26 @@ Currently the game has only a few areas, each with unique atmosphere and ideas:
 * **Pause Menu:** Escape
 * **Fullscreen:** F11
 
+---
+
+## 📸 Screenshots
+<p align="center">
+  <img src="screenshots/Screenshot_Beginning.png" alt="Game Screenshot" width="500">
+  <img src="screenshots/Screenshot_Castle.png" alt="Game Screenshot" width="500">
+</p>
+
+<p align="center">
+  <img src="screenshots/Screenshot_Miniboss1.png" alt="Game Screenshot" width="500">
+  <img src="screenshots/Screenshot_Sewers.png" alt="Game Screenshot" width="500">
+</p>
+
+<p align="center">
+  <img src="screenshots/Screenshot_Outdoors.png" alt="Game Screenshot" width="500">
+  <img src="screenshots/Screenshot_Boss1.png" alt="Game Screenshot" width="500">
+</p>
+
+---
+
 ## 🛠️ Building & Compiling
 
 This game is built on the HaxeFlixel engine. To compile it from source:
@@ -55,18 +75,22 @@ Special thanks to all the talented composers, remixers, and creators whose music
 
 ---
 
+## 🪁 Tutorial
+* **Tutorial BGM:** [-8bit clouds-](https://www.newgrounds.com/audio/listen/96415) - **Waterflame**
+
+---
 ## 🏰 Chapter 1
 
-* **Castle Theme:** ["MM9: 'Galaxy Man (NES-like)'"](https://www.newgrounds.com/audio/listen/278487) — **Reone662**
-* **Reznor Miniboss:** ["bigboo" (MIDI)](https://www.youtube.com/watch?v=GWTAh_9s0EI) — *Unknown Author*
-* **Castle Sewers:** ["Darker Cave"](https://www.newgrounds.com/audio/listen/272095) — **Cetaphobic**
+* **Castle Theme:** ["MM9: 'Galaxy Man (NES-like)'"](https://www.newgrounds.com/audio/listen/278487) - **Reone662**
+* **Reznor Miniboss:** ["bigboo" (MIDI)](https://www.youtube.com/watch?v=GWTAh_9s0EI) - *Unknown Author*
+* **Castle Sewers:** ["Darker Cave"](https://www.newgrounds.com/audio/listen/272095) - **Cetaphobic**
 * **Castle Elevator:** *(Track TBD)*
-* **Castle Morning:** ["Quiet Autumn"](https://www.youtube.com/watch?v=SWAQzCNeGWg) — **Toby Fox**
-* **Bonus Room:** ["Spelunker - Stage 01 Theme" (Remix)](https://www.youtube.com/watch?v=Cc6vQQxgyVs) — **plsdonhackme**
-* **Castle Circus:** [*"The Circus"*](https://www.youtube.com/watch?v=qCNztya--aw) — **Toby Fox**
-* **JEVIL Boss:** ["THE WORLD REVOLVING" (MIDI)](https://www.youtube.com/watch?v=Z01Tsgwe2dQ) — **Toby Fox**
-* **JEVIL Boss Game Over:** ["Faint Courage (Game Over)"](https://www.youtube.com/watch?v=TkvdhHEuCNY) — **Toby Fox**
-* **Teleport Room:** ["Meadow of Bowser - Super Mariofell World"](https://www.youtube.com/watch?v=_9PR3BwD-zA) — **SIivagunner**
+* **Castle Morning:** ["Quiet Autumn"](https://www.youtube.com/watch?v=SWAQzCNeGWg) - **Toby Fox**
+* **Bonus Room:** ["Spelunker - Stage 01 Theme" (Remix)](https://www.youtube.com/watch?v=Cc6vQQxgyVs) - **plsdonhackme**
+* **Castle Circus:** [*"The Circus"*](https://www.youtube.com/watch?v=qCNztya--aw) - **Toby Fox**
+* **JEVIL Boss:** ["THE WORLD REVOLVING" (MIDI)](https://www.youtube.com/watch?v=Z01Tsgwe2dQ) - **Toby Fox**
+* **JEVIL Boss Game Over:** ["Faint Courage (Game Over)"](https://www.youtube.com/watch?v=TkvdhHEuCNY) - **Toby Fox**
+* **Teleport Room:** ["Meadow of Bowser - Super Mariofell World"](https://www.youtube.com/watch?v=_9PR3BwD-zA) - **SIivagunner**
 
 ---
 
